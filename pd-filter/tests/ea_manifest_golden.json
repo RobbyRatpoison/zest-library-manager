@@ -1,0 +1,128 @@
+{
+ "registry": [
+  [
+   "software\\wow6432node\\popcap\\bejeweled 3\\install dir",
+   "C:\\PROGRAM FILES (X86)\\origin games\\bejeweled 3\\"
+  ],
+  [
+   "software\\wow6432node\\popcap\\bejeweled 3\\other",
+   "x"
+  ],
+  [
+   "software\\ea games\\battlefield™ v\\install dir",
+   "E:\\Games\\Battlefield V\\"
+  ],
+  [
+   "software\\wow6432node\\image & form\\steamworld dig\\install dir",
+   "C:\\Program Files (x86)\\Origin Games\\SteamWorld Dig"
+  ],
+  [
+   "software\\ea games\\theme hospital\\install dir",
+   "C:\\Program Files\\EA Games\\Theme Hospital"
+  ],
+  [
+   "software\\ea games\\broken\\install dir",
+   "C:\\Program Files\\EA Games\\Broken"
+  ],
+  [
+   "software\\ea games\\gone\\install dir",
+   "C:\\Program Files\\EA Games\\Gone"
+  ],
+  [
+   "software\\ea games\\qdrive\\install dir",
+   "Q:\\x\\y"
+  ],
+  [
+   "software\\foo\\bar\\baz\\install dir",
+   "C:\\Program Files\\EA Games\\Theme Hospital"
+  ],
+  [
+   "software\\ea games\\empty\\install dir",
+   ""
+  ],
+  [
+   "software\\ea games\\cdata\\install dir",
+   "C:\\Program Files\\EA Games\\Cdata"
+  ],
+  [
+   "software\\ea games\\dungeon keeper\\install dir",
+   "C:\\Program Files\\EA Games\\Dungeon Keeper\\"
+  ]
+ ],
+ "dirs": [
+  "<ROOT>/drive_c/Program Files (x86)/Origin Games/Bejeweled 3",
+  "<ROOT>/drive_e/Games/Battlefield V",
+  "<ROOT>/drive_c/Program Files (x86)/Origin Games/SteamWorld Dig",
+  "<ROOT>/drive_c/Program Files/EA Games/Theme Hospital",
+  "<ROOT>/drive_c/Program Files/EA Games/Broken",
+  "<ROOT>/drive_c/Program Files/EA Games/Cdata",
+  "<ROOT>/drive_c/Program Files/EA Games/Dungeon Keeper"
+ ],
+ "by_content_id": {
+  "70619": [
+   "<ROOT>/drive_c/Program Files (x86)/Origin Games/Bejeweled 3",
+   "<ROOT>/drive_c/Program Files (x86)/Origin Games/Bejeweled 3/__Installer/installerdata.xml"
+  ],
+  "1026023": [
+   "<ROOT>/drive_e/Games/Battlefield V",
+   "<ROOT>/drive_e/Games/Battlefield V/__Installer/installerdata.xml"
+  ],
+  "1026024": [
+   "<ROOT>/drive_e/Games/Battlefield V",
+   "<ROOT>/drive_e/Games/Battlefield V/__Installer/installerdata.xml"
+  ],
+  "55555": [
+   "<ROOT>/drive_c/Program Files (x86)/Origin Games/SteamWorld Dig",
+   "<ROOT>/drive_c/Program Files (x86)/Origin Games/SteamWorld Dig/__Installer/installerdata.xml"
+  ],
+  "40404": [
+   "<ROOT>/drive_c/Program Files/EA Games/Dungeon Keeper",
+   "<ROOT>/drive_c/Program Files/EA Games/Dungeon Keeper/__Installer/installerdata.xml"
+  ],
+  "777": [
+   "<ROOT>/drive_c/Program Files/EA Games/Cdata",
+   "<ROOT>/drive_c/Program Files/EA Games/Cdata/__Installer/installerdata.xml"
+  ],
+  "31337": null,
+  "999": null,
+  "": null,
+  "1026": null
+ },
+ "by_name": {
+  "Bejeweled 3": "<ROOT>/drive_c/Program Files (x86)/Origin Games/Bejeweled 3",
+  "Bejeweled® 3": "<ROOT>/drive_c/Program Files (x86)/Origin Games/Bejeweled 3",
+  "bejeweled   3": "<ROOT>/drive_c/Program Files (x86)/Origin Games/Bejeweled 3",
+  "Battlefield V": "<ROOT>/drive_e/Games/Battlefield V",
+  "Battlefield™ V": "<ROOT>/drive_e/Games/Battlefield V",
+  "Battlefield V DE": "<ROOT>/drive_e/Games/Battlefield V",
+  "SteamWorld Dig": "<ROOT>/drive_c/Program Files (x86)/Origin Games/SteamWorld Dig",
+  "Dungeon Keeper": "<ROOT>/drive_c/Program Files/EA Games/Dungeon Keeper",
+  "Dungeon  Keeper!": "<ROOT>/drive_c/Program Files/EA Games/Dungeon Keeper",
+  "Theme Hospital": null,
+  "Broken": null,
+  "Tom & Jerry: The Game": "<ROOT>/drive_c/Program Files/EA Games/Cdata",
+  "tom jerry the game": "<ROOT>/drive_c/Program Files/EA Games/Cdata",
+  "  ": null,
+  "": null,
+  "Nothing": null
+ },
+ "expr": {
+  "[Software\\EA Games\\Battlefield™ V\\Install Dir]bfv.exe": "<ROOT>/drive_e/Games/Battlefield V/bfv.exe",
+  "[Software\\PopCap\\Bejeweled 3\\Install Dir]bej3.exe": "<ROOT>/drive_c/Program Files (x86)/Origin Games/Bejeweled 3/bej3.exe",
+  "[HKEY_LOCAL_MACHINE\\Software\\PopCap\\Bejeweled 3\\Install Dir]sub\\bej3.exe": "<ROOT>/drive_c/Program Files (x86)/Origin Games/Bejeweled 3/sub/bej3.exe",
+  "[Software\\Nope\\Install Dir]x.exe": null,
+  "C:\\Program Files\\EA Games\\Dungeon Keeper\\dk.exe": "<ROOT>/drive_c/Program Files/EA Games/Dungeon Keeper/dk.exe",
+  "Program Files\\x.exe": "<ROOT>/drive_c/Program Files/x.exe",
+  "E:\\games\\battlefield v\\BFV.EXE": "<ROOT>/drive_e/Games/Battlefield V/BFV.EXE",
+  "Q:\\a\\b": "/a/b",
+  "[Software\\EA Games\\Qdrive\\Install Dir]": "/x/y"
+ },
+ "norm": {
+  "Bejeweled® 3": "bejeweled 3",
+  "Battlefield™  V": "battlefield v",
+  "Tom & Jerry's": "tom jerrys",
+  "  Café Éclair ": "café éclair",
+  "": "",
+  "<none>": ""
+ }
+}

@@ -1,0 +1,21 @@
+# build output
+/target/
+/package/dist/
+/package/flatpak/build-dir/
+/package/flatpak/repo/
+/package/flatpak/.flatpak-builder/
+*.flatpak
+
+# personal data: never commit a library, settings or sign-ins
+config.json
+state.json
+theme.json
+games*.db
+games*.db-*
+/static/
+*.log
+
+# golden cases generated from a real library by PlayDate's tests/gen_golden.py
+/pd-filter/tests/golden.json
+
+__pycache__/

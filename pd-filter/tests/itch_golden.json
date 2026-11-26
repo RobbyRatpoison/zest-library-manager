@@ -1,0 +1,406 @@
+{
+ "dates": [
+  [
+   "2020-05-01T12:30:00.000000Z",
+   1588336200
+  ],
+  [
+   "2020-05-01T12:30:00Z",
+   1588336200
+  ],
+  [
+   "2020-05-01 12:30:00",
+   1588336200
+  ],
+  [
+   "2020-05-01T12:30:00.5Z",
+   1588336200
+  ],
+  [
+   "2020-5-1T1:2:3Z",
+   1588294923
+  ],
+  [
+   "2020-02-30T00:00:00Z",
+   null
+  ],
+  [
+   "2020-13-01T00:00:00Z",
+   null
+  ],
+  [
+   "2020-05-01T12:30:00+02:00",
+   null
+  ],
+  [
+   "2020-05-01",
+   null
+  ],
+  [
+   "",
+   null
+  ],
+  [
+   null,
+   null
+  ],
+  [
+   "garbage",
+   null
+  ],
+  [
+   "2020-05-01T24:00:00Z",
+   null
+  ],
+  [
+   "2019-03-04T00:00:00Z",
+   1551657600
+  ],
+  [
+   "1970-01-01T00:00:00Z",
+   0
+  ],
+  [
+   "2024-02-29 23:59:59",
+   1709251199
+  ],
+  [
+   "2023-02-29 00:00:00",
+   null
+  ],
+  [
+   "2020-05-01T12:30:00.1234567Z",
+   null
+  ],
+  [
+   " 2020-05-01T12:30:00Z",
+   null
+  ]
+ ],
+ "page_dates": [
+  [
+   "Oct 12, 2020",
+   1602460800
+  ],
+  [
+   "October 12, 2020",
+   1602460800
+  ],
+  [
+   "Oct 2020",
+   1601510400
+  ],
+  [
+   "October 2020",
+   1601510400
+  ],
+  [
+   "2020",
+   1577836800
+  ],
+  [
+   "oct 12, 2020",
+   1602460800
+  ],
+  [
+   "OCTOBER 5, 2020",
+   1601856000
+  ],
+  [
+   "Sept 12, 2020",
+   null
+  ],
+  [
+   "Sep 12, 2020",
+   1599868800
+  ],
+  [
+   "September 12, 2020",
+   1599868800
+  ],
+  [
+   "Octob 12, 2020",
+   null
+  ],
+  [
+   "May 5, 2021",
+   1620172800
+  ],
+  [
+   "May 2021",
+   1619827200
+  ],
+  [
+   "Feb 30, 2020",
+   null
+  ],
+  [
+   "Feb 29, 2020",
+   1582934400
+  ],
+  [
+   "  Oct 12, 2020  ",
+   1602460800
+  ],
+  [
+   "Oct 12 2020",
+   null
+  ],
+  [
+   "Oct  12,  2020",
+   1602460800
+  ],
+  [
+   "12 Oct 2020",
+   null
+  ],
+  [
+   "",
+   null
+  ],
+  [
+   "soon",
+   null
+  ],
+  [
+   "20201",
+   null
+  ],
+  [
+   "Mar 3, 1999",
+   920419200
+  ],
+  [
+   "Jan 2000",
+   946684800
+  ]
+ ],
+ "tag_keys": [
+  [
+   "2D",
+   "2d"
+  ],
+  [
+   "Pixel Art",
+   "pixel art"
+  ],
+  [
+   "pixel-art",
+   "pixel art"
+  ],
+  [
+   "First-Person",
+   "first person"
+  ],
+  [
+   "First Person",
+   "first person"
+  ],
+  [
+   "RELAXING",
+   "relaxing"
+  ],
+  [
+   "Relaxing",
+   "relaxing"
+  ],
+  [
+   "relaxing",
+   "relaxing"
+  ],
+  [
+   "  Spaced  Out ",
+   "spaced out"
+  ],
+  [
+   "",
+   ""
+  ],
+  [
+   "!!!",
+   ""
+  ],
+  [
+   "Caf\u00e9",
+   "caf"
+  ],
+  [
+   "8-Bit",
+   "8 bit"
+  ],
+  [
+   "8 bit",
+   "8 bit"
+  ]
+ ],
+ "allow": [
+  {
+   "lists": [
+    "2D,Pixel Art,Relaxing",
+    "RELAXING,relaxing,First Person",
+    "first person,First-Person,First-Person"
+   ],
+   "out": {
+    "2d": "2D",
+    "pixel art": "Pixel Art",
+    "relaxing": "Relaxing",
+    "first person": "First-Person"
+   }
+  },
+  {
+   "lists": [
+    "A,a,A,a,a"
+   ],
+   "out": {
+    "a": "a"
+   }
+  },
+  {
+   "lists": [
+    "B,b"
+   ],
+   "out": {
+    "b": "B"
+   }
+  },
+  {
+   "lists": [
+    "PIXEL ART,pixel art"
+   ],
+   "out": {
+    "pixel art": "PIXEL ART"
+   }
+  },
+  {
+   "lists": [
+    ",,x, y ,"
+   ],
+   "out": {
+    "x": "x",
+    "y": "y"
+   }
+  },
+  {
+   "lists": [
+    "Pixel Art,Pixel-Art,pixel art,Pixel-Art"
+   ],
+   "out": {
+    "pixel art": "Pixel-Art"
+   }
+  }
+ ],
+ "pages": [
+  {
+   "name": "full",
+   "html": "<html><body><div class=\"game_info_panel_widget\"><table><tr><td>Genre</td><td><a href=\"/g\">Platformer</a>, <a>Puzzle</a></td></tr><tr><td>Tags</td><td><a>2D</a> <a>Pixel Art</a> <a>Cursed</a> <a>pixel-art</a></td></tr><tr><td>Release date</td><td><abbr title=\"x\">Oct 12, 2020</abbr></td></tr></table></div></body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {
+    "genres": "Platformer,Puzzle",
+    "tags": "2D,Pixel Art",
+    "release_date": 1602460800
+   }
+  },
+  {
+   "name": "noreleasedate",
+   "html": "<html><body><div class=\"game_info_panel_widget\"><table><tr><td>Genre</td><td><a>Platformer</a></td></tr></table></div></body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {
+    "genres": "Platformer"
+   }
+  },
+  {
+   "name": "badwhen",
+   "html": "<html><body><div class=\"game_info_panel_widget\"><table><tr><td>Release date</td><td>soon</td></tr></table></div></body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {}
+  },
+  {
+   "name": "upper",
+   "html": "<html><body><div class=\"game_info_panel_widget\"><table><tr><td>GENRE</td><td><a> Action </a><a>  </a><a>Adventure</a></td></tr><tr><td>Tags</td><td><a>Relaxing</a><a>RELAXING</a></td></tr></table></div></body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {
+    "genres": "Action,Adventure",
+    "tags": "Relaxing"
+   }
+  },
+  {
+   "name": "threecells",
+   "html": "<html><body><div class=\"game_info_panel_widget\"><table><tr><td>Genre</td><td><a>X</a></td><td><a>Y</a></td></tr></table></div></body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {}
+  },
+  {
+   "name": "nolinks",
+   "html": "<html><body><div class=\"game_info_panel_widget\"><table><tr><td>Genre</td><td>Platformer</td></tr><tr><td>Tags</td><td>2D</td></tr></table></div></body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {}
+  },
+  {
+   "name": "duprow",
+   "html": "<html><body><div class=\"game_info_panel_widget\"><table><tr><td>Genre</td><td><a>One</a></td></tr><tr><td>Genre</td><td><a>Two</a></td></tr></table></div></body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {
+    "genres": "Two"
+   }
+  },
+  {
+   "name": "nopanel",
+   "html": "<html><body>nothing</body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {}
+  },
+  {
+   "name": "notags",
+   "html": "<html><body><div class=\"game_info_panel_widget\"><table><tr><td>Tags</td><td><a>Unknown One</a><a>Unknown Two</a></td></tr></table></div></body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {}
+  },
+  {
+   "name": "monthonly",
+   "html": "<html><body><div class=\"game_info_panel_widget\"><table><tr><td>Release date</td><td>Nov 2018</td></tr></table></div></body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {
+    "release_date": 1541030400
+   }
+  },
+  {
+   "name": "split",
+   "html": "<html><body><div class=\"game_info_panel_widget\"><table><tr><td><b>Release</b> date</td><td><span>Oct</span> 12, 2020</td></tr></table></div></body></html>",
+   "lists": [
+    "2D,Pixel Art,Relaxing,First Person",
+    "Platformer,Puzzle"
+   ],
+   "out": {}
+  }
+ ]
+}

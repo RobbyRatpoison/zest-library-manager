@@ -1,0 +1,196 @@
+{
+ "rows": [
+  [
+   -1,
+   "Blade of Fire",
+   "product/UP4040-PPSA30074_00-BLADESFOFIRE0000",
+   "PPSA30074_00",
+   1735689600
+  ],
+  [
+   -2,
+   "Hades\u2122",
+   null,
+   "CUSA05555_00",
+   1735689600
+  ],
+  [
+   -3,
+   "Same  Name   Game",
+   "concept/5",
+   "",
+   1735689600
+  ],
+  [
+   -4,
+   "Old Date Game",
+   "product/EP0000-CUSA00001_00-OLDGAME000000000",
+   "CUSA00001_00",
+   1546300800
+  ],
+  [
+   -5,
+   "No Date Yet",
+   "product/EP0000-CUSA00002_00-NODATE0000000000",
+   "CUSA00002_00",
+   null
+  ],
+  [
+   -6,
+   "Zero Date",
+   "product/EP0000-CUSA00003_00-ZERODATE00000000",
+   "CUSA00003_00",
+   0
+  ],
+  [
+   -7,
+   "Nothing Matches",
+   null,
+   "CUSA99999_00",
+   1735689600
+  ],
+  [
+   -8,
+   "Two Ways",
+   "product/EP0000-CUSA00004_00-TWOWAYS00000000",
+   "CUSA00004_00",
+   1735689600
+  ]
+ ],
+ "purchases": [
+  {
+   "date": "2022-03-04T05:06:07Z",
+   "name": "Blade of Fire",
+   "sku": "UP4040-PPSA30074_00-BLADESFOFIRE0000-U001"
+  },
+  {
+   "date": "2021-01-01T00:00:00Z",
+   "name": "Blade of Fire Demo",
+   "sku": "UP4040-PPSA30074_00-DEMOBLADESFOFIRE-U001"
+  },
+  {
+   "date": "2020-06-01T00:00:00Z",
+   "name": "Hades",
+   "sku": "EP0000-CUSA05555_00-HADES0000000000-A0100-V0100"
+  },
+  {
+   "date": "2023-02-02T00:00:00+02:00",
+   "name": "same name game",
+   "sku": "noseparators"
+  },
+  {
+   "date": "2024-01-01T00:00:00Z",
+   "name": "Old Date Game",
+   "sku": "EP0000-CUSA00001_00-OLDGAME000000000-U001"
+  },
+  {
+   "date": "2020-01-01T00:00:00Z",
+   "name": "No Date Yet",
+   "sku": "EP0000-CUSA00002_00-NODATE0000000000-U001"
+  },
+  {
+   "date": "2018-01-01T00:00:00Z",
+   "name": "Zero Date",
+   "sku": "EP0000-CUSA00003_00-ZERODATE00000000-U001"
+  },
+  {
+   "date": "2019-05-05T00:00:00Z",
+   "name": "Two Ways",
+   "sku": "EP0000-CUSA00004_00-TWOWAYS00000000-U001"
+  },
+  {
+   "date": "2017-05-05T00:00:00Z",
+   "name": "Two Ways",
+   "sku": "x"
+  },
+  {
+   "date": "garbage",
+   "name": "Bad Date",
+   "sku": "EP0000-CUSA00009_00-BAD-U001"
+  },
+  {
+   "date": "",
+   "name": "No Date",
+   "sku": "S"
+  },
+  {
+   "date": "2021-01-01T00:00:00Z",
+   "name": "",
+   "sku": ""
+  }
+ ],
+ "result": {
+  "matched": 7,
+  "updated": 6,
+  "purchases": 10
+ },
+ "dates": {
+  "-99": 1,
+  "-8": 1493942400,
+  "-7": 1735689600,
+  "-6": 1514764800,
+  "-5": 1577836800,
+  "-4": 1546300800,
+  "-3": 1675288800,
+  "-2": 1590969600,
+  "-1": 1609459200
+ },
+ "titles": [
+  [
+   "UP4040-PPSA30074_00-DEMOBLADESFOFIRE-U001",
+   "PPSA30074_00",
+   "UP4040-PPSA30074_00-DEMOBLADESFOFIRE"
+  ],
+  [
+   "EP0000-CUSA05555_00-HADES0000000000-A0100-V0100",
+   "CUSA05555_00",
+   "EP0000-CUSA05555_00-HADES0000000000-A0100"
+  ],
+  [
+   "noseparators",
+   null,
+   "noseparators"
+  ],
+  [
+   "",
+   null,
+   null
+  ],
+  [
+   "a-b",
+   null,
+   "a-b"
+  ],
+  [
+   "a-b-c",
+   null,
+   "a-b-c"
+  ],
+  [
+   "a-b-c-d",
+   null,
+   "a-b-c"
+  ],
+  [
+   "A-ABCD12345_00-c",
+   "ABCD12345_00",
+   "A-ABCD12345_00-c"
+  ],
+  [
+   "A-ABCD1234_00-c-d",
+   null,
+   "A-ABCD1234_00-c"
+  ],
+  [
+   "A-abcd12345_00-c-d",
+   null,
+   "A-abcd12345_00-c"
+  ],
+  [
+   null,
+   null,
+   null
+  ]
+ ],
+ "other_account": "This browser is signed in to PlayStation as someone_else, but PlayDate is connected as Rob_X."
+}

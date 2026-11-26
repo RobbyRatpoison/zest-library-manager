@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiPManifest version="4.0"><gameTitles><gameTitle locale="en_US">Battlefield™ V</gameTitle><gameTitle locale="de_DE">Battlefield V DE</gameTitle></gameTitles><contentIDs><contentID>1026023</contentID><contentID> 1026024 </contentID></contentIDs><runtime><launcher><filePath>[Software\Foo\Bar\Install Dir]game.exe</filePath></launcher></runtime></DiPManifest>

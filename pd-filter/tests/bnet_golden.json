@@ -1,0 +1,79 @@
+{
+ "scan": [
+  {
+   "code": "D3",
+   "uid": "diablo3",
+   "name": "Diablo III",
+   "genres": "Action,RPG",
+   "installed": false,
+   "install_path": "",
+   "source": "license"
+  },
+  {
+   "code": "MYST",
+   "uid": "mystery_uid",
+   "name": "MYST",
+   "genres": "",
+   "installed": true,
+   "install_path": "D:/Mystery",
+   "source": "installed"
+  },
+  {
+   "code": "Pro",
+   "uid": "prometheus",
+   "name": "Overwatch",
+   "genres": "Action,FPS,Multiplayer",
+   "installed": true,
+   "install_path": "C:/Games/Overwatch",
+   "source": "both"
+  },
+  {
+   "code": "VIPR",
+   "uid": "viper",
+   "name": "Call of Duty: Black Ops 4",
+   "genres": "Action,FPS,Multiplayer",
+   "installed": true,
+   "install_path": "C:/Games/BO4",
+   "source": "installed"
+  },
+  {
+   "code": "W3",
+   "uid": "w3",
+   "name": "Warcraft III: Reforged",
+   "genres": "Strategy,RTS",
+   "installed": false,
+   "install_path": "",
+   "source": "license"
+  },
+  {
+   "code": "WTCG",
+   "uid": "hs_beta",
+   "name": "Hearthstone",
+   "genres": "Card Game,Strategy",
+   "installed": false,
+   "install_path": "",
+   "source": "installed"
+  },
+  {
+   "code": "WoW",
+   "uid": "wow",
+   "name": "World of Warcraft",
+   "genres": "MMO,RPG",
+   "installed": true,
+   "install_path": "C:/Games/WoW",
+   "source": "installed"
+  }
+ ],
+ "names": {
+  "Overwatch\u00ae": "Pro",
+  "OVERWATCH": "Pro",
+  "World of Warcraft": "WoW",
+  "nothing here": null
+ },
+ "normalize": {
+  "Overwatch\u00ae": "overwatch",
+  " Diablo\u00ae III: \u2122x ": "diabloiiix",
+  "null": ""
+ },
+ "rows": 33
+}

@@ -1,0 +1,52 @@
+# Zest (the native build) under its own app id, so it installs beside PlayDate (Zest is a separate app; its first start can import a copy of PlayDate's library, see
+# pd-filter/src/import_playdate.rs). Its data is in ~/.var/app/io.github.robbyratpoison.Zest/data/zest.
+# Build from the package/flatpak folder:
+#   flatpak-builder --user --install-deps-from=flathub --force-clean build-dir io.github.robbyratpoison.Zest.yml
+# Needs org.gnome.Platform//50, org.gnome.Sdk//50 and org.freedesktop.Sdk.Extension.rust-stable//25.08 (GNOME 50 is built on freedesktop 25.08). The GNOME runtime is
+# for WebKitGTK 4.1, which the sign-in window (zest-login) shows store login pages in; the freedesktop runtime has no WebKit. The cargo build fetches crates, so the build step has network access
+# (this is self-hosted distribution, not Flathub; vendor the crates with flatpak-cargo-generator before submitting anywhere that forbids it).
+id: io.github.robbyratpoison.Zest
+runtime: org.gnome.Platform
+runtime-version: '50'
+sdk: org.gnome.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+command: zest
+finish-args:
+  - --filesystem=home
+  - --filesystem=/mnt
+  - --filesystem=/media
+  - --filesystem=/run/media
+  - --share=network
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  # gamepads (and the Steam Deck's controller) are read from /dev/input
+  - --device=all
+  # Wine, Proton, umu-run, winetricks and the games run on the host through flatpak-spawn --host (pd-filter/src/sandbox.rs)
+  - --talk-name=org.freedesktop.Flatpak
+modules:
+  - name: zest
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/rust-stable/bin
+      build-args:
+        - --share=network
+      env:
+        CARGO_HOME: /run/build/zest/cargo
+        CARGO_TARGET_DIR: /run/build/zest/target
+    build-commands:
+      - cargo build --release -p grid-own -p zest-login
+      - install -Dm755 /run/build/zest/target/release/grid-own /app/bin/zest
+      # the sign-in window; Zest starts it from next to itself (pd-filter/src/weblogin.rs)
+      - install -Dm755 /run/build/zest/target/release/zest-login /app/bin/zest-login
+      - install -Dm644 package/flatpak/io.github.robbyratpoison.Zest.desktop /app/share/applications/io.github.robbyratpoison.Zest.desktop
+      - install -Dm644 package/flatpak/io.github.robbyratpoison.Zest.metainfo.xml /app/share/metainfo/io.github.robbyratpoison.Zest.metainfo.xml
+      - install -Dm644 assets/favicon.png /app/share/icons/hicolor/512x512/apps/io.github.robbyratpoison.Zest.png
+    sources:
+      - type: dir
+        path: ../..
+        skip:
+          - .git
+          - target
+          - package/dist

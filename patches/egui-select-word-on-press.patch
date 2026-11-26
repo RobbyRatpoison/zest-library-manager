@@ -1,0 +1,291 @@
+diff --color -ruN /home/rob/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/egui-0.34.3/src/input_state/mod.rs vendor/egui/src/input_state/mod.rs
+--- /home/rob/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/egui-0.34.3/src/input_state/mod.rs	2006-07-23 21:21:28.000000000 -0400
++++ vendor/egui/src/input_state/mod.rs	2026-10-31 22:20:32.638149322 -0400
+@@ -1058,6 +1058,15 @@
+     /// Used to check for triple-clicks.
+     last_last_click_time: f64,
+ 
++    /// Like the `last_*click*` fields, but for *presses*, so a double click can be recognised
++    /// when the second button goes down instead of when it comes up.
++    last_press_pos: Option<Pos2>,
++    last_press_time: f64,
++    last_last_press_time: f64,
++
++    /// 1, 2 or 3 for a press this frame (a single, double or triple press), 0 if nothing was pressed.
++    press_count: u8,
++
+     /// When was the pointer last moved?
+     /// Used for things like showing hover ui/tooltip with a delay.
+     last_move_time: f64,
+@@ -1090,6 +1099,10 @@
+             last_click_pos: None,
+             last_click_time: f64::NEG_INFINITY,
+             last_last_click_time: f64::NEG_INFINITY,
++            last_press_pos: None,
++            last_press_time: f64::NEG_INFINITY,
++            last_last_press_time: f64::NEG_INFINITY,
++            press_count: 0,
+             last_move_time: f64::NEG_INFINITY,
+             pointer_events: vec![],
+             options: Default::default(),
+@@ -1106,6 +1119,7 @@
+         self.options = options;
+ 
+         self.pointer_events.clear();
++        self.press_count = 0;
+ 
+         let old_pos = self.latest_pos;
+         self.interact_pos = self.latest_pos;
+@@ -1151,6 +1165,20 @@
+                     }
+ 
+                     if pressed {
++                        let close = self.last_press_pos.map_or(true, |last| {
++                            last.distance_sq(pos) < self.options.max_click_dist * self.options.max_click_dist
++                        });
++                        self.press_count = if close && (time - self.last_last_press_time) < (self.options.max_double_click_delay * 2.0) {
++                            3
++                        } else if close && (time - self.last_press_time) < self.options.max_double_click_delay {
++                            2
++                        } else {
++                            1
++                        };
++                        self.last_last_press_time = self.last_press_time;
++                        self.last_press_time = time;
++                        self.last_press_pos = Some(pos);
++
+                         self.press_origin = Some(pos);
+                         self.press_start_time = Some(time);
+                         self.has_moved_too_much_for_a_click = false;
+@@ -1434,6 +1462,11 @@
+             .any(|event| matches!(event, &PointerEvent::Released { button: b, click: Some(_) } if button == b))
+     }
+ 
++    /// How many presses in a row (1, 2 or 3) was the primary button pressed with this frame; 0 if it was not pressed.
++    ///
++    /// Unlike [`Self::button_double_clicked`] this is known when the button goes down, not when it comes up.
++    pub fn press_count(&self) -> u8 { self.press_count }
++
+     /// Was the button given double clicked this frame?
+     pub fn button_double_clicked(&self, button: PointerButton) -> bool {
+         self.pointer_events.iter().any(|event| {
+@@ -1669,6 +1702,10 @@
+             pointer_events,
+             last_move_time,
+             options: _,
++            last_press_pos: _,
++            last_press_time: _,
++            last_last_press_time: _,
++            press_count: _,
+         } = self;
+ 
+         ui.label(format!("latest_pos: {latest_pos:?}"));
+diff --color -ruN /home/rob/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/egui-0.34.3/src/style.rs vendor/egui/src/style.rs
+--- /home/rob/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/egui-0.34.3/src/style.rs	2006-07-23 21:21:28.000000000 -0400
++++ vendor/egui/src/style.rs	2026-10-31 22:19:09.413426314 -0400
+@@ -950,6 +950,12 @@
+     /// The default is `true`, but text selection can be slightly glitchy,
+     /// so you may want to disable it.
+     pub multi_widget_text_select: bool,
++
++    /// Select a word when the second click of a double click is *pressed* (like most native toolkits and browsers),
++    /// and let dragging from there extend the selection a word at a time.
++    ///
++    /// When `false` (the default), the word is selected when the second click is released.
++    pub select_word_on_press: bool,
+ }
+ 
+ /// Look and feel of the text cursor.
+@@ -1473,6 +1479,7 @@
+             tooltip_grace_time: 0.2,
+             selectable_labels: true,
+             multi_widget_text_select: true,
++            select_word_on_press: false,
+         }
+     }
+ }
+@@ -2024,6 +2031,7 @@
+             tooltip_grace_time,
+             selectable_labels,
+             multi_widget_text_select,
++            select_word_on_press,
+         } = self;
+ 
+         ui.spacing_mut().item_spacing = vec2(12.0, 8.0);
+@@ -2073,6 +2081,8 @@
+             "Only show tooltips if mouse is still",
+         );
+ 
++        ui.checkbox(select_word_on_press, "Double click selects the word on press (and drags by word)");
++
+         ui.horizontal(|ui| {
+             ui.checkbox(selectable_labels, "Selectable text in labels");
+             if *selectable_labels {
+diff --color -ruN /home/rob/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/egui-0.34.3/src/text_selection/label_text_selection.rs vendor/egui/src/text_selection/label_text_selection.rs
+--- /home/rob/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/egui-0.34.3/src/text_selection/label_text_selection.rs	2006-07-23 21:21:28.000000000 -0400
++++ vendor/egui/src/text_selection/label_text_selection.rs	2026-10-31 22:31:23.117589694 -0400
+@@ -96,6 +96,10 @@
+     /// Have we reached the widget containing the secondary selection?
+     has_reached_secondary: bool,
+ 
++    /// The word picked by a double press in a label (`Interaction::select_word_on_press`), so a drag
++    /// from there can grow the selection a whole word at a time.
++    word_anchor: Option<(Id, CCursorRange, bool)>,
++
+     /// Accumulated text to copy.
+     text_to_copy: String,
+     last_copied_galley_rect: Option<Rect>,
+@@ -116,6 +120,7 @@
+             is_dragging: Default::default(),
+             has_reached_primary: Default::default(),
+             has_reached_secondary: Default::default(),
++            word_anchor: None,
+             text_to_copy: Default::default(),
+             last_copied_galley_rect: Default::default(),
+             painted_selections: Default::default(),
+@@ -369,6 +374,29 @@
+             if let Some(new_primary) = new_primary {
+                 selection.primary =
+                     WidgetTextCursor::new(response.id, new_primary, global_from_galley, galley);
++                // After a double press: grow from the picked word by whole words.
++                if let Some((anchor_id, anchor, by_line)) = self.word_anchor
++                    && ui.style().interaction.select_word_on_press
++                    && !ui.input(|i| i.pointer.any_pressed())
++                {
++                    if anchor_id == response.id {
++                        let r = super::text_cursor_state::extend_by_words(galley.text(), anchor, new_primary, by_line);
++                        selection.primary = WidgetTextCursor::new(response.id, r.primary, global_from_galley, galley);
++                        selection.secondary = WidgetTextCursor::new(response.id, r.secondary, global_from_galley, galley);
++                    } else if selection.secondary.widget_id == anchor_id {
++                        // Dragged into another label: end on a word boundary there, and keep the first word whole at the other end.
++                        let w = super::text_cursor_state::select_unit_at(galley.text(), new_primary, by_line).as_sorted_char_range();
++                        let a = anchor.as_sorted_char_range();
++                        let below = galley_rect.top() >= selection.secondary.pos.y;
++                        selection.primary = WidgetTextCursor::new(
++                            response.id,
++                            CCursor::new(if below { w.end } else { w.start }),
++                            global_from_galley,
++                            galley,
++                        );
++                        selection.secondary.ccursor = CCursor::new(if below { a.start } else { a.end });
++                    }
++                }
+ 
+                 // We don't want the latency of `drag_started`.
+                 let drag_started = ui.input(|i| i.pointer.any_pressed());
+@@ -520,7 +548,19 @@
+             // This is where we handle start-of-drag and double-click-to-select.
+             // Actual drag-to-select happens elsewhere.
+             let dragged = false;
+-            cursor_state.pointer_interaction(ui, response, cursor_at_pointer, galley, dragged);
++            let on_press = ui.style().interaction.select_word_on_press;
++            let press_count = if on_press { ui.input(|i| i.pointer.press_count()) } else { 0 };
++            if on_press && (press_count == 2 || press_count >= 3) {
++                let by_line = press_count >= 3;
++                let range = super::text_cursor_state::select_unit_at(galley.text(), cursor_at_pointer, by_line);
++                self.word_anchor = Some((response.id, range, by_line));
++                cursor_state.set_char_range(Some(range));
++            } else {
++                if on_press && press_count == 1 {
++                    self.word_anchor = None;
++                }
++                cursor_state.pointer_interaction(ui, response, cursor_at_pointer, galley, dragged);
++            }
+         }
+ 
+         if let Some(mut cursor_range) = cursor_state.range(galley) {
+diff --color -ruN /home/rob/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/egui-0.34.3/src/text_selection/text_cursor_state.rs vendor/egui/src/text_selection/text_cursor_state.rs
+--- /home/rob/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/egui-0.34.3/src/text_selection/text_cursor_state.rs	2006-07-23 21:21:28.000000000 -0400
++++ vendor/egui/src/text_selection/text_cursor_state.rs	2026-10-31 22:28:49.661468604 -0400
+@@ -15,12 +15,17 @@
+ #[cfg_attr(feature = "serde", serde(default))]
+ pub struct TextCursorState {
+     ccursor_range: Option<CCursorRange>,
++
++    /// The word picked by a double press (with `Interaction::select_word_on_press`);
++    /// while the button stays down, dragging extends the selection from it by whole words.
++    word_anchor: Option<(CCursorRange, bool)>,
+ }
+ 
+ impl From<CCursorRange> for TextCursorState {
+     fn from(ccursor_range: CCursorRange) -> Self {
+         Self {
+             ccursor_range: Some(ccursor_range),
++            word_anchor: None,
+         }
+     }
+ }
+@@ -65,18 +70,33 @@
+     ) -> bool {
+         let text = galley.text();
+ 
+-        if response.double_clicked() {
++        let on_press = ui.style().interaction.select_word_on_press;
++        let press_count = if on_press && response.hovered() { ui.input(|i| i.pointer.press_count()) } else { 0 };
++
++        if on_press && press_count == 2 {
++            // Select the word as the second press lands, and remember it so a drag can extend by words.
++            let ccursor_range = select_word_at(text, cursor_at_pointer);
++            self.word_anchor = Some((ccursor_range, false));
++            self.set_char_range(Some(ccursor_range));
++            true
++        } else if on_press && press_count >= 3 {
++            let ccursor_range = select_line_at(text, cursor_at_pointer);
++            self.word_anchor = Some((ccursor_range, true));
++            self.set_char_range(Some(ccursor_range));
++            true
++        } else if !on_press && response.double_clicked() {
+             // Select word:
+             let ccursor_range = select_word_at(text, cursor_at_pointer);
+             self.set_char_range(Some(ccursor_range));
+             true
+-        } else if response.triple_clicked() {
++        } else if !on_press && response.triple_clicked() {
+             // Select line:
+             let ccursor_range = select_line_at(text, cursor_at_pointer);
+             self.set_char_range(Some(ccursor_range));
+             true
+         } else if response.sense.senses_drag() {
+             if response.hovered() && ui.input(|i| i.pointer.any_pressed()) {
++                self.word_anchor = None;
+                 // The start of a drag (or a click).
+                 if ui.input(|i| i.modifiers.shift) {
+                     if let Some(mut cursor_range) = self.range(galley) {
+@@ -91,7 +111,10 @@
+                 true
+             } else if is_being_dragged {
+                 // Drag to select text:
+-                if let Some(mut cursor_range) = self.range(galley) {
++                if let Some((anchor, by_line)) = self.word_anchor {
++                    // after a double (or triple) press: grow by whole words (lines) from the one that was picked
++                    self.set_char_range(Some(extend_by_words(text, anchor, cursor_at_pointer, by_line)));
++                } else if let Some(mut cursor_range) = self.range(galley) {
+                     cursor_range.primary = cursor_at_pointer;
+                     self.set_char_range(Some(cursor_range));
+                 }
+@@ -105,7 +128,24 @@
+     }
+ }
+ 
+-fn select_word_at(text: &str, ccursor: CCursor) -> CCursorRange {
++/// The selection that spans `anchor` (the word first picked) and the word under `pointer`:
++/// dragging after a double press grows the selection a whole word at a time, in either direction.
++pub(crate) fn extend_by_words(text: &str, anchor: CCursorRange, pointer: CCursor, by_line: bool) -> CCursorRange {
++    let a = anchor.as_sorted_char_range();
++    let w = select_unit_at(text, pointer, by_line).as_sorted_char_range();
++    if w.start < a.start {
++        CCursorRange { primary: CCursor::new(w.start), secondary: CCursor::new(a.end), h_pos: None }
++    } else {
++        CCursorRange::two(CCursor::new(a.start), CCursor::new(w.end.max(a.end)))
++    }
++}
++
++/// The word (or, for a triple press, the line) under `ccursor`.
++pub(crate) fn select_unit_at(text: &str, ccursor: CCursor, by_line: bool) -> CCursorRange {
++    if by_line { select_line_at(text, ccursor) } else { select_word_at(text, ccursor) }
++}
++
++pub(crate) fn select_word_at(text: &str, ccursor: CCursor) -> CCursorRange {
+     if text.is_empty() {
+         return CCursorRange::one(ccursor);
+     }

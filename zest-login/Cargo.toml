@@ -1,0 +1,14 @@
+[package]
+name = "zest-login"
+version = "0.1.0"
+edition = "2021"
+description = "Zest's on-demand sign-in window: shows a store's own login page in the system web view and prints what the sign-in produced. Started by Zest only when you press Sign in, and gone again when it finishes."
+
+[dependencies]
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+tao = "0.37.2"
+wry = "0.57.1"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+webkit2gtk = "2.0.2"

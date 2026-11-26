@@ -1,0 +1,120 @@
+{
+ "slugs": {
+  "": {
+   "probed": [],
+   "result": ""
+  },
+  "a/b": {
+   "probed": [],
+   "result": "a/b"
+  },
+  "battlefield-1": {
+   "probed": [
+    "https://www.ea.com/games/battlefield-1",
+    "https://www.ea.com/games/battlefield/battlefield-1"
+   ],
+   "result": "battlefield-1"
+  },
+  "fifa": {
+   "probed": [
+    "https://www.ea.com/games/fifa"
+   ],
+   "result": "fifa"
+  },
+  "need-for-speed-heat": {
+   "probed": [
+    "https://www.ea.com/games/need-for-speed-heat",
+    "https://www.ea.com/games/need-for-speed/need-for-speed-heat",
+    "https://www.ea.com/games/need-for/need-for-speed-heat",
+    "https://www.ea.com/games/need/need-for-speed-heat"
+   ],
+   "result": "need-for-speed-heat"
+  }
+ },
+ "tokens": [
+  [
+   "abc123DEF",
+   [
+    "abc123DEF",
+    null
+   ]
+  ],
+  [
+   "\"abc123DEF\"",
+   [
+    "abc123DEF",
+    null
+   ]
+  ],
+  [
+   "{\"access_token\": \"tok-1\", \"expires_in\": 14400}",
+   [
+    "tok-1",
+    14400
+   ]
+  ],
+  [
+   "{\"access_token\": \"tok-2\"}",
+   [
+    "tok-2",
+    null
+   ]
+  ],
+  [
+   "nucleus:rest#access_token=tok3&expires_in=3600&token_type=Bearer",
+   [
+    "tok3",
+    3600
+   ]
+  ],
+  [
+   "https://accounts.ea.com/connect/auth?x=1&access_token=tok4&expires_in=99",
+   [
+    "tok4",
+    99
+   ]
+  ],
+  [
+   "some \"access_token\" : \"tok5\" here",
+   [
+    "tok5",
+    null
+   ]
+  ],
+  [
+   "two words",
+   [
+    null,
+    null
+   ]
+  ],
+  [
+   "a=b",
+   [
+    null,
+    null
+   ]
+  ],
+  [
+   "",
+   [
+    null,
+    null
+   ]
+  ],
+  [
+   "{bad json",
+   [
+    null,
+    null
+   ]
+  ],
+  [
+   "login_required",
+   [
+    "login_required",
+    null
+   ]
+  ]
+ ]
+}

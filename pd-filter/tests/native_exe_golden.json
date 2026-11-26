@@ -1,0 +1,2036 @@
+[
+ {
+  "name": "unity_pair",
+  "files": {
+   "Game.x86": [
+    127,
+    69,
+    76,
+    70,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "Game.x86_64": [
+    127,
+    69,
+    76,
+    70,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "Game_Data/x.dll": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "Game.x86_64"
+      ],
+      [
+       2,
+       0,
+       "Game.x86"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "Game.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "Game.x86_64"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "Game.x86_64"
+      ],
+      [
+       2,
+       0,
+       "Game.x86"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "Game.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "Game.x86_64"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "Game.x86_64"
+      ],
+      [
+       2,
+       0,
+       "Game.x86"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "Game.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "Game.x86_64"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "unity_by_extension_only",
+  "files": {
+   "Foo.x86": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "Foo.x86_64": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "Foo.x86_64"
+      ],
+      [
+       2,
+       0,
+       "Foo.x86"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "Foo.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "Foo.x86_64"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "Foo.x86_64"
+      ],
+      [
+       2,
+       0,
+       "Foo.x86"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "Foo.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "Foo.x86_64"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "Foo.x86_64"
+      ],
+      [
+       2,
+       0,
+       "Foo.x86"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "Foo.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "Foo.x86_64"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "appimage_wins",
+  "files": {
+   "Game.AppImage": [
+    127,
+    69,
+    76,
+    70,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "run": [
+    127,
+    69,
+    76,
+    70,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "run.sh": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "g.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [
+      "Game.AppImage"
+     ],
+     "natives": [
+      [
+       0,
+       0,
+       "run"
+      ]
+     ],
+     "scripts": [
+      "run.sh"
+     ],
+     "winexes": [
+      [
+       0,
+       "g.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "Game.AppImage",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "Game.AppImage"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [
+      "Game.AppImage"
+     ],
+     "natives": [],
+     "scripts": [],
+     "winexes": [
+      [
+       0,
+       "g.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "Game.AppImage",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "Game.AppImage"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [
+      "Game.AppImage"
+     ],
+     "natives": [
+      [
+       0,
+       0,
+       "run"
+      ]
+     ],
+     "scripts": [
+      "run.sh"
+     ],
+     "winexes": [
+      [
+       0,
+       "g.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "Game.AppImage",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "Game.AppImage"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "two_appimages_tied",
+  "files": {
+   "A.AppImage": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "B.AppImage": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "sub/C.AppImage": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [
+      "A.AppImage",
+      "B.AppImage",
+      "sub/C.AppImage"
+     ],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "A.AppImage",
+     "is_windows": false,
+     "ambiguous": true,
+     "candidates": [
+      "A.AppImage",
+      "B.AppImage"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [
+      "A.AppImage",
+      "B.AppImage",
+      "sub/C.AppImage"
+     ],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "A.AppImage",
+     "is_windows": false,
+     "ambiguous": true,
+     "candidates": [
+      "A.AppImage",
+      "B.AppImage"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [
+      "A.AppImage",
+      "B.AppImage",
+      "sub/C.AppImage"
+     ],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "A.AppImage",
+     "is_windows": false,
+     "ambiguous": true,
+     "candidates": [
+      "A.AppImage",
+      "B.AppImage"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "extensionless_elf",
+  "files": {
+   "game": [
+    127,
+    69,
+    76,
+    70,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "readme": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "lib/libx.so": [
+    127,
+    69,
+    76,
+    70,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "game"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "game"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "elf32_only",
+  "files": {
+   "game32": [
+    127,
+    69,
+    76,
+    70,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       2,
+       0,
+       "game32"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game32",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game32"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       2,
+       0,
+       "game32"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game32",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game32"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "native_depth",
+  "files": {
+   "bin/linux/game.x86_64": [
+    127,
+    69,
+    76,
+    70,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "game.x86_64": [
+    127,
+    69,
+    76,
+    70,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "game.x86_64"
+      ],
+      [
+       0,
+       2,
+       "bin/linux/game.x86_64"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game.x86_64"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "game.x86_64"
+      ],
+      [
+       0,
+       2,
+       "bin/linux/game.x86_64"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game.x86_64"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "game.x86_64"
+      ],
+      [
+       0,
+       2,
+       "bin/linux/game.x86_64"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game.x86_64"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "tied_natives",
+  "files": {
+   "a.x86_64": [
+    127,
+    69,
+    76,
+    70,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "b.x86_64": [
+    127,
+    69,
+    76,
+    70,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "a.x86_64"
+      ],
+      [
+       0,
+       0,
+       "b.x86_64"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "a.x86_64",
+     "is_windows": false,
+     "ambiguous": true,
+     "candidates": [
+      "a.x86_64",
+      "b.x86_64"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "a.x86_64"
+      ],
+      [
+       0,
+       0,
+       "b.x86_64"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "a.x86_64",
+     "is_windows": false,
+     "ambiguous": true,
+     "candidates": [
+      "a.x86_64",
+      "b.x86_64"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "a.x86_64"
+      ],
+      [
+       0,
+       0,
+       "b.x86_64"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "a.x86_64",
+     "is_windows": false,
+     "ambiguous": true,
+     "candidates": [
+      "a.x86_64",
+      "b.x86_64"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "script_only",
+  "files": {
+   "start.sh": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "x/other.sh": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [
+      "start.sh",
+      "x/other.sh"
+     ],
+     "winexes": []
+    },
+    "pick": {
+     "path": "start.sh",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "start.sh"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [
+      "start.sh",
+      "x/other.sh"
+     ],
+     "winexes": []
+    },
+    "pick": {
+     "path": "start.sh",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "start.sh"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "exe_only",
+  "files": {
+   "Game.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "UnityCrashHandler64.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "setup.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "unins000.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "vc_redist.x64.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "bin/Other.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": [
+      [
+       0,
+       "Game.exe"
+      ],
+      [
+       1,
+       "bin/Other.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "Game.exe",
+     "is_windows": true,
+     "ambiguous": false,
+     "candidates": [
+      "Game.exe"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": [
+      [
+       0,
+       "Game.exe"
+      ],
+      [
+       1,
+       "bin/Other.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "Game.exe",
+     "is_windows": true,
+     "ambiguous": false,
+     "candidates": [
+      "Game.exe"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": [
+      [
+       0,
+       "Game.exe"
+      ],
+      [
+       1,
+       "bin/Other.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "Game.exe",
+     "is_windows": true,
+     "ambiguous": false,
+     "candidates": [
+      "Game.exe"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "exe_tied_depth",
+  "files": {
+   "A.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "B.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": [
+      [
+       0,
+       "A.exe"
+      ],
+      [
+       0,
+       "B.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "A.exe",
+     "is_windows": true,
+     "ambiguous": true,
+     "candidates": [
+      "A.exe",
+      "B.exe"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": [
+      [
+       0,
+       "A.exe"
+      ],
+      [
+       0,
+       "B.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "A.exe",
+     "is_windows": true,
+     "ambiguous": true,
+     "candidates": [
+      "A.exe",
+      "B.exe"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": [
+      [
+       0,
+       "A.exe"
+      ],
+      [
+       0,
+       "B.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "A.exe",
+     "is_windows": true,
+     "ambiguous": true,
+     "candidates": [
+      "A.exe",
+      "B.exe"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "only_helpers",
+  "files": {
+   "setup.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "Redist/dxsetup.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "dotnet.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   }
+  }
+ },
+ {
+  "name": "hidden_ignored",
+  "files": {
+   ".hidden/game.x86_64": [
+    127,
+    69,
+    76,
+    70,
+    2,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   ".game.sh": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "ok/Game.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": [
+      [
+       1,
+       "ok/Game.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "ok/Game.exe",
+     "is_windows": true,
+     "ambiguous": false,
+     "candidates": [
+      "ok/Game.exe"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": [
+      [
+       1,
+       "ok/Game.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "ok/Game.exe",
+     "is_windows": true,
+     "ambiguous": false,
+     "candidates": [
+      "ok/Game.exe"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": [
+      [
+       1,
+       "ok/Game.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "ok/Game.exe",
+     "is_windows": true,
+     "ambiguous": false,
+     "candidates": [
+      "ok/Game.exe"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "upper_case_ext",
+  "files": {
+   "GAME.X86_64": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "Run.SH": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "GAME.EXE": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "GAME.X86_64"
+      ]
+     ],
+     "scripts": [
+      "Run.SH"
+     ],
+     "winexes": [
+      [
+       0,
+       "GAME.EXE"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "GAME.X86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "GAME.X86_64"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "GAME.X86_64"
+      ]
+     ],
+     "scripts": [],
+     "winexes": [
+      [
+       0,
+       "GAME.EXE"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "GAME.X86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "GAME.X86_64"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "GAME.X86_64"
+      ]
+     ],
+     "scripts": [
+      "Run.SH"
+     ],
+     "winexes": [
+      [
+       0,
+       "GAME.EXE"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "GAME.X86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "GAME.X86_64"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "dot_linux",
+  "files": {
+   "game.linux": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       1,
+       0,
+       "game.linux"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game.linux",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game.linux"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       1,
+       0,
+       "game.linux"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game.linux",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game.linux"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       1,
+       0,
+       "game.linux"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game.linux",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game.linux"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "empty",
+  "files": {},
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   }
+  }
+ },
+ {
+  "name": "docs_only",
+  "files": {
+   "readme.txt": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "data.pak": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": null,
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": []
+    }
+   }
+  }
+ },
+ {
+  "name": "mixed_all",
+  "files": {
+   "a.exe": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "b.sh": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ],
+   "c.x86": [
+    127,
+    69,
+    76,
+    70,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "d.AppImage": [
+    104,
+    101,
+    108,
+    108,
+    111
+   ]
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [
+      "d.AppImage"
+     ],
+     "natives": [
+      [
+       2,
+       0,
+       "c.x86"
+      ]
+     ],
+     "scripts": [
+      "b.sh"
+     ],
+     "winexes": [
+      [
+       0,
+       "a.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "d.AppImage",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "d.AppImage"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [
+      "d.AppImage"
+     ],
+     "natives": [
+      [
+       2,
+       0,
+       "c.x86"
+      ]
+     ],
+     "scripts": [],
+     "winexes": [
+      [
+       0,
+       "a.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "d.AppImage",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "d.AppImage"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [
+      "d.AppImage"
+     ],
+     "natives": [
+      [
+       2,
+       0,
+       "c.x86"
+      ]
+     ],
+     "scripts": [
+      "b.sh"
+     ],
+     "winexes": [
+      [
+       0,
+       "a.exe"
+      ]
+     ]
+    },
+    "pick": {
+     "path": "d.AppImage",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "d.AppImage"
+     ]
+    }
+   }
+  }
+ },
+ {
+  "name": "unreadable_elf_ext",
+  "files": {
+   "game.x86_64": []
+  },
+  "out": {
+   "linux": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "game.x86_64"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game.x86_64"
+     ]
+    }
+   },
+   "windows": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "game.x86_64"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game.x86_64"
+     ]
+    }
+   },
+   "mac": {
+    "scan": {
+     "appimages": [],
+     "natives": [
+      [
+       0,
+       0,
+       "game.x86_64"
+      ]
+     ],
+     "scripts": [],
+     "winexes": []
+    },
+    "pick": {
+     "path": "game.x86_64",
+     "is_windows": false,
+     "ambiguous": false,
+     "candidates": [
+      "game.x86_64"
+     ]
+    }
+   }
+  }
+ }
+]

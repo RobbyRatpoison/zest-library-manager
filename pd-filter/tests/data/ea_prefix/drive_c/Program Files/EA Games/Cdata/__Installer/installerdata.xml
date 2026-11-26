@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiPManifest version="4.0"><title><![CDATA[Tom & Jerry: The Game]]></title><contentIDs><contentID>777</contentID></contentIDs><runtime><launcher><filePath>[Software\Foo\Bar\Install Dir]game.exe</filePath></launcher></runtime></DiPManifest>

@@ -1,0 +1,29 @@
+[package]
+name = "pd-filter"
+version = "0.1.0"
+edition = "2021"
+description = "Filter tree to SQL compiler, a port of library.build_tree_sql / is_safe_sql (checked against golden cases generated from the Python code)"
+
+[dependencies]
+serde_json = { version = "1", features = ["preserve_order"] }
+serde = "1"
+regex = "1"
+rusqlite = { version = "0.32", features = ["bundled", "backup"] }
+scraper = { version = "0.20", default-features = false }
+html-escape = "0.2"
+ring = "0.17"
+des = "0.8"
+cbc = "0.1"
+flate2 = "1"
+ureq = { version = "2", default-features = false, features = ["tls", "gzip"] }
+serde_yaml = "0.9"
+lzma-rs = "0.3.0"
+roxmltree = "0.20"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[target.'cfg(windows)'.dependencies]
+winreg = "0.52"
+
+[dev-dependencies]

@@ -1,0 +1,940 @@
+{
+ "auth_url": "https://login.live.com/oauth20_authorize.srf?client_id=38cd2fa8-66fd-4760-afb2-405eb65d5b0c&response_type=code&approval_prompt=auto&scope=Xboxlive.signin+Xboxlive.offline_access&redirect_uri=https%3A%2F%2Flogin.live.com%2Foauth20_desktop.srf",
+ "not_after": [
+  [
+   "2026-11-02T10:00:00.1234567Z",
+   1793613600
+  ],
+  [
+   "2026-11-02T10:00:00Z",
+   1793613600
+  ],
+  [
+   "2026-11-02T10:00:00",
+   1793613600
+  ],
+  [
+   "",
+   0
+  ],
+  [
+   null,
+   0
+  ],
+  [
+   "garbage",
+   0
+  ],
+  [
+   "2026-13-02T10:00:00Z",
+   0
+  ],
+  [
+   "2026-11-02 10:00:00Z",
+   0
+  ]
+ ],
+ "iso": [
+  [
+   "2019-03-04T10:00:00.1234567Z",
+   1551693600
+  ],
+  [
+   "2019-03-04T10:00:00Z",
+   1551693600
+  ],
+  [
+   "2019-03-04T10:00:00",
+   1551693600
+  ],
+  [
+   "2019-03-04",
+   1551657600
+  ],
+  [
+   "2019-03-04 10:00:00",
+   1551693600
+  ],
+  [
+   "2019-03-04T10:00",
+   1551693600
+  ],
+  [
+   "2019-03-04T10:00:00+02:00",
+   1551693600
+  ],
+  [
+   "2019-03-04T10:00:00.5",
+   1551693600
+  ],
+  [
+   "0001-01-01T00:00:00Z",
+   -62135596800
+  ],
+  [
+   "1970-01-01T00:00:00Z",
+   0
+  ],
+  [
+   "",
+   null
+  ],
+  [
+   null,
+   null
+  ],
+  [
+   "garbage",
+   null
+  ],
+  [
+   "2019-13-04T00:00:00Z",
+   null
+  ],
+  [
+   "2019-02-30",
+   null
+  ],
+  [
+   "2019-03-04T25:00:00Z",
+   null
+  ],
+  [
+   "2019-03-04T10:00:00.123456789Z",
+   1551693600
+  ],
+  [
+   "2019-03-04T10:00:00-05:00",
+   1551693600
+  ],
+  [
+   "2019-03-04T10:00:00.123+02:00",
+   1551693600
+  ]
+ ],
+ "sync": [
+  {
+   "min_play": 0,
+   "existing": [],
+   "titles": [
+    {
+     "titleId": "1",
+     "name": "Forza",
+     "pfn": "Fz.PFN",
+     "detail": {
+      "developerName": "Dev",
+      "publisherName": "Pub",
+      "genres": [
+       "Action",
+       "Racing"
+      ],
+      "releaseDate": "2019-03-04T10:00:00.1234567Z",
+      "availabilities": [
+       {
+        "ProductId": "9ABC"
+       }
+      ]
+     },
+     "titleHistory": {
+      "lastTimePlayed": "2021-06-01T12:00:00Z"
+     },
+     "achievement": {
+      "currentAchievements": 4,
+      "totalAchievements": 10
+     }
+    },
+    {
+     "titleId": "2",
+     "name": "Steam Thing",
+     "pfn": null,
+     "detail": {
+      "developerName": "X"
+     }
+    },
+    {
+     "titleId": "3",
+     "name": "Empty pfn",
+     "pfn": ""
+    },
+    {
+     "titleId": "4",
+     "name": "Zero total",
+     "pfn": "Z.PFN",
+     "achievement": {
+      "currentAchievements": 43,
+      "totalAchievements": 0
+     }
+    },
+    {
+     "titleId": "5",
+     "name": "No detail",
+     "pfn": "N.PFN"
+    },
+    {
+     "titleId": "6",
+     "name": "Blank bits",
+     "pfn": "B.PFN",
+     "detail": {
+      "developerName": "",
+      "publisherName": "",
+      "genres": [],
+      "releaseDate": "",
+      "availabilities": []
+     },
+     "titleHistory": {
+      "lastTimePlayed": ""
+     }
+    },
+    {
+     "titleId": "7",
+     "name": "Bad date",
+     "pfn": "D.PFN",
+     "detail": {
+      "releaseDate": "soon",
+      "availabilities": [
+       {
+        "ProductId": ""
+       }
+      ]
+     },
+     "titleHistory": {
+      "lastTimePlayed": "nope"
+     }
+    },
+    {
+     "titleId": "8",
+     "name": "Played",
+     "pfn": "P.PFN",
+     "titleHistory": {
+      "lastTimePlayed": "2020-01-01T00:00:00Z"
+     }
+    },
+    {
+     "titleId": "9",
+     "name": "Missing stat",
+     "pfn": "M.PFN"
+    },
+    {
+     "titleId": "10",
+     "name": "Cur none",
+     "pfn": "C.PFN",
+     "achievement": {
+      "currentAchievements": null,
+      "totalAchievements": 5
+     }
+    }
+   ],
+   "playtimes": {
+    "1": 120,
+    "4": 0,
+    "8": 30,
+    "10": "7"
+   },
+   "rows": [
+    {
+     "platform_id": "1",
+     "name": "Forza",
+     "platform_appname": "Fz.PFN",
+     "platform_slug": "9ABC",
+     "last_played": 1622548800,
+     "playtime_forever": 120,
+     "completion_status": "Unfinished",
+     "developers": "Dev",
+     "publishers": "Pub",
+     "genres": "Action,Racing",
+     "release_date": 1551693600,
+     "unlocked_achievements": 4,
+     "total_achievements": 10,
+     "cheevos_fetched": "2026-11-01"
+    },
+    {
+     "platform_id": "4",
+     "name": "Zero total",
+     "platform_appname": "Z.PFN",
+     "platform_slug": null,
+     "last_played": null,
+     "playtime_forever": 0,
+     "completion_status": "Never Played",
+     "developers": null,
+     "publishers": null,
+     "genres": null,
+     "release_date": null,
+     "unlocked_achievements": null,
+     "total_achievements": null,
+     "cheevos_fetched": "0"
+    },
+    {
+     "platform_id": "5",
+     "name": "No detail",
+     "platform_appname": "N.PFN",
+     "platform_slug": null,
+     "last_played": null,
+     "playtime_forever": 0,
+     "completion_status": "Never Played",
+     "developers": null,
+     "publishers": null,
+     "genres": null,
+     "release_date": null,
+     "unlocked_achievements": null,
+     "total_achievements": null,
+     "cheevos_fetched": "0"
+    },
+    {
+     "platform_id": "6",
+     "name": "Blank bits",
+     "platform_appname": "B.PFN",
+     "platform_slug": null,
+     "last_played": null,
+     "playtime_forever": 0,
+     "completion_status": "Never Played",
+     "developers": null,
+     "publishers": null,
+     "genres": null,
+     "release_date": null,
+     "unlocked_achievements": null,
+     "total_achievements": null,
+     "cheevos_fetched": "0"
+    },
+    {
+     "platform_id": "7",
+     "name": "Bad date",
+     "platform_appname": "D.PFN",
+     "platform_slug": "",
+     "last_played": null,
+     "playtime_forever": 0,
+     "completion_status": "Never Played",
+     "developers": null,
+     "publishers": null,
+     "genres": null,
+     "release_date": null,
+     "unlocked_achievements": null,
+     "total_achievements": null,
+     "cheevos_fetched": "0"
+    },
+    {
+     "platform_id": "8",
+     "name": "Played",
+     "platform_appname": "P.PFN",
+     "platform_slug": null,
+     "last_played": 1577836800,
+     "playtime_forever": 30,
+     "completion_status": "Unfinished",
+     "developers": null,
+     "publishers": null,
+     "genres": null,
+     "release_date": null,
+     "unlocked_achievements": null,
+     "total_achievements": null,
+     "cheevos_fetched": "0"
+    },
+    {
+     "platform_id": "9",
+     "name": "Missing stat",
+     "platform_appname": "M.PFN",
+     "platform_slug": null,
+     "last_played": null,
+     "playtime_forever": 0,
+     "completion_status": "Never Played",
+     "developers": null,
+     "publishers": null,
+     "genres": null,
+     "release_date": null,
+     "unlocked_achievements": null,
+     "total_achievements": null,
+     "cheevos_fetched": "0"
+    },
+    {
+     "platform_id": "10",
+     "name": "Cur none",
+     "platform_appname": "C.PFN",
+     "platform_slug": null,
+     "last_played": null,
+     "playtime_forever": 7,
+     "completion_status": "Unfinished",
+     "developers": null,
+     "publishers": null,
+     "genres": null,
+     "release_date": null,
+     "unlocked_achievements": 0,
+     "total_achievements": 5,
+     "cheevos_fetched": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "min_play": 60,
+   "existing": [],
+   "titles": [
+    {
+     "titleId": "1",
+     "name": "Forza",
+     "pfn": "Fz.PFN",
+     "detail": {
+      "developerName": "Dev",
+      "publisherName": "Pub",
+      "genres": [
+       "Action",
+       "Racing"
+      ],
+      "releaseDate": "2019-03-04T10:00:00.1234567Z",
+      "availabilities": [
+       {
+        "ProductId": "9ABC"
+       }
+      ]
+     },
+     "titleHistory": {
+      "lastTimePlayed": "2021-06-01T12:00:00Z"
+     },
+     "achievement": {
+      "currentAchievements": 4,
+      "totalAchievements": 10
+     }
+    },
+    {
+     "titleId": "2",
+     "name": "Steam Thing",
+     "pfn": null,
+     "detail": {
+      "developerName": "X"
+     }
+    },
+    {
+     "titleId": "3",
+     "name": "Empty pfn",
+     "pfn": ""
+    },
+    {
+     "titleId": "4",
+     "name": "Zero total",
+     "pfn": "Z.PFN",
+     "achievement": {
+      "currentAchievements": 43,
+      "totalAchievements": 0
+     }
+    },
+    {
+     "titleId": "5",
+     "name": "No detail",
+     "pfn": "N.PFN"
+    },
+    {
+     "titleId": "6",
+     "name": "Blank bits",
+     "pfn": "B.PFN",
+     "detail": {
+      "developerName": "",
+      "publisherName": "",
+      "genres": [],
+      "releaseDate": "",
+      "availabilities": []
+     },
+     "titleHistory": {
+      "lastTimePlayed": ""
+     }
+    },
+    {
+     "titleId": "7",
+     "name": "Bad date",
+     "pfn": "D.PFN",
+     "detail": {
+      "releaseDate": "soon",
+      "availabilities": [
+       {
+        "ProductId": ""
+       }
+      ]
+     },
+     "titleHistory": {
+      "lastTimePlayed": "nope"
+     }
+    },
+    {
+     "titleId": "8",
+     "name": "Played",
+     "pfn": "P.PFN",
+     "titleHistory": {
+      "lastTimePlayed": "2020-01-01T00:00:00Z"
+     }
+    },
+    {
+     "titleId": "9",
+     "name": "Missing stat",
+     "pfn": "M.PFN"
+    },
+    {
+     "titleId": "10",
+     "name": "Cur none",
+     "pfn": "C.PFN",
+     "achievement": {
+      "currentAchievements": null,
+      "totalAchievements": 5
+     }
+    }
+   ],
+   "playtimes": {
+    "1": 120,
+    "4": 0,
+    "8": 30,
+    "10": "7"
+   },
+   "rows": [
+    {
+     "platform_id": "1",
+     "name": "Forza",
+     "platform_appname": "Fz.PFN",
+     "platform_slug": "9ABC",
+     "last_played": 1622548800,
+     "playtime_forever": 120,
+     "completion_status": "Unfinished",
+     "developers": "Dev",
+     "publishers": "Pub",
+     "genres": "Action,Racing",
+     "release_date": 1551693600,
+     "unlocked_achievements": 4,
+     "total_achievements": 10,
+     "cheevos_fetched": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "min_play": 60,
+   "existing": [
+    "8"
+   ],
+   "titles": [
+    {
+     "titleId": "1",
+     "name": "Forza",
+     "pfn": "Fz.PFN",
+     "detail": {
+      "developerName": "Dev",
+      "publisherName": "Pub",
+      "genres": [
+       "Action",
+       "Racing"
+      ],
+      "releaseDate": "2019-03-04T10:00:00.1234567Z",
+      "availabilities": [
+       {
+        "ProductId": "9ABC"
+       }
+      ]
+     },
+     "titleHistory": {
+      "lastTimePlayed": "2021-06-01T12:00:00Z"
+     },
+     "achievement": {
+      "currentAchievements": 4,
+      "totalAchievements": 10
+     }
+    },
+    {
+     "titleId": "2",
+     "name": "Steam Thing",
+     "pfn": null,
+     "detail": {
+      "developerName": "X"
+     }
+    },
+    {
+     "titleId": "3",
+     "name": "Empty pfn",
+     "pfn": ""
+    },
+    {
+     "titleId": "4",
+     "name": "Zero total",
+     "pfn": "Z.PFN",
+     "achievement": {
+      "currentAchievements": 43,
+      "totalAchievements": 0
+     }
+    },
+    {
+     "titleId": "5",
+     "name": "No detail",
+     "pfn": "N.PFN"
+    },
+    {
+     "titleId": "6",
+     "name": "Blank bits",
+     "pfn": "B.PFN",
+     "detail": {
+      "developerName": "",
+      "publisherName": "",
+      "genres": [],
+      "releaseDate": "",
+      "availabilities": []
+     },
+     "titleHistory": {
+      "lastTimePlayed": ""
+     }
+    },
+    {
+     "titleId": "7",
+     "name": "Bad date",
+     "pfn": "D.PFN",
+     "detail": {
+      "releaseDate": "soon",
+      "availabilities": [
+       {
+        "ProductId": ""
+       }
+      ]
+     },
+     "titleHistory": {
+      "lastTimePlayed": "nope"
+     }
+    },
+    {
+     "titleId": "8",
+     "name": "Played",
+     "pfn": "P.PFN",
+     "titleHistory": {
+      "lastTimePlayed": "2020-01-01T00:00:00Z"
+     }
+    },
+    {
+     "titleId": "9",
+     "name": "Missing stat",
+     "pfn": "M.PFN"
+    },
+    {
+     "titleId": "10",
+     "name": "Cur none",
+     "pfn": "C.PFN",
+     "achievement": {
+      "currentAchievements": null,
+      "totalAchievements": 5
+     }
+    }
+   ],
+   "playtimes": {
+    "1": 120,
+    "4": 0,
+    "8": 30,
+    "10": "7"
+   },
+   "rows": [
+    {
+     "platform_id": "1",
+     "name": "Forza",
+     "platform_appname": "Fz.PFN",
+     "platform_slug": "9ABC",
+     "last_played": 1622548800,
+     "playtime_forever": 120,
+     "completion_status": "Unfinished",
+     "developers": "Dev",
+     "publishers": "Pub",
+     "genres": "Action,Racing",
+     "release_date": 1551693600,
+     "unlocked_achievements": 4,
+     "total_achievements": 10,
+     "cheevos_fetched": "2026-11-01"
+    }
+   ]
+  }
+ ],
+ "meta": [
+  {
+   "title": {
+    "titleId": "1",
+    "name": "Forza",
+    "pfn": "Fz.PFN",
+    "detail": {
+     "developerName": "Dev",
+     "publisherName": "Pub",
+     "genres": [
+      "Action",
+      "Racing"
+     ],
+     "releaseDate": "2019-03-04T10:00:00.1234567Z",
+     "availabilities": [
+      {
+       "ProductId": "9ABC"
+      }
+     ]
+    },
+    "titleHistory": {
+     "lastTimePlayed": "2021-06-01T12:00:00Z"
+    },
+    "achievement": {
+     "currentAchievements": 4,
+     "totalAchievements": 10
+    }
+   },
+   "out": {
+    "developers": "Dev",
+    "publishers": "Pub",
+    "genres": "Action,Racing",
+    "release_date": 1551693600,
+    "unlocked_achievements": 4,
+    "total_achievements": 10,
+    "cheevos_fetched": "2026-11-01"
+   }
+  },
+  {
+   "title": {
+    "titleId": "2",
+    "name": "Steam Thing",
+    "pfn": null,
+    "detail": {
+     "developerName": "X"
+    }
+   },
+   "out": {
+    "developers": "X"
+   }
+  },
+  {
+   "title": {
+    "titleId": "3",
+    "name": "Empty pfn",
+    "pfn": ""
+   },
+   "out": {}
+  },
+  {
+   "title": {
+    "titleId": "4",
+    "name": "Zero total",
+    "pfn": "Z.PFN",
+    "achievement": {
+     "currentAchievements": 43,
+     "totalAchievements": 0
+    }
+   },
+   "out": {}
+  },
+  {
+   "title": {
+    "titleId": "5",
+    "name": "No detail",
+    "pfn": "N.PFN"
+   },
+   "out": {}
+  },
+  {
+   "title": {
+    "titleId": "6",
+    "name": "Blank bits",
+    "pfn": "B.PFN",
+    "detail": {
+     "developerName": "",
+     "publisherName": "",
+     "genres": [],
+     "releaseDate": "",
+     "availabilities": []
+    },
+    "titleHistory": {
+     "lastTimePlayed": ""
+    }
+   },
+   "out": {}
+  },
+  {
+   "title": {
+    "titleId": "7",
+    "name": "Bad date",
+    "pfn": "D.PFN",
+    "detail": {
+     "releaseDate": "soon",
+     "availabilities": [
+      {
+       "ProductId": ""
+      }
+     ]
+    },
+    "titleHistory": {
+     "lastTimePlayed": "nope"
+    }
+   },
+   "out": {}
+  },
+  {
+   "title": {
+    "titleId": "8",
+    "name": "Played",
+    "pfn": "P.PFN",
+    "titleHistory": {
+     "lastTimePlayed": "2020-01-01T00:00:00Z"
+    }
+   },
+   "out": {}
+  },
+  {
+   "title": {
+    "titleId": "9",
+    "name": "Missing stat",
+    "pfn": "M.PFN"
+   },
+   "out": {}
+  },
+  {
+   "title": {
+    "titleId": "10",
+    "name": "Cur none",
+    "pfn": "C.PFN",
+    "achievement": {
+     "currentAchievements": null,
+     "totalAchievements": 5
+    }
+   },
+   "out": {
+    "unlocked_achievements": 0,
+    "total_achievements": 5,
+    "cheevos_fetched": "2026-11-01"
+   }
+  },
+  {
+   "title": {
+    "titleId": "1",
+    "name": "Forza dup",
+    "pfn": "Fz.PFN",
+    "detail": {
+     "developerName": "Other"
+    }
+   },
+   "out": {
+    "developers": "Other"
+   }
+  }
+ ],
+ "images": [
+  {
+   "images": [
+    {
+     "type": "Poster",
+     "url": "p"
+    },
+    {
+     "type": "BoxArt",
+     "url": "b"
+    },
+    {
+     "type": "Poster",
+     "url": "p2"
+    },
+    {
+     "type": "Logo",
+     "url": "l"
+    }
+   ],
+   "out": {
+    "vertical": "p",
+    "horizontal": null,
+    "icon": "l"
+   }
+  },
+  {
+   "images": [
+    {
+     "type": "BoxArt",
+     "url": "b"
+    },
+    {
+     "type": "Hero",
+     "url": "h"
+    },
+    {
+     "type": "SuperHeroArt",
+     "url": "s"
+    }
+   ],
+   "out": {
+    "vertical": "b",
+    "horizontal": "h",
+    "icon": null
+   }
+  },
+  {
+   "images": [
+    {
+     "type": "TitledHeroArt",
+     "url": ""
+    },
+    {
+     "type": "Hero",
+     "url": "h"
+    }
+   ],
+   "out": {
+    "vertical": null,
+    "horizontal": "h",
+    "icon": null
+   }
+  },
+  {
+   "images": [],
+   "out": {
+    "vertical": null,
+    "horizontal": null,
+    "icon": null
+   }
+  },
+  {
+   "images": [
+    {
+     "url": "x"
+    },
+    {
+     "type": "Logo"
+    }
+   ],
+   "out": {
+    "vertical": null,
+    "horizontal": null,
+    "icon": null
+   }
+  }
+ ],
+ "stats": [
+  {
+   "in": {
+    "statlistscollection": [
+     {
+      "stats": [
+       {
+        "titleid": "1",
+        "value": "120"
+       },
+       {
+        "titleid": "2",
+        "value": null
+       },
+       {
+        "titleid": "3",
+        "value": "x"
+       },
+       {
+        "titleid": "4"
+       },
+       {
+        "titleid": "5",
+        "value": 7.9
+       }
+      ]
+     }
+    ]
+   },
+   "out": {
+    "1": 120,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 7
+   }
+  },
+  {
+   "in": {
+    "statlistscollection": []
+   },
+   "out": {}
+  },
+  {
+   "in": {},
+   "out": {}
+  }
+ ]
+}

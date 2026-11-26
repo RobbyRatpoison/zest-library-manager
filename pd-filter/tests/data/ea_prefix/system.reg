@@ -1,0 +1,35 @@
+WINE REGISTRY Version 2
+;; All keys relative to \\Machine
+
+[Software\\Wow6432Node\\PopCap\\Bejeweled 3] 1700000000
+#time=1d9
+"Install Dir"="C:\\PROGRAM FILES (X86)\\origin games\\bejeweled 3\\"
+"Other"="x"
+
+[Software\\EA Games\\Battlefield\x2122 V] 1700000001
+"Install Dir"="E:\\Games\\Battlefield V\\"
+
+[Software\\Wow6432Node\\Image & Form\\SteamWorld Dig] 1700000002
+"Install Dir"="C:\\Program Files (x86)\\Origin Games\\SteamWorld Dig"
+
+[Software\\EA Games\\Theme Hospital] 1700000003
+"Install Dir"="C:\\Program Files\\EA Games\\Theme Hospital\\"
+
+[Software\\EA Games\\Broken] 1700000004
+"Install Dir"="C:\\Program Files\\EA Games\\Broken"
+
+[Software\\EA Games\\Gone] 1700000005
+"Install Dir"="C:\\Program Files\\EA Games\\Gone"
+
+[Software\\EA Games\\Qdrive] 1700000006
+"Install Dir"="Q:\\x\\y"
+
+[Software\\Foo\\Bar\\Baz] 1700000007
+"Install Dir"="C:\\Program Files\\EA Games\\Theme Hospital"
+
+[Software\\EA Games\\Empty] 1700000008
+"Install Dir"=""
+
+[Software\\EA Games\\Cdata] 1700000009
+"Install Dir"="C:\\Program Files\\EA Games\\Cdata"
+

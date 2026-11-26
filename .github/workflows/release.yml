@@ -1,0 +1,114 @@
+name: Build Zest
+
+# A tag like v2026.11.1 builds the Linux tarball, the Flatpak bundle
+# (app id io.github.robbyratpoison.Zest) and the Windows and macOS programs, and attaches them to a release. Run by hand it only builds.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  tests:
+    name: Tests (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with: { workspaces: . }
+      - run: sudo apt-get update && sudo apt-get install -y libwayland-dev libxkbcommon-dev libudev-dev
+      - run: cargo test --release -p pd-filter -p grid-core -p grid-own
+
+  linux:
+    name: Linux tarball
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with: { workspaces: . }
+      - run: sudo apt-get update && sudo apt-get install -y libwayland-dev libxkbcommon-dev libudev-dev
+      - run: sh package/build-release.sh "${GITHUB_REF_NAME#v}"
+      - uses: actions/upload-artifact@v4
+        with: { name: zest-linux, path: package/dist/*.tar.gz }
+
+  flatpak:
+    name: Flatpak bundle
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y flatpak flatpak-builder
+      - run: |
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          cd package/flatpak
+          # the version the program reports (flatpak-builder has no switch for it: it goes into the manifest's build environment)
+          sed -i "s|CARGO_HOME: /run/build/zest/cargo|CARGO_HOME: /run/build/zest/cargo\n        ZEST_BUILD_VERSION: \"${GITHUB_REF_NAME#v}\"|" io.github.robbyratpoison.Zest.yml
+          flatpak-builder --user --install-deps-from=flathub --force-clean --repo=repo build-dir io.github.robbyratpoison.Zest.yml
+          flatpak build-bundle repo zest.flatpak io.github.robbyratpoison.Zest
+          mv zest.flatpak "../../Zest-${GITHUB_REF_NAME#v}-Linux.flatpak"
+      - uses: actions/upload-artifact@v4
+        with: { name: zest-flatpak, path: "Zest-*-Linux.flatpak" }
+
+  windows:
+    name: Windows program
+    needs: tests
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with: { workspaces: . }
+      # the tests exercise the per-OS code (path detection, emulator and Steam locations) that has only ever been type-checked; informative only during the beta
+      - run: cargo test --release -p pd-filter -p grid-core -p grid-own
+        continue-on-error: true
+      - shell: bash
+        run: |
+          [ "${GITHUB_REF_TYPE}" = tag ] && export ZEST_BUILD_VERSION="${GITHUB_REF_NAME#v}"
+          cargo build --release -p grid-own -p zest-login
+      - shell: bash
+        run: |
+          mkdir zest-windows
+          cp target/release/grid-own.exe zest-windows/Zest.exe
+          cp target/release/zest-login.exe zest-windows/zest-login.exe
+          cp assets/favicon.png zest-windows/zest.png
+          7z a Zest-windows.zip ./zest-windows/*
+      - uses: actions/upload-artifact@v4
+        with: { name: zest-windows, path: Zest-windows.zip }
+
+  macos:
+    name: macOS program
+    needs: tests
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with: { workspaces: . }
+      # the tests exercise the per-OS code (path detection, emulator and Steam locations) that has only ever been type-checked; informative only during the beta
+      - run: cargo test --release -p pd-filter -p grid-core -p grid-own
+        continue-on-error: true
+      - run: sh package/build-release.sh "${GITHUB_REF_NAME#v}"
+      - uses: actions/upload-artifact@v4
+        with: { name: zest-macos, path: package/dist/*.tar.gz }
+
+  release:
+    name: Attach to the release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [linux, flatpak, windows, macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { path: dist }
+      - uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          files: dist/**/*

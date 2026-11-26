@@ -1,0 +1,3178 @@
+{
+ "cases": [
+  {
+   "kind": "normal",
+   "min_rate": 2.0,
+   "cap": 60,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.0993575232171652,
+    "Shooter": 0.0010819824838703002,
+    "Multiplayer": -0.06202064411003072,
+    "RPG": -0.06689986124675859,
+    "Story Rich": -0.04710551683604568,
+    "Singleplayer": 0.11672294121816817,
+    "Puzzle": 0.010179031658825638,
+    "Casual": -0.05494340399195996,
+    "Strategy": 0.050581694452996234,
+    "Turn-Based": 0.03337067971106143,
+    "Roguelike": -0.08064516129032258,
+    "Horror": 0.06599581427722687,
+    "Racing": -0.06310262659390102,
+    "Relaxing": 0.009097049174955324,
+    "Rare Tag": 0.08280912625806318
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11672294121816817,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.08280912625806318,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.06599581427722687,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.050581694452996234,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.03337067971106143,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.010179031658825638,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.009097049174955324,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": 0.0010819824838703002,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.0993575232171652,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.08064516129032258,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.06689986124675859,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.06310262659390102,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.06202064411003072,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.05494340399195996,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.04710551683604568,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11672294121816817,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.08280912625806318,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.06599581427722687,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.0993575232171652,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.08064516129032258,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.06689986124675859,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "normal",
+   "min_rate": 0.0,
+   "cap": 60,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.0993575232171652,
+    "Shooter": 0.0010819824838703002,
+    "Multiplayer": -0.06202064411003072,
+    "RPG": -0.06689986124675859,
+    "Story Rich": -0.04710551683604568,
+    "Singleplayer": 0.11672294121816817,
+    "Puzzle": 0.010179031658825638,
+    "Casual": -0.05494340399195996,
+    "Strategy": 0.050581694452996234,
+    "Turn-Based": 0.03337067971106143,
+    "Roguelike": -0.08064516129032258,
+    "Horror": 0.06599581427722687,
+    "Racing": -0.06310262659390102,
+    "Relaxing": 0.009097049174955324,
+    "Rare Tag": 0.08280912625806318
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11672294121816817,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.08280912625806318,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.06599581427722687,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.050581694452996234,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.03337067971106143,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.010179031658825638,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.009097049174955324,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": 0.0010819824838703002,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.0993575232171652,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.08064516129032258,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.06689986124675859,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.06310262659390102,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.06202064411003072,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.05494340399195996,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.04710551683604568,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11672294121816817,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.08280912625806318,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.06599581427722687,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.0993575232171652,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.08064516129032258,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.06689986124675859,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "normal",
+   "min_rate": 10.0,
+   "cap": 200,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.10811751160990468,
+    "Multiplayer": -0.0668824700639378,
+    "RPG": -0.08154066117770792,
+    "Story Rich": -0.05595356839512698,
+    "Singleplayer": 0.13231711369871269,
+    "Puzzle": 0.011593303441848168,
+    "Casual": -0.060674336342361745,
+    "Strategy": 0.03697993642435926,
+    "Relaxing": 0.01358332859509076
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.13231711369871269,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.03697993642435926,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.01358332859509076,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.011593303441848168,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.10811751160990468,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.08154066117770792,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.0668824700639378,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.060674336342361745,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.05595356839512698,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.13231711369871269,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.03697993642435926,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.01358332859509076,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.10811751160990468,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.08154066117770792,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.0668824700639378,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "normal",
+   "min_rate": 2.0,
+   "cap": 1,
+   "overrides": {
+    "Action": "like",
+    "Horror": "dislike",
+    "Puzzle": "ignore",
+    "Ghost Tag": "like",
+    "Phantom": "dislike"
+   },
+   "affinity": {
+    "Action": 0.04065157600019825,
+    "Shooter": -0.029023089618535343,
+    "Multiplayer": -0.058046179237070686,
+    "RPG": 0.04065157600019825,
+    "Story Rich": 0.022664333633506395,
+    "Singleplayer": -0.01741411258722303,
+    "Puzzle": 0.0,
+    "Casual": -0.027849203099535258,
+    "Strategy": 0.025833956950845588,
+    "Turn-Based": 0.03872801431131641,
+    "Roguelike": -0.08064516129032258,
+    "Horror": -0.08064516129032258,
+    "Racing": -0.029023089618535343,
+    "Relaxing": 0.03990190083031647,
+    "Rare Tag": 0.022598982053251893,
+    "Ghost Tag": 0.04065157600019825,
+    "Phantom": -0.08064516129032258
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Action",
+      "affinity": 0.04065157600019825,
+      "pinned": true
+     },
+     {
+      "tag": "Ghost Tag",
+      "affinity": 0.04065157600019825,
+      "pinned": true
+     },
+     {
+      "tag": "RPG",
+      "affinity": 0.04065157600019825,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.03990190083031647,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.03872801431131641,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.025833956950845588,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": 0.022664333633506395,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.022598982053251893,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Roguelike",
+      "affinity": -0.08064516129032258,
+      "pinned": false
+     },
+     {
+      "tag": "Phantom",
+      "affinity": -0.08064516129032258,
+      "pinned": true
+     },
+     {
+      "tag": "Horror",
+      "affinity": -0.08064516129032258,
+      "pinned": true
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.058046179237070686,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.029023089618535343,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.029023089618535343,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.027849203099535258,
+      "pinned": false
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.01741411258722303,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Puzzle"
+    ]
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Action",
+      "affinity": 0.04065157600019825,
+      "pinned": true
+     },
+     {
+      "tag": "Ghost Tag",
+      "affinity": 0.04065157600019825,
+      "pinned": true
+     },
+     {
+      "tag": "RPG",
+      "affinity": 0.04065157600019825,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Roguelike",
+      "affinity": -0.08064516129032258,
+      "pinned": false
+     },
+     {
+      "tag": "Phantom",
+      "affinity": -0.08064516129032258,
+      "pinned": true
+     },
+     {
+      "tag": "Horror",
+      "affinity": -0.08064516129032258,
+      "pinned": true
+     }
+    ],
+    "ignored": [
+     "Puzzle"
+    ]
+   }
+  },
+  {
+   "kind": "normal",
+   "min_rate": 5.0,
+   "cap": 60,
+   "overrides": {
+    "Rare Tag": "like"
+   },
+   "affinity": {
+    "Action": -0.0993575232171652,
+    "Shooter": 0.0010819824838703002,
+    "Multiplayer": -0.06202064411003072,
+    "RPG": -0.06689986124675859,
+    "Story Rich": -0.04710551683604568,
+    "Singleplayer": 0.11672294121816817,
+    "Puzzle": 0.010179031658825638,
+    "Casual": -0.05494340399195996,
+    "Strategy": 0.050581694452996234,
+    "Turn-Based": 0.03337067971106143,
+    "Roguelike": -0.08064516129032258,
+    "Horror": 0.06599581427722687,
+    "Racing": -0.06310262659390102,
+    "Relaxing": 0.009097049174955324,
+    "Rare Tag": 0.11672294121816817
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.11672294121816817,
+      "pinned": true
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11672294121816817,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.06599581427722687,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.050581694452996234,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.03337067971106143,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.010179031658825638,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.009097049174955324,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": 0.0010819824838703002,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.0993575232171652,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.08064516129032258,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.06689986124675859,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.06310262659390102,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.06202064411003072,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.05494340399195996,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.04710551683604568,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.11672294121816817,
+      "pinned": true
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11672294121816817,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.06599581427722687,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.0993575232171652,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.08064516129032258,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.06689986124675859,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "normal",
+   "min_rate": 2.0,
+   "cap": 60,
+   "overrides": {
+    "Action": "ignore",
+    "RPG": "ignore",
+    "Singleplayer": "ignore",
+    "Puzzle": "ignore",
+    "Casual": "ignore"
+   },
+   "affinity": {
+    "Action": 0.0,
+    "Shooter": 0.0010819824838703002,
+    "Multiplayer": -0.06202064411003072,
+    "RPG": 0.0,
+    "Story Rich": -0.04710551683604568,
+    "Singleplayer": 0.0,
+    "Puzzle": 0.0,
+    "Casual": 0.0,
+    "Strategy": 0.050581694452996234,
+    "Turn-Based": 0.03337067971106143,
+    "Roguelike": -0.08064516129032258,
+    "Horror": 0.06599581427722687,
+    "Racing": -0.06310262659390102,
+    "Relaxing": 0.009097049174955324,
+    "Rare Tag": 0.08280912625806318
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.08280912625806318,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.06599581427722687,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.050581694452996234,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.03337067971106143,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.009097049174955324,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": 0.0010819824838703002,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Roguelike",
+      "affinity": -0.08064516129032258,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.06310262659390102,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.06202064411003072,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.04710551683604568,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Action",
+     "Casual",
+     "Puzzle",
+     "RPG",
+     "Singleplayer"
+    ]
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.08280912625806318,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.06599581427722687,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.050581694452996234,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Roguelike",
+      "affinity": -0.08064516129032258,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.06310262659390102,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.06202064411003072,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Action",
+     "Casual",
+     "Puzzle",
+     "RPG",
+     "Singleplayer"
+    ]
+   }
+  },
+  {
+   "kind": "none_liked",
+   "min_rate": 2.0,
+   "cap": 60,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.04473494587133203,
+    "Shooter": -0.03742669788801494,
+    "Multiplayer": -0.07399900341569526,
+    "RPG": -0.0032461473580956968,
+    "Story Rich": -0.004345141382116599,
+    "Singleplayer": 0.11520301108016273,
+    "Puzzle": 0.01070134431738995,
+    "Casual": 4.0345658186891065e-05,
+    "Strategy": 0.023899200508602503,
+    "Turn-Based": 0.04132911203494882,
+    "Roguelike": -0.008407242007337945,
+    "Horror": 0.02144240429837907,
+    "Racing": -0.0365723055276803,
+    "Relaxing": 0.012594138315477399,
+    "Rare Tag": 0.029609443656757425
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11520301108016273,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.04132911203494882,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.029609443656757425,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.023899200508602503,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.02144240429837907,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.012594138315477399,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.01070134431738995,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": 4.0345658186891065e-05,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.07399900341569526,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.04473494587133203,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.03742669788801494,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.0365723055276803,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.008407242007337945,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.004345141382116599,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.0032461473580956968,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11520301108016273,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.04132911203494882,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.029609443656757425,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.07399900341569526,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.04473494587133203,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.03742669788801494,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "none_liked",
+   "min_rate": 0.0,
+   "cap": 60,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.04473494587133203,
+    "Shooter": -0.03742669788801494,
+    "Multiplayer": -0.07399900341569526,
+    "RPG": -0.0032461473580956968,
+    "Story Rich": -0.004345141382116599,
+    "Singleplayer": 0.11520301108016273,
+    "Puzzle": 0.01070134431738995,
+    "Casual": 4.0345658186891065e-05,
+    "Strategy": 0.023899200508602503,
+    "Turn-Based": 0.04132911203494882,
+    "Roguelike": -0.008407242007337945,
+    "Horror": 0.02144240429837907,
+    "Racing": -0.0365723055276803,
+    "Relaxing": 0.012594138315477399,
+    "Rare Tag": 0.029609443656757425
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11520301108016273,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.04132911203494882,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.029609443656757425,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.023899200508602503,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.02144240429837907,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.012594138315477399,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.01070134431738995,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": 4.0345658186891065e-05,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.07399900341569526,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.04473494587133203,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.03742669788801494,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.0365723055276803,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.008407242007337945,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.004345141382116599,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.0032461473580956968,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11520301108016273,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.04132911203494882,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.029609443656757425,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.07399900341569526,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.04473494587133203,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.03742669788801494,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "none_liked",
+   "min_rate": 10.0,
+   "cap": 200,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.04641265430634442,
+    "Multiplayer": -0.07929976206103637,
+    "RPG": -0.0021939917919194807,
+    "Story Rich": -0.007768771861193971,
+    "Singleplayer": 0.1265395793848122,
+    "Puzzle": 0.00524689356187949,
+    "Casual": -0.005284640084242231,
+    "Strategy": 0.025674237825163232,
+    "Relaxing": 0.011485712261598169
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.1265395793848122,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.025674237825163232,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.011485712261598169,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.00524689356187949,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.07929976206103637,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.04641265430634442,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.007768771861193971,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.005284640084242231,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.0021939917919194807,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.1265395793848122,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.025674237825163232,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.011485712261598169,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.07929976206103637,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.04641265430634442,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.007768771861193971,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "none_liked",
+   "min_rate": 2.0,
+   "cap": 1,
+   "overrides": {
+    "Action": "like",
+    "Horror": "dislike",
+    "Puzzle": "ignore",
+    "Ghost Tag": "like",
+    "Phantom": "dislike"
+   },
+   "affinity": {
+    "Action": 0.06083402473464472,
+    "Shooter": -0.026207592252097102,
+    "Multiplayer": -0.05048712760764976,
+    "RPG": 0.009562128407188175,
+    "Story Rich": 0.01619435560625329,
+    "Singleplayer": 0.06083402473464472,
+    "Puzzle": 0.0,
+    "Casual": 0.015491922648861012,
+    "Strategy": 0.017479484289140035,
+    "Turn-Based": 0.019204866598402592,
+    "Roguelike": -0.017854414567327087,
+    "Horror": -0.05048712760764976,
+    "Racing": -0.024279535355552655,
+    "Relaxing": 0.02375396709195088,
+    "Rare Tag": 0.019098667129181512,
+    "Ghost Tag": 0.06083402473464472,
+    "Phantom": -0.05048712760764976
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Action",
+      "affinity": 0.06083402473464472,
+      "pinned": true
+     },
+     {
+      "tag": "Ghost Tag",
+      "affinity": 0.06083402473464472,
+      "pinned": true
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.06083402473464472,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.02375396709195088,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.019204866598402592,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.019098667129181512,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.017479484289140035,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": 0.01619435560625329,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": 0.015491922648861012,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": 0.009562128407188175,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Phantom",
+      "affinity": -0.05048712760764976,
+      "pinned": true
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.05048712760764976,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": -0.05048712760764976,
+      "pinned": true
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.026207592252097102,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.024279535355552655,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.017854414567327087,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Puzzle"
+    ]
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Action",
+      "affinity": 0.06083402473464472,
+      "pinned": true
+     },
+     {
+      "tag": "Ghost Tag",
+      "affinity": 0.06083402473464472,
+      "pinned": true
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.06083402473464472,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Phantom",
+      "affinity": -0.05048712760764976,
+      "pinned": true
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.05048712760764976,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": -0.05048712760764976,
+      "pinned": true
+     }
+    ],
+    "ignored": [
+     "Puzzle"
+    ]
+   }
+  },
+  {
+   "kind": "none_liked",
+   "min_rate": 5.0,
+   "cap": 60,
+   "overrides": {
+    "Rare Tag": "like"
+   },
+   "affinity": {
+    "Action": -0.04473494587133203,
+    "Shooter": -0.03742669788801494,
+    "Multiplayer": -0.07399900341569526,
+    "RPG": -0.0032461473580956968,
+    "Story Rich": -0.004345141382116599,
+    "Singleplayer": 0.11520301108016273,
+    "Puzzle": 0.01070134431738995,
+    "Casual": 4.0345658186891065e-05,
+    "Strategy": 0.023899200508602503,
+    "Turn-Based": 0.04132911203494882,
+    "Roguelike": -0.008407242007337945,
+    "Horror": 0.02144240429837907,
+    "Racing": -0.0365723055276803,
+    "Relaxing": 0.012594138315477399,
+    "Rare Tag": 0.11520301108016273
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.11520301108016273,
+      "pinned": true
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11520301108016273,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.04132911203494882,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.023899200508602503,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.02144240429837907,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.012594138315477399,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.01070134431738995,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": 4.0345658186891065e-05,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.07399900341569526,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.04473494587133203,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.03742669788801494,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.0365723055276803,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.008407242007337945,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.004345141382116599,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.0032461473580956968,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.11520301108016273,
+      "pinned": true
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.11520301108016273,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.04132911203494882,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.07399900341569526,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.04473494587133203,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.03742669788801494,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "none_liked",
+   "min_rate": 2.0,
+   "cap": 60,
+   "overrides": {
+    "Action": "ignore",
+    "RPG": "ignore",
+    "Singleplayer": "ignore",
+    "Puzzle": "ignore",
+    "Casual": "ignore"
+   },
+   "affinity": {
+    "Action": 0.0,
+    "Shooter": -0.03742669788801494,
+    "Multiplayer": -0.07399900341569526,
+    "RPG": 0.0,
+    "Story Rich": -0.004345141382116599,
+    "Singleplayer": 0.0,
+    "Puzzle": 0.0,
+    "Casual": 0.0,
+    "Strategy": 0.023899200508602503,
+    "Turn-Based": 0.04132911203494882,
+    "Roguelike": -0.008407242007337945,
+    "Horror": 0.02144240429837907,
+    "Racing": -0.0365723055276803,
+    "Relaxing": 0.012594138315477399,
+    "Rare Tag": 0.029609443656757425
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.04132911203494882,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.029609443656757425,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.023899200508602503,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": 0.02144240429837907,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.012594138315477399,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.07399900341569526,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.03742669788801494,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.0365723055276803,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.008407242007337945,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.004345141382116599,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Action",
+     "Casual",
+     "Puzzle",
+     "RPG",
+     "Singleplayer"
+    ]
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.04132911203494882,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.029609443656757425,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": 0.023899200508602503,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.07399900341569526,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.03742669788801494,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.0365723055276803,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Action",
+     "Casual",
+     "Puzzle",
+     "RPG",
+     "Singleplayer"
+    ]
+   }
+  },
+  {
+   "kind": "no_playtime",
+   "min_rate": 2.0,
+   "cap": 60,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.010322580645161283,
+    "Shooter": -0.0006451612903225767,
+    "Multiplayer": -0.0012903225806451535,
+    "RPG": -0.01806451612903226,
+    "Story Rich": -0.00903225806451613,
+    "Singleplayer": -0.029032258064516148,
+    "Puzzle": 0.014193548387096772,
+    "Casual": -0.0012903225806451535,
+    "Strategy": -0.00903225806451613,
+    "Turn-Based": 0.015483870967741939,
+    "Roguelike": -0.0006451612903225767,
+    "Horror": 0.015483870967741939,
+    "Racing": -0.0006451612903225767,
+    "Relaxing": 0.014838709677419348,
+    "Rare Tag": -0.0006451612903225767
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Horror",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.014838709677419348,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.014193548387096772,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.029032258064516148,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.01806451612903226,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.010322580645161283,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Horror",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.014838709677419348,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.029032258064516148,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.01806451612903226,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.010322580645161283,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "no_playtime",
+   "min_rate": 0.0,
+   "cap": 60,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.010322580645161283,
+    "Shooter": -0.0006451612903225767,
+    "Multiplayer": -0.0012903225806451535,
+    "RPG": -0.01806451612903226,
+    "Story Rich": -0.00903225806451613,
+    "Singleplayer": -0.029032258064516148,
+    "Puzzle": 0.014193548387096772,
+    "Casual": -0.0012903225806451535,
+    "Strategy": -0.00903225806451613,
+    "Turn-Based": 0.015483870967741939,
+    "Roguelike": -0.0006451612903225767,
+    "Horror": 0.015483870967741939,
+    "Racing": -0.0006451612903225767,
+    "Relaxing": 0.014838709677419348,
+    "Rare Tag": -0.0006451612903225767
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Horror",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.014838709677419348,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.014193548387096772,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.029032258064516148,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.01806451612903226,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.010322580645161283,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Horror",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.014838709677419348,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.029032258064516148,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.01806451612903226,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.010322580645161283,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "no_playtime",
+   "min_rate": 10.0,
+   "cap": 200,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.010322580645161283,
+    "Multiplayer": -0.0012903225806451535,
+    "RPG": -0.01806451612903226,
+    "Story Rich": -0.00903225806451613,
+    "Singleplayer": -0.029032258064516148,
+    "Puzzle": 0.014193548387096772,
+    "Casual": -0.0012903225806451535,
+    "Strategy": -0.00903225806451613,
+    "Relaxing": 0.014838709677419348
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Relaxing",
+      "affinity": 0.014838709677419348,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.014193548387096772,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.029032258064516148,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.01806451612903226,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.010322580645161283,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Relaxing",
+      "affinity": 0.014838709677419348,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.014193548387096772,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.029032258064516148,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.01806451612903226,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.010322580645161283,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "no_playtime",
+   "min_rate": 2.0,
+   "cap": 1,
+   "overrides": {
+    "Action": "like",
+    "Horror": "dislike",
+    "Puzzle": "ignore",
+    "Ghost Tag": "like",
+    "Phantom": "dislike"
+   },
+   "affinity": {
+    "Action": 0.015483870967741939,
+    "Shooter": -0.0006451612903225767,
+    "Multiplayer": -0.0012903225806451535,
+    "RPG": -0.01806451612903226,
+    "Story Rich": -0.00903225806451613,
+    "Singleplayer": -0.029032258064516148,
+    "Puzzle": 0.0,
+    "Casual": -0.0012903225806451535,
+    "Strategy": -0.00903225806451613,
+    "Turn-Based": 0.015483870967741939,
+    "Roguelike": -0.0006451612903225767,
+    "Horror": -0.029032258064516148,
+    "Racing": -0.0006451612903225767,
+    "Relaxing": 0.014838709677419348,
+    "Rare Tag": -0.0006451612903225767,
+    "Ghost Tag": 0.015483870967741939,
+    "Phantom": -0.029032258064516148
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Action",
+      "affinity": 0.015483870967741939,
+      "pinned": true
+     },
+     {
+      "tag": "Ghost Tag",
+      "affinity": 0.015483870967741939,
+      "pinned": true
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.014838709677419348,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.029032258064516148,
+      "pinned": false
+     },
+     {
+      "tag": "Phantom",
+      "affinity": -0.029032258064516148,
+      "pinned": true
+     },
+     {
+      "tag": "Horror",
+      "affinity": -0.029032258064516148,
+      "pinned": true
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.01806451612903226,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Puzzle"
+    ]
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Action",
+      "affinity": 0.015483870967741939,
+      "pinned": true
+     },
+     {
+      "tag": "Ghost Tag",
+      "affinity": 0.015483870967741939,
+      "pinned": true
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.029032258064516148,
+      "pinned": false
+     },
+     {
+      "tag": "Phantom",
+      "affinity": -0.029032258064516148,
+      "pinned": true
+     },
+     {
+      "tag": "Horror",
+      "affinity": -0.029032258064516148,
+      "pinned": true
+     }
+    ],
+    "ignored": [
+     "Puzzle"
+    ]
+   }
+  },
+  {
+   "kind": "no_playtime",
+   "min_rate": 5.0,
+   "cap": 60,
+   "overrides": {
+    "Rare Tag": "like"
+   },
+   "affinity": {
+    "Action": -0.010322580645161283,
+    "Shooter": -0.0006451612903225767,
+    "Multiplayer": -0.0012903225806451535,
+    "RPG": -0.01806451612903226,
+    "Story Rich": -0.00903225806451613,
+    "Singleplayer": -0.029032258064516148,
+    "Puzzle": 0.014193548387096772,
+    "Casual": -0.0012903225806451535,
+    "Strategy": -0.00903225806451613,
+    "Turn-Based": 0.015483870967741939,
+    "Roguelike": -0.0006451612903225767,
+    "Horror": 0.015483870967741939,
+    "Racing": -0.0006451612903225767,
+    "Relaxing": 0.014838709677419348,
+    "Rare Tag": 0.015483870967741939
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Horror",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.015483870967741939,
+      "pinned": true
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.014838709677419348,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.014193548387096772,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.029032258064516148,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.01806451612903226,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.010322580645161283,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     },
+     {
+      "tag": "Casual",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Horror",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.015483870967741939,
+      "pinned": true
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Singleplayer",
+      "affinity": -0.029032258064516148,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.01806451612903226,
+      "pinned": false
+     },
+     {
+      "tag": "Action",
+      "affinity": -0.010322580645161283,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "no_playtime",
+   "min_rate": 2.0,
+   "cap": 60,
+   "overrides": {
+    "Action": "ignore",
+    "RPG": "ignore",
+    "Singleplayer": "ignore",
+    "Puzzle": "ignore",
+    "Casual": "ignore"
+   },
+   "affinity": {
+    "Action": 0.0,
+    "Shooter": -0.0006451612903225767,
+    "Multiplayer": -0.0012903225806451535,
+    "RPG": 0.0,
+    "Story Rich": -0.00903225806451613,
+    "Singleplayer": 0.0,
+    "Puzzle": 0.0,
+    "Casual": 0.0,
+    "Strategy": -0.00903225806451613,
+    "Turn-Based": 0.015483870967741939,
+    "Roguelike": -0.0006451612903225767,
+    "Horror": 0.015483870967741939,
+    "Racing": -0.0006451612903225767,
+    "Relaxing": 0.014838709677419348,
+    "Rare Tag": -0.0006451612903225767
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Horror",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.014838709677419348,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Strategy",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     },
+     {
+      "tag": "Racing",
+      "affinity": -0.0006451612903225767,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Action",
+     "Casual",
+     "Puzzle",
+     "RPG",
+     "Singleplayer"
+    ]
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Horror",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": 0.015483870967741939,
+      "pinned": false
+     },
+     {
+      "tag": "Relaxing",
+      "affinity": 0.014838709677419348,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Strategy",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.00903225806451613,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.0012903225806451535,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Action",
+     "Casual",
+     "Puzzle",
+     "RPG",
+     "Singleplayer"
+    ]
+   }
+  },
+  {
+   "kind": "tiny",
+   "min_rate": 2.0,
+   "cap": 60,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.4,
+    "Shooter": -0.2,
+    "Multiplayer": -0.2,
+    "RPG": -0.2,
+    "Story Rich": -0.2,
+    "Singleplayer": 0.19999999999999996,
+    "Puzzle": 0.8,
+    "Casual": 0.8,
+    "Strategy": -0.2,
+    "Turn-Based": -0.2,
+    "Roguelike": -0.2
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Casual",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.19999999999999996,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.4,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Casual",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.19999999999999996,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.4,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "tiny",
+   "min_rate": 0.0,
+   "cap": 60,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.4,
+    "Shooter": -0.2,
+    "Multiplayer": -0.2,
+    "RPG": -0.2,
+    "Story Rich": -0.2,
+    "Singleplayer": 0.19999999999999996,
+    "Puzzle": 0.8,
+    "Casual": 0.8,
+    "Strategy": -0.2,
+    "Turn-Based": -0.2,
+    "Roguelike": -0.2
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Casual",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.19999999999999996,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.4,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Casual",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.19999999999999996,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.4,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "tiny",
+   "min_rate": 10.0,
+   "cap": 200,
+   "overrides": {},
+   "affinity": {
+    "Action": -0.4,
+    "Shooter": -0.2,
+    "Multiplayer": -0.2,
+    "RPG": -0.2,
+    "Story Rich": -0.2,
+    "Singleplayer": 0.19999999999999996,
+    "Puzzle": 0.8,
+    "Casual": 0.8,
+    "Strategy": -0.2,
+    "Turn-Based": -0.2,
+    "Roguelike": -0.2
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Casual",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.19999999999999996,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.4,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Casual",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.19999999999999996,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.4,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "tiny",
+   "min_rate": 2.0,
+   "cap": 1,
+   "overrides": {
+    "Action": "like",
+    "Horror": "dislike",
+    "Puzzle": "ignore",
+    "Ghost Tag": "like",
+    "Phantom": "dislike"
+   },
+   "affinity": {
+    "Action": 0.8,
+    "Shooter": -0.2,
+    "Multiplayer": -0.2,
+    "RPG": -0.2,
+    "Story Rich": -0.2,
+    "Singleplayer": 0.19999999999999996,
+    "Puzzle": 0.0,
+    "Casual": 0.8,
+    "Strategy": -0.2,
+    "Turn-Based": -0.2,
+    "Roguelike": -0.2,
+    "Horror": -0.2,
+    "Ghost Tag": 0.8,
+    "Phantom": -0.2
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Action",
+      "affinity": 0.8,
+      "pinned": true
+     },
+     {
+      "tag": "Casual",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Ghost Tag",
+      "affinity": 0.8,
+      "pinned": true
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.19999999999999996,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Phantom",
+      "affinity": -0.2,
+      "pinned": true
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Horror",
+      "affinity": -0.2,
+      "pinned": true
+     }
+    ],
+    "ignored": [
+     "Puzzle"
+    ]
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Action",
+      "affinity": 0.8,
+      "pinned": true
+     },
+     {
+      "tag": "Casual",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Ghost Tag",
+      "affinity": 0.8,
+      "pinned": true
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Puzzle"
+    ]
+   }
+  },
+  {
+   "kind": "tiny",
+   "min_rate": 5.0,
+   "cap": 60,
+   "overrides": {
+    "Rare Tag": "like"
+   },
+   "affinity": {
+    "Action": -0.4,
+    "Shooter": -0.2,
+    "Multiplayer": -0.2,
+    "RPG": -0.2,
+    "Story Rich": -0.2,
+    "Singleplayer": 0.19999999999999996,
+    "Puzzle": 0.8,
+    "Casual": 0.8,
+    "Strategy": -0.2,
+    "Turn-Based": -0.2,
+    "Roguelike": -0.2,
+    "Rare Tag": 0.8
+   },
+   "lists": {
+    "liked": [
+     {
+      "tag": "Casual",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.8,
+      "pinned": true
+     },
+     {
+      "tag": "Singleplayer",
+      "affinity": 0.19999999999999996,
+      "pinned": false
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.4,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "RPG",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   },
+   "lists3": {
+    "liked": [
+     {
+      "tag": "Casual",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Puzzle",
+      "affinity": 0.8,
+      "pinned": false
+     },
+     {
+      "tag": "Rare Tag",
+      "affinity": 0.8,
+      "pinned": true
+     }
+    ],
+    "disliked": [
+     {
+      "tag": "Action",
+      "affinity": -0.4,
+      "pinned": false
+     },
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": []
+   }
+  },
+  {
+   "kind": "tiny",
+   "min_rate": 2.0,
+   "cap": 60,
+   "overrides": {
+    "Action": "ignore",
+    "RPG": "ignore",
+    "Singleplayer": "ignore",
+    "Puzzle": "ignore",
+    "Casual": "ignore"
+   },
+   "affinity": {
+    "Action": 0.0,
+    "Shooter": -0.2,
+    "Multiplayer": -0.2,
+    "RPG": 0.0,
+    "Story Rich": -0.2,
+    "Singleplayer": 0.0,
+    "Puzzle": 0.0,
+    "Casual": 0.0,
+    "Strategy": -0.2,
+    "Turn-Based": -0.2,
+    "Roguelike": -0.2
+   },
+   "lists": {
+    "liked": [],
+    "disliked": [
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Shooter",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Roguelike",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Multiplayer",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Action",
+     "Casual",
+     "Puzzle",
+     "RPG",
+     "Singleplayer"
+    ]
+   },
+   "lists3": {
+    "liked": [],
+    "disliked": [
+     {
+      "tag": "Turn-Based",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Strategy",
+      "affinity": -0.2,
+      "pinned": false
+     },
+     {
+      "tag": "Story Rich",
+      "affinity": -0.2,
+      "pinned": false
+     }
+    ],
+    "ignored": [
+     "Action",
+     "Casual",
+     "Puzzle",
+     "RPG",
+     "Singleplayer"
+    ]
+   }
+  }
+ ]
+}

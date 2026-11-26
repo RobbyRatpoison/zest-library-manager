@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Zest
+Comment=Your personal game library manager
+Exec=zest
+Icon=zest
+Terminal=false
+Categories=Game;
+StartupWMClass=zest-dev

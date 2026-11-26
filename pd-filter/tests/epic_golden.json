@@ -1,0 +1,3397 @@
+{
+ "auth": [
+  {
+   "s": "abc123",
+   "out": "abc123"
+  },
+  {
+   "s": "  abc123  ",
+   "out": "abc123"
+  },
+  {
+   "s": "{\"authorizationCode\":\"abc123\",\"x\":1}",
+   "out": "abc123"
+  },
+  {
+   "s": "{\"code\":\" c2 \"}",
+   "out": "c2"
+  },
+  {
+   "s": "{\"foo\":1}",
+   "out": ""
+  },
+  {
+   "s": "{\"authorizationCode\":\"\"}",
+   "out": ""
+  },
+  {
+   "s": "{bad json",
+   "out": "{bad json"
+  },
+  {
+   "s": "\"abc\"",
+   "out": "\"abc\""
+  },
+  {
+   "s": "https://localhost/launcher/authorized?code=abc%20d&x=1",
+   "out": "abc d"
+  },
+  {
+   "s": "https://x/?a=1&code=zz#frag",
+   "out": "zz"
+  },
+  {
+   "s": "https://x/?code=a+b",
+   "out": "a b"
+  },
+  {
+   "s": "code=bare",
+   "out": ""
+  },
+  {
+   "s": "https://x/?other=1 code=",
+   "out": ""
+  },
+  {
+   "s": "",
+   "out": ""
+  },
+  {
+   "s": "   ",
+   "out": ""
+  },
+  {
+   "s": "https://x/?code=",
+   "out": ""
+  },
+  {
+   "s": "https://x/?code=1&code=2",
+   "out": "1"
+  },
+  {
+   "s": "https://x/#code=1",
+   "out": ""
+  }
+ ],
+ "clean": [
+  {
+   "s": null,
+   "out": ""
+  },
+  {
+   "s": "",
+   "out": ""
+  },
+  {
+   "s": " /game/home/ ",
+   "out": "game"
+  },
+  {
+   "s": "game",
+   "out": "game"
+  },
+  {
+   "s": "game/home",
+   "out": "game"
+  },
+  {
+   "s": "/a/b/c",
+   "out": "a"
+  },
+  {
+   "s": "  ",
+   "out": ""
+  },
+  {
+   "s": "x/",
+   "out": "x"
+  }
+ ],
+ "store_slugs": [
+  {
+   "el": {
+    "catalogNs": {
+     "mappings": [
+      {
+       "pageType": "productHome",
+       "pageSlug": "luftrausers-51e5e9/home"
+      }
+     ]
+    },
+    "productSlug": null,
+    "urlSlug": "luftrausers"
+   },
+   "out": "luftrausers-51e5e9"
+  },
+  {
+   "el": {
+    "offerMappings": [
+     {
+      "pageType": "productHome",
+      "pageSlug": "from-offer"
+     }
+    ],
+    "urlSlug": "x"
+   },
+   "out": "from-offer"
+  },
+  {
+   "el": {
+    "catalogNs": {
+     "mappings": [
+      {
+       "pageType": "other",
+       "pageSlug": "nope"
+      }
+     ]
+    },
+    "productSlug": "prod/home",
+    "urlSlug": "u"
+   },
+   "out": "prod"
+  },
+  {
+   "el": {
+    "productSlug": null,
+    "urlSlug": "0123456789abcdef0123456789abcdef"
+   },
+   "out": ""
+  },
+  {
+   "el": {
+    "productSlug": "0123456789abcdef0123456789abcdef",
+    "urlSlug": "ok"
+   },
+   "out": ""
+  },
+  {
+   "el": {
+    "urlSlug": "only-url"
+   },
+   "out": "only-url"
+  },
+  {
+   "el": {},
+   "out": ""
+  },
+  {
+   "el": {
+    "catalogNs": null,
+    "offerMappings": null
+   },
+   "out": ""
+  },
+  {
+   "el": {
+    "catalogNs": {
+     "mappings": [
+      {
+       "pageType": "productHome",
+       "pageSlug": ""
+      },
+      {
+       "pageType": "productHome",
+       "pageSlug": "second"
+      }
+     ]
+    }
+   },
+   "out": "second"
+  }
+ ],
+ "dlc": [
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "Game",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "ARK ModKit (UE4)",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "Conan Exiles Dev Kit",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "Game Soundtrack",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "The Art Book",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "Ghost Ostrich",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "OST",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "Level Editor",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "SDK Tools",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "Bus Simulator 18",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": {
+     "id": 1
+    }
+   },
+   "name": "",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "Game",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "ARK ModKit (UE4)",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "Conan Exiles Dev Kit",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "Game Soundtrack",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "The Art Book",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "Ghost Ostrich",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "OST",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "Level Editor",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "SDK Tools",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "Bus Simulator 18",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "addons"
+     }
+    ]
+   },
+   "name": "",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "Game",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "ARK ModKit (UE4)",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "Conan Exiles Dev Kit",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "Game Soundtrack",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "The Art Book",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "Ghost Ostrich",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "OST",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "Level Editor",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "SDK Tools",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "Bus Simulator 18",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "digitalextras"
+     }
+    ]
+   },
+   "name": "",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "Game",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "ARK ModKit (UE4)",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "Conan Exiles Dev Kit",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "Game Soundtrack",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "The Art Book",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "Ghost Ostrich",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "OST",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "Level Editor",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "SDK Tools",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "Bus Simulator 18",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "software"
+     }
+    ]
+   },
+   "name": "",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Game",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "ARK ModKit (UE4)",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Conan Exiles Dev Kit",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Game Soundtrack",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "The Art Book",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Ghost Ostrich",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "OST",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Level Editor",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "SDK Tools",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Bus Simulator 18",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "Game",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "ARK ModKit (UE4)",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "Conan Exiles Dev Kit",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "Game Soundtrack",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "The Art Book",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "Ghost Ostrich",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "OST",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "Level Editor",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "SDK Tools",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "Bus Simulator 18",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "games"
+     },
+     {
+      "path": "games/edition"
+     }
+    ]
+   },
+   "name": "",
+   "out": false
+  },
+  {
+   "entry": {},
+   "name": "Game",
+   "out": false
+  },
+  {
+   "entry": {},
+   "name": "ARK ModKit (UE4)",
+   "out": false
+  },
+  {
+   "entry": {},
+   "name": "Conan Exiles Dev Kit",
+   "out": false
+  },
+  {
+   "entry": {},
+   "name": "Game Soundtrack",
+   "out": true
+  },
+  {
+   "entry": {},
+   "name": "The Art Book",
+   "out": true
+  },
+  {
+   "entry": {},
+   "name": "Ghost Ostrich",
+   "out": false
+  },
+  {
+   "entry": {},
+   "name": "OST",
+   "out": true
+  },
+  {
+   "entry": {},
+   "name": "Level Editor",
+   "out": false
+  },
+  {
+   "entry": {},
+   "name": "SDK Tools",
+   "out": false
+  },
+  {
+   "entry": {},
+   "name": "Bus Simulator 18",
+   "out": false
+  },
+  {
+   "entry": {},
+   "name": "",
+   "out": false
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "Game",
+   "out": false
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "ARK ModKit (UE4)",
+   "out": false
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "Conan Exiles Dev Kit",
+   "out": false
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "Game Soundtrack",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "The Art Book",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "Ghost Ostrich",
+   "out": false
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "OST",
+   "out": true
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "Level Editor",
+   "out": false
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "SDK Tools",
+   "out": false
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "Bus Simulator 18",
+   "out": false
+  },
+  {
+   "entry": {
+    "mainGameItem": null,
+    "categories": []
+   },
+   "name": "",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Game",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "ARK ModKit (UE4)",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Conan Exiles Dev Kit",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Game Soundtrack",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "The Art Book",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Ghost Ostrich",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "OST",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Level Editor",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "SDK Tools",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "Bus Simulator 18",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "engines"
+     }
+    ]
+   },
+   "name": "",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "Game",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "ARK ModKit (UE4)",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "Conan Exiles Dev Kit",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "Game Soundtrack",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "The Art Book",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "Ghost Ostrich",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "OST",
+   "out": true
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "Level Editor",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "SDK Tools",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "Bus Simulator 18",
+   "out": false
+  },
+  {
+   "entry": {
+    "categories": [
+     {
+      "path": "applications"
+     }
+    ]
+   },
+   "name": "",
+   "out": false
+  }
+ ],
+ "titles": [
+  {
+   "a": "Halcyon 6",
+   "b": "Halcyon 6 Starbase Commander",
+   "key": "halcyon6",
+   "out": true
+  },
+  {
+   "a": "Shadowrun Returns",
+   "b": "Shadowrun: Dragonfall",
+   "key": "shadowrunreturns",
+   "out": false
+  },
+  {
+   "a": "A",
+   "b": "a",
+   "key": "a",
+   "out": true
+  },
+  {
+   "a": "",
+   "b": "x",
+   "key": "",
+   "out": false
+  },
+  {
+   "a": "x",
+   "b": "",
+   "key": "x",
+   "out": false
+  },
+  {
+   "a": "Café",
+   "b": "Cafe",
+   "key": "caf",
+   "out": true
+  },
+  {
+   "a": "The Game!",
+   "b": "the game",
+   "key": "thegame",
+   "out": true
+  }
+ ],
+ "picks": [
+  {
+   "els": [],
+   "name": null,
+   "out": null
+  },
+  {
+   "els": [],
+   "name": "Halcyon 6",
+   "out": null
+  },
+  {
+   "els": [],
+   "name": "Nameless",
+   "out": null
+  },
+  {
+   "els": [],
+   "name": "Nothing",
+   "out": null
+  },
+  {
+   "els": [],
+   "name": "",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    },
+    {
+     "title": "Halcyon 6 Starbase Commander",
+     "namespace": "ns",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    }
+   ],
+   "name": null,
+   "out": 1
+  },
+  {
+   "els": [
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    },
+    {
+     "title": "Halcyon 6 Starbase Commander",
+     "namespace": "ns",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    }
+   ],
+   "name": "Halcyon 6",
+   "out": 1
+  },
+  {
+   "els": [
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    },
+    {
+     "title": "Halcyon 6 Starbase Commander",
+     "namespace": "ns",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    }
+   ],
+   "name": "Nameless",
+   "out": 3
+  },
+  {
+   "els": [
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    },
+    {
+     "title": "Halcyon 6 Starbase Commander",
+     "namespace": "ns",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    }
+   ],
+   "name": "Nothing",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    },
+    {
+     "title": "Halcyon 6 Starbase Commander",
+     "namespace": "ns",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    }
+   ],
+   "name": "",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    }
+   ],
+   "name": null,
+   "out": 0
+  },
+  {
+   "els": [
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    }
+   ],
+   "name": "Halcyon 6",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    }
+   ],
+   "name": "Nameless",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    }
+   ],
+   "name": "Nothing",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    }
+   ],
+   "name": "",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    }
+   ],
+   "name": null,
+   "out": 0
+  },
+  {
+   "els": [
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    }
+   ],
+   "name": "Halcyon 6",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    }
+   ],
+   "name": "Nameless",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    }
+   ],
+   "name": "Nothing",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    }
+   ],
+   "name": "",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    }
+   ],
+   "name": null,
+   "out": 0
+  },
+  {
+   "els": [
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    }
+   ],
+   "name": "Halcyon 6",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    }
+   ],
+   "name": "Nameless",
+   "out": 0
+  },
+  {
+   "els": [
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    }
+   ],
+   "name": "Nothing",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    }
+   ],
+   "name": "",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    },
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Halcyon 6 Starbase Commander",
+     "namespace": "ns",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    }
+   ],
+   "name": null,
+   "out": 1
+  },
+  {
+   "els": [
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    },
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Halcyon 6 Starbase Commander",
+     "namespace": "ns",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    }
+   ],
+   "name": "Halcyon 6",
+   "out": 3
+  },
+  {
+   "els": [
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    },
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Halcyon 6 Starbase Commander",
+     "namespace": "ns",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    }
+   ],
+   "name": "Nameless",
+   "out": 1
+  },
+  {
+   "els": [
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    },
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Halcyon 6 Starbase Commander",
+     "namespace": "ns",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    }
+   ],
+   "name": "Nothing",
+   "out": null
+  },
+  {
+   "els": [
+    {
+     "title": "Edition",
+     "namespace": "ns",
+     "offerType": "EDITION"
+    },
+    {
+     "title": "Nameless Base",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Other Game",
+     "namespace": "other",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Halcyon 6 Starbase Commander",
+     "namespace": "ns",
+     "offerType": "BASE_GAME"
+    },
+    {
+     "title": "Soundtrack",
+     "namespace": "ns",
+     "offerType": "DLC"
+    }
+   ],
+   "name": "",
+   "out": null
+  }
+ ],
+ "extract": [
+  {
+   "entry": {
+    "customAttributes": {
+     "developerName": {
+      "value": " Dev "
+     },
+     "publisherName": {
+      "value": "Pub"
+     },
+     "genres": {
+      "value": "Action,RPG"
+     }
+    },
+    "urlSlug": "slug/home"
+   },
+   "out": {
+    "developers": "Dev",
+    "publishers": "Pub",
+    "genres": "Action,RPG",
+    "platform_slug": "slug"
+   }
+  },
+  {
+   "entry": {
+    "customAttributes": {
+     "developerDisplayName": {
+      "value": "D2"
+     }
+    },
+    "publisher": "",
+    "developer": "ignored"
+   },
+   "out": {
+    "developers": "D2",
+    "publishers": "D2"
+   }
+  },
+  {
+   "entry": {
+    "developer": "Top Dev",
+    "publisher": "Top Pub",
+    "urlSlug": "0123456789abcdef0123456789abcdef"
+   },
+   "out": {
+    "developers": "Top Dev",
+    "publishers": "Top Pub"
+   }
+  },
+  {
+   "entry": {
+    "developer": "Only Dev"
+   },
+   "out": {
+    "developers": "Only Dev",
+    "publishers": "Only Dev"
+   }
+  },
+  {
+   "entry": {},
+   "out": {}
+  },
+  {
+   "entry": {
+    "customAttributes": {
+     "genres": {
+      "value": " "
+     }
+    }
+   },
+   "out": {}
+  },
+  {
+   "entry": {
+    "customAttributes": {
+     "developerName": {
+      "value": ""
+     },
+     "developerDisplayName": {
+      "value": "Disp"
+     },
+     "publisherName": {
+      "value": ""
+     },
+     "publisherDisplayName": {
+      "value": "PD"
+     }
+    }
+   },
+   "out": {
+    "developers": "Disp",
+    "publishers": "PD"
+   }
+  },
+  {
+   "entry": {
+    "customAttributes": {
+     "genres": {
+      "value": "A, B ,C"
+     }
+    },
+    "urlSlug": "ok"
+   },
+   "out": {
+    "genres": "A, B ,C",
+    "platform_slug": "ok"
+   }
+  }
+ ],
+ "merges": [
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "_description": "d",
+    "_release_date": 1000,
+    "_listing_date": 5
+   },
+   "current": null,
+   "out": {
+    "developers": "D",
+    "platform_slug": "new",
+    "tags": "A,B",
+    "release_date": 1000
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "_description": "d",
+    "_release_date": 1000,
+    "_listing_date": 5
+   },
+   "current": 0,
+   "out": {
+    "developers": "D",
+    "platform_slug": "new",
+    "tags": "A,B",
+    "release_date": 1000
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "_description": "d",
+    "_release_date": 1000,
+    "_listing_date": 5
+   },
+   "current": 2000,
+   "out": {
+    "developers": "D",
+    "platform_slug": "new",
+    "tags": "A,B",
+    "release_date": 1000
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "_description": "d",
+    "_release_date": 1000,
+    "_listing_date": 5
+   },
+   "current": 500,
+   "out": {
+    "developers": "D",
+    "platform_slug": "new",
+    "tags": "A,B"
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {},
+   "current": null,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old"
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {},
+   "current": 0,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old"
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {},
+   "current": 2000,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old"
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {},
+   "current": 500,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old"
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "_release_date": 3000
+   },
+   "current": null,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old",
+    "release_date": 3000
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "_release_date": 3000
+   },
+   "current": 0,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old",
+    "release_date": 3000
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "_release_date": 3000
+   },
+   "current": 2000,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old"
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "_release_date": 3000
+   },
+   "current": 500,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old"
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "tags": "T"
+   },
+   "current": null,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old",
+    "tags": "T"
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "tags": "T"
+   },
+   "current": 0,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old",
+    "tags": "T"
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "tags": "T"
+   },
+   "current": 2000,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old",
+    "tags": "T"
+   }
+  },
+  {
+   "meta": {
+    "developers": "D",
+    "platform_slug": "old"
+   },
+   "store": {
+    "tags": "T"
+   },
+   "current": 500,
+   "out": {
+    "developers": "D",
+    "platform_slug": "old",
+    "tags": "T"
+   }
+  },
+  {
+   "meta": {},
+   "store": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "_description": "d",
+    "_release_date": 1000,
+    "_listing_date": 5
+   },
+   "current": null,
+   "out": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "release_date": 1000
+   }
+  },
+  {
+   "meta": {},
+   "store": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "_description": "d",
+    "_release_date": 1000,
+    "_listing_date": 5
+   },
+   "current": 0,
+   "out": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "release_date": 1000
+   }
+  },
+  {
+   "meta": {},
+   "store": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "_description": "d",
+    "_release_date": 1000,
+    "_listing_date": 5
+   },
+   "current": 2000,
+   "out": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "release_date": 1000
+   }
+  },
+  {
+   "meta": {},
+   "store": {
+    "tags": "A,B",
+    "platform_slug": "new",
+    "_description": "d",
+    "_release_date": 1000,
+    "_listing_date": 5
+   },
+   "current": 500,
+   "out": {
+    "tags": "A,B",
+    "platform_slug": "new"
+   }
+  },
+  {
+   "meta": {},
+   "store": {},
+   "current": null,
+   "out": {}
+  },
+  {
+   "meta": {},
+   "store": {},
+   "current": 0,
+   "out": {}
+  },
+  {
+   "meta": {},
+   "store": {},
+   "current": 2000,
+   "out": {}
+  },
+  {
+   "meta": {},
+   "store": {},
+   "current": 500,
+   "out": {}
+  },
+  {
+   "meta": {},
+   "store": {
+    "_release_date": 3000
+   },
+   "current": null,
+   "out": {
+    "release_date": 3000
+   }
+  },
+  {
+   "meta": {},
+   "store": {
+    "_release_date": 3000
+   },
+   "current": 0,
+   "out": {
+    "release_date": 3000
+   }
+  },
+  {
+   "meta": {},
+   "store": {
+    "_release_date": 3000
+   },
+   "current": 2000,
+   "out": {}
+  },
+  {
+   "meta": {},
+   "store": {
+    "_release_date": 3000
+   },
+   "current": 500,
+   "out": {}
+  },
+  {
+   "meta": {},
+   "store": {
+    "tags": "T"
+   },
+   "current": null,
+   "out": {
+    "tags": "T"
+   }
+  },
+  {
+   "meta": {},
+   "store": {
+    "tags": "T"
+   },
+   "current": 0,
+   "out": {
+    "tags": "T"
+   }
+  },
+  {
+   "meta": {},
+   "store": {
+    "tags": "T"
+   },
+   "current": 2000,
+   "out": {
+    "tags": "T"
+   }
+  },
+  {
+   "meta": {},
+   "store": {
+    "tags": "T"
+   },
+   "current": 500,
+   "out": {
+    "tags": "T"
+   }
+  }
+ ],
+ "releases": [
+  {
+   "s": "2020-01-02T00:00:00Z",
+   "out": 1577923200
+  },
+  {
+   "s": "2020-01-02T03:04:05.000Z",
+   "out": 1577934245
+  },
+  {
+   "s": "2099-01-01T00:00:00.000Z",
+   "out": null
+  },
+  {
+   "s": "",
+   "out": null
+  },
+  {
+   "s": null,
+   "out": null
+  },
+  {
+   "s": "junk",
+   "out": null
+  },
+  {
+   "s": "1999-12-31T23:59:59Z",
+   "out": 946684799
+  }
+ ],
+ "ent_ns": {
+  "ns1": 1577836800,
+  "ns2": 1643767322
+ },
+ "ent_cid": {
+  "c1": 1614834367,
+  "c2": 1577836800,
+  "c3": 1546300800,
+  "c4": 1643767322,
+  "c7": 1514764800
+ },
+ "ents": [
+  {
+   "namespace": "ns1",
+   "catalogItemId": "c1",
+   "grantDate": "2021-03-04T05:06:07Z"
+  },
+  {
+   "namespace": "ns1",
+   "catalogItemId": "c2",
+   "grantDate": "2020-01-01T00:00:00Z"
+  },
+  {
+   "namespace": "epic",
+   "catalogItemId": "c3",
+   "createdDate": "2019-01-01T00:00:00Z"
+  },
+  {
+   "namespace": "ns2",
+   "catalogItemId": "c4",
+   "created": "2022-02-02T02:02:02Z"
+  },
+  {
+   "namespace": "ns3",
+   "catalogItemId": "c5"
+  },
+  {
+   "namespace": "ns4",
+   "catalogItemId": "c6",
+   "grantDate": "garbage"
+  },
+  {
+   "namespace": "",
+   "catalogItemId": "c7",
+   "grantDate": "2018-01-01T00:00:00Z"
+  }
+ ],
+ "ratings": [
+  {
+   "in": {
+    "averageRating": 4.5,
+    "pollResult": [
+     {
+      "total": 100
+     },
+     {
+      "total": 20
+     }
+    ]
+   },
+   "out": {
+    "review_percentage": 90,
+    "review_score": "Very Positive",
+    "total_reviews": 120,
+    "weighted_percentage": 81
+   }
+  },
+  {
+   "in": {
+    "averageRating": 2.5,
+    "pollResult": [
+     {
+      "total": 3
+     }
+    ]
+   },
+   "out": {
+    "review_percentage": 50,
+    "review_score": "Not Enough Reviews",
+    "total_reviews": 3,
+    "weighted_percentage": 50
+   }
+  },
+  {
+   "in": {
+    "averageRating": 0,
+    "pollResult": []
+   },
+   "out": {
+    "review_percentage": 0,
+    "review_score": "No Reviews",
+    "total_reviews": 0,
+    "weighted_percentage": 50
+   }
+  },
+  {
+   "in": {
+    "averageRating": null
+   },
+   "out": {}
+  },
+  {
+   "in": {},
+   "out": {}
+  },
+  {
+   "in": {
+    "averageRating": 5,
+    "pollResult": [
+     {
+      "total": 600
+     }
+    ]
+   },
+   "out": {
+    "review_percentage": 100,
+    "review_score": "Overwhelmingly Positive",
+    "total_reviews": 600,
+    "weighted_percentage": 93
+   }
+  },
+  {
+   "in": {
+    "averageRating": 3.7,
+    "pollResult": [
+     {
+      "total": 60
+     }
+    ]
+   },
+   "out": {
+    "review_percentage": 74,
+    "review_score": "Mostly Positive",
+    "total_reviews": 60,
+    "weighted_percentage": 67
+   }
+  },
+  {
+   "in": {
+    "averageRating": 1.0,
+    "pollResult": [
+     {
+      "total": 700
+     }
+    ]
+   },
+   "out": {
+    "review_percentage": 20,
+    "review_score": "Mostly Negative",
+    "total_reviews": 700,
+    "weighted_percentage": 24
+   }
+  },
+  {
+   "in": {
+    "averageRating": 4.125,
+    "pollResult": [
+     {
+      "total": 10
+     }
+    ]
+   },
+   "out": {
+    "review_percentage": 82,
+    "review_score": "Positive",
+    "total_reviews": 10,
+    "weighted_percentage": 67
+   }
+  }
+ ],
+ "labels": [
+  {
+   "p": 0,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 0,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 0,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 0,
+   "t": 10,
+   "out": "Negative"
+  },
+  {
+   "p": 0,
+   "t": 49,
+   "out": "Negative"
+  },
+  {
+   "p": 0,
+   "t": 50,
+   "out": "Very Negative"
+  },
+  {
+   "p": 0,
+   "t": 499,
+   "out": "Very Negative"
+  },
+  {
+   "p": 0,
+   "t": 500,
+   "out": "Overwhelmingly Negative"
+  },
+  {
+   "p": 0,
+   "t": 1000,
+   "out": "Overwhelmingly Negative"
+  },
+  {
+   "p": 10,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 10,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 10,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 10,
+   "t": 10,
+   "out": "Negative"
+  },
+  {
+   "p": 10,
+   "t": 49,
+   "out": "Negative"
+  },
+  {
+   "p": 10,
+   "t": 50,
+   "out": "Very Negative"
+  },
+  {
+   "p": 10,
+   "t": 499,
+   "out": "Very Negative"
+  },
+  {
+   "p": 10,
+   "t": 500,
+   "out": "Overwhelmingly Negative"
+  },
+  {
+   "p": 10,
+   "t": 1000,
+   "out": "Overwhelmingly Negative"
+  },
+  {
+   "p": 20,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 20,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 20,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 20,
+   "t": 10,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 20,
+   "t": 49,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 20,
+   "t": 50,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 20,
+   "t": 499,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 20,
+   "t": 500,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 20,
+   "t": 1000,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 39,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 39,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 39,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 39,
+   "t": 10,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 39,
+   "t": 49,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 39,
+   "t": 50,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 39,
+   "t": 499,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 39,
+   "t": 500,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 39,
+   "t": 1000,
+   "out": "Mostly Negative"
+  },
+  {
+   "p": 40,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 40,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 40,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 40,
+   "t": 10,
+   "out": "Mixed"
+  },
+  {
+   "p": 40,
+   "t": 49,
+   "out": "Mixed"
+  },
+  {
+   "p": 40,
+   "t": 50,
+   "out": "Mixed"
+  },
+  {
+   "p": 40,
+   "t": 499,
+   "out": "Mixed"
+  },
+  {
+   "p": 40,
+   "t": 500,
+   "out": "Mixed"
+  },
+  {
+   "p": 40,
+   "t": 1000,
+   "out": "Mixed"
+  },
+  {
+   "p": 69,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 69,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 69,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 69,
+   "t": 10,
+   "out": "Mixed"
+  },
+  {
+   "p": 69,
+   "t": 49,
+   "out": "Mixed"
+  },
+  {
+   "p": 69,
+   "t": 50,
+   "out": "Mixed"
+  },
+  {
+   "p": 69,
+   "t": 499,
+   "out": "Mixed"
+  },
+  {
+   "p": 69,
+   "t": 500,
+   "out": "Mixed"
+  },
+  {
+   "p": 69,
+   "t": 1000,
+   "out": "Mixed"
+  },
+  {
+   "p": 70,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 70,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 70,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 70,
+   "t": 10,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 70,
+   "t": 49,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 70,
+   "t": 50,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 70,
+   "t": 499,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 70,
+   "t": 500,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 70,
+   "t": 1000,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 79,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 79,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 79,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 79,
+   "t": 10,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 79,
+   "t": 49,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 79,
+   "t": 50,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 79,
+   "t": 499,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 79,
+   "t": 500,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 79,
+   "t": 1000,
+   "out": "Mostly Positive"
+  },
+  {
+   "p": 80,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 80,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 80,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 80,
+   "t": 10,
+   "out": "Positive"
+  },
+  {
+   "p": 80,
+   "t": 49,
+   "out": "Positive"
+  },
+  {
+   "p": 80,
+   "t": 50,
+   "out": "Very Positive"
+  },
+  {
+   "p": 80,
+   "t": 499,
+   "out": "Very Positive"
+  },
+  {
+   "p": 80,
+   "t": 500,
+   "out": "Very Positive"
+  },
+  {
+   "p": 80,
+   "t": 1000,
+   "out": "Very Positive"
+  },
+  {
+   "p": 94,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 94,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 94,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 94,
+   "t": 10,
+   "out": "Positive"
+  },
+  {
+   "p": 94,
+   "t": 49,
+   "out": "Positive"
+  },
+  {
+   "p": 94,
+   "t": 50,
+   "out": "Very Positive"
+  },
+  {
+   "p": 94,
+   "t": 499,
+   "out": "Very Positive"
+  },
+  {
+   "p": 94,
+   "t": 500,
+   "out": "Very Positive"
+  },
+  {
+   "p": 94,
+   "t": 1000,
+   "out": "Very Positive"
+  },
+  {
+   "p": 95,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 95,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 95,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 95,
+   "t": 10,
+   "out": "Positive"
+  },
+  {
+   "p": 95,
+   "t": 49,
+   "out": "Positive"
+  },
+  {
+   "p": 95,
+   "t": 50,
+   "out": "Very Positive"
+  },
+  {
+   "p": 95,
+   "t": 499,
+   "out": "Very Positive"
+  },
+  {
+   "p": 95,
+   "t": 500,
+   "out": "Overwhelmingly Positive"
+  },
+  {
+   "p": 95,
+   "t": 1000,
+   "out": "Overwhelmingly Positive"
+  },
+  {
+   "p": 100,
+   "t": 0,
+   "out": "No Reviews"
+  },
+  {
+   "p": 100,
+   "t": 1,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 100,
+   "t": 9,
+   "out": "Not Enough Reviews"
+  },
+  {
+   "p": 100,
+   "t": 10,
+   "out": "Positive"
+  },
+  {
+   "p": 100,
+   "t": 49,
+   "out": "Positive"
+  },
+  {
+   "p": 100,
+   "t": 50,
+   "out": "Very Positive"
+  },
+  {
+   "p": 100,
+   "t": 499,
+   "out": "Very Positive"
+  },
+  {
+   "p": 100,
+   "t": 500,
+   "out": "Overwhelmingly Positive"
+  },
+  {
+   "p": 100,
+   "t": 1000,
+   "out": "Overwhelmingly Positive"
+  }
+ ],
+ "store": [
+  {
+   "ns_els": [
+    {
+     "title": "Game One",
+     "namespace": "ns1",
+     "offerType": "BASE_GAME",
+     "description": " Blurb ",
+     "tags": [
+      {
+       "id": "t1"
+      },
+      {
+       "id": "zz"
+      },
+      {
+       "id": "t2"
+      }
+     ],
+     "pcReleaseDate": "2020-01-02T00:00:00Z",
+     "releaseDate": "2021-01-01T00:00:00Z",
+     "catalogNs": {
+      "mappings": [
+       {
+        "pageType": "productHome",
+        "pageSlug": "game-one-ab12/home"
+       }
+      ]
+     }
+    }
+   ],
+   "kw_els": [],
+   "name": "Game One",
+   "out": {
+    "tags": "Co-op,Action",
+    "platform_slug": "game-one-ab12",
+    "_description": "Blurb",
+    "_release_date": 1577923200,
+    "_listing_date": 1609459200
+   }
+  },
+  {
+   "ns_els": [
+    {
+     "title": "Game One",
+     "namespace": "ns1",
+     "offerType": "BASE_GAME",
+     "description": " Blurb ",
+     "tags": [
+      {
+       "id": "t1"
+      },
+      {
+       "id": "zz"
+      },
+      {
+       "id": "t2"
+      }
+     ],
+     "pcReleaseDate": "2020-01-02T00:00:00Z",
+     "releaseDate": "2021-01-01T00:00:00Z",
+     "catalogNs": {
+      "mappings": [
+       {
+        "pageType": "productHome",
+        "pageSlug": "game-one-ab12/home"
+       }
+      ]
+     }
+    }
+   ],
+   "kw_els": [],
+   "name": "Unrelated",
+   "out": {}
+  },
+  {
+   "ns_els": [],
+   "kw_els": [
+    {
+     "title": "Game One",
+     "namespace": "ns1",
+     "offerType": "BASE_GAME",
+     "description": " Blurb ",
+     "tags": [
+      {
+       "id": "t1"
+      },
+      {
+       "id": "zz"
+      },
+      {
+       "id": "t2"
+      }
+     ],
+     "pcReleaseDate": "2020-01-02T00:00:00Z",
+     "releaseDate": "2021-01-01T00:00:00Z",
+     "catalogNs": {
+      "mappings": [
+       {
+        "pageType": "productHome",
+        "pageSlug": "game-one-ab12/home"
+       }
+      ]
+     }
+    }
+   ],
+   "name": "Game One",
+   "out": {
+    "tags": "Co-op,Action",
+    "platform_slug": "game-one-ab12",
+    "_description": "Blurb",
+    "_release_date": 1577923200,
+    "_listing_date": 1609459200
+   }
+  },
+  {
+   "ns_els": [],
+   "kw_els": [
+    {
+     "title": "Game One",
+     "namespace": "other",
+     "offerType": "BASE_GAME",
+     "description": " Blurb ",
+     "tags": [
+      {
+       "id": "t1"
+      },
+      {
+       "id": "zz"
+      },
+      {
+       "id": "t2"
+      }
+     ],
+     "pcReleaseDate": "2020-01-02T00:00:00Z",
+     "releaseDate": "2021-01-01T00:00:00Z",
+     "catalogNs": {
+      "mappings": [
+       {
+        "pageType": "productHome",
+        "pageSlug": "game-one-ab12/home"
+       }
+      ]
+     }
+    }
+   ],
+   "name": "Game One",
+   "out": {}
+  },
+  {
+   "ns_els": [
+    {
+     "title": "Game One",
+     "namespace": "ns1",
+     "offerType": "BASE_GAME",
+     "description": " Blurb ",
+     "tags": [
+      {
+       "id": "t1"
+      },
+      {
+       "id": "zz"
+      },
+      {
+       "id": "t2"
+      }
+     ],
+     "pcReleaseDate": "2020-01-02T00:00:00Z",
+     "releaseDate": "2021-01-01T00:00:00Z",
+     "catalogNs": {
+      "mappings": [
+       {
+        "pageType": "productHome",
+        "pageSlug": "game-one-ab12/home"
+       }
+      ]
+     }
+    }
+   ],
+   "kw_els": [],
+   "name": null,
+   "out": {
+    "tags": "Co-op,Action",
+    "platform_slug": "game-one-ab12",
+    "_description": "Blurb",
+    "_release_date": 1577923200,
+    "_listing_date": 1609459200
+   }
+  },
+  {
+   "ns_els": [
+    {
+     "title": "Game One",
+     "namespace": "ns1",
+     "offerType": "BASE_GAME",
+     "description": "",
+     "tags": [],
+     "pcReleaseDate": "2099-01-01T00:00:00Z",
+     "releaseDate": "2021-01-01T00:00:00Z",
+     "catalogNs": {
+      "mappings": [
+       {
+        "pageType": "productHome",
+        "pageSlug": "game-one-ab12/home"
+       }
+      ]
+     }
+    }
+   ],
+   "kw_els": [],
+   "name": "Game One",
+   "out": {
+    "platform_slug": "game-one-ab12",
+    "_listing_date": 1609459200
+   }
+  },
+  {
+   "ns_els": [],
+   "kw_els": [],
+   "name": "Game One",
+   "out": {}
+  }
+ ],
+ "art": [
+  {
+   "keyImages": [
+    {
+     "type": "DieselGameBoxTall",
+     "url": "v1"
+    },
+    {
+     "type": "DieselGameBox",
+     "url": "h1"
+    },
+    {
+     "type": "DieselGameBoxTall",
+     "url": "v2"
+    },
+    {
+     "type": "Thumbnail",
+     "url": "t"
+    }
+   ]
+  },
+  {
+   "keyImages": [
+    {
+     "type": "DieselGameBox",
+     "url": ""
+    }
+   ]
+  },
+  {}
+ ]
+}

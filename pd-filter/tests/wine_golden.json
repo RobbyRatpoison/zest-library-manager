@@ -1,0 +1,159 @@
+[
+ {
+  "name": "typical",
+  "tree": {
+   "compat": [
+    "GE-Proton9-10",
+    "GE-Proton10-4",
+    "GE-Proton10-34",
+    "GE-Proton10-9",
+    "Proton-CachyOS-9.0",
+    "UMU-Proton-9.0-4",
+    "NoScript"
+   ],
+   "noscript": [
+    "NoScript"
+   ],
+   "official": [
+    "Proton 9.0 (Beta)",
+    "Proton - Experimental",
+    "Proton Hotfix",
+    "Proton 8.0",
+    "SteamLinuxRuntime_soldier"
+   ],
+   "symlink_steam": true,
+   "library": [
+    "Proton 7.0"
+   ]
+  },
+  "found": [
+   {
+    "name": "GE-Proton9-10",
+    "rel": ".local/share/Steam/compatibilitytools.d/GE-Proton9-10/proton"
+   },
+   {
+    "name": "GE-Proton10-9",
+    "rel": ".local/share/Steam/compatibilitytools.d/GE-Proton10-9/proton"
+   },
+   {
+    "name": "GE-Proton10-4",
+    "rel": ".local/share/Steam/compatibilitytools.d/GE-Proton10-4/proton"
+   },
+   {
+    "name": "GE-Proton10-34",
+    "rel": ".local/share/Steam/compatibilitytools.d/GE-Proton10-34/proton"
+   },
+   {
+    "name": "UMU-Proton-9.0-4",
+    "rel": ".local/share/Steam/compatibilitytools.d/UMU-Proton-9.0-4/proton"
+   },
+   {
+    "name": "proton-cachyos-slr",
+    "rel": "../../usr/share/steam/compatibilitytools.d/proton-cachyos-slr/proton"
+   },
+   {
+    "name": "proton-cachyos-native",
+    "rel": "../../usr/share/steam/compatibilitytools.d/proton-cachyos-native/proton"
+   },
+   {
+    "name": "Proton-CachyOS-9.0",
+    "rel": ".local/share/Steam/compatibilitytools.d/Proton-CachyOS-9.0/proton"
+   },
+   {
+    "name": "Proton Hotfix",
+    "rel": ".local/share/Steam/steamapps/common/Proton Hotfix/proton"
+   },
+   {
+    "name": "Proton 9.0 (Beta)",
+    "rel": ".local/share/Steam/steamapps/common/Proton 9.0 (Beta)/proton"
+   },
+   {
+    "name": "Proton 8.0",
+    "rel": ".local/share/Steam/steamapps/common/Proton 8.0/proton"
+   },
+   {
+    "name": "Proton 7.0",
+    "rel": "games-lib/steamapps/common/Proton 7.0/proton"
+   },
+   {
+    "name": "Proton - Experimental",
+    "rel": ".local/share/Steam/steamapps/common/Proton - Experimental/proton"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "tree": {
+   "compat": [],
+   "official": []
+  },
+  "found": [
+   {
+    "name": "proton-cachyos-slr",
+    "rel": "../../usr/share/steam/compatibilitytools.d/proton-cachyos-slr/proton"
+   },
+   {
+    "name": "proton-cachyos-native",
+    "rel": "../../usr/share/steam/compatibilitytools.d/proton-cachyos-native/proton"
+   }
+  ]
+ },
+ {
+  "name": "official_only",
+  "tree": {
+   "compat": [],
+   "official": [
+    "Proton 9.0",
+    "Proton 10.0"
+   ]
+  },
+  "found": [
+   {
+    "name": "proton-cachyos-slr",
+    "rel": "../../usr/share/steam/compatibilitytools.d/proton-cachyos-slr/proton"
+   },
+   {
+    "name": "proton-cachyos-native",
+    "rel": "../../usr/share/steam/compatibilitytools.d/proton-cachyos-native/proton"
+   },
+   {
+    "name": "Proton 9.0",
+    "rel": ".local/share/Steam/steamapps/common/Proton 9.0/proton"
+   },
+   {
+    "name": "Proton 10.0",
+    "rel": ".local/share/Steam/steamapps/common/Proton 10.0/proton"
+   }
+  ]
+ },
+ {
+  "name": "flatpak_steam",
+  "tree": {
+   "compat": [
+    "GE-Proton8-1"
+   ],
+   "official": [],
+   "flatpak": [
+    "GE-Proton9-1"
+   ]
+  },
+  "found": [
+   {
+    "name": "GE-Proton9-1",
+    "rel": ".var/app/com.valvesoftware.Steam/.local/share/Steam/compatibilitytools.d/GE-Proton9-1/proton"
+   },
+   {
+    "name": "GE-Proton8-1",
+    "rel": ".local/share/Steam/compatibilitytools.d/GE-Proton8-1/proton"
+   },
+   {
+    "name": "proton-cachyos-slr",
+    "rel": "../../usr/share/steam/compatibilitytools.d/proton-cachyos-slr/proton"
+   },
+   {
+    "name": "proton-cachyos-native",
+    "rel": "../../usr/share/steam/compatibilitytools.d/proton-cachyos-native/proton"
+   }
+  ]
+ }
+]

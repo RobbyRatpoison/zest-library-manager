@@ -1,0 +1,505 @@
+{
+ "pages": [
+  {
+   "name": "basic",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/0123abcd-0123-abcd-0123-0123456789ab\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game One </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div><li><a href=\"#\"><figure><img data-src=\"https://img.indiegala.com/products/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game Two </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('8', 2)\"></a></li><div id=\"showcase-8\"><a class=\"library-showcase-title\" href=\"https://www.indiegala.com/library/showcase/x\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game One",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/0123abcd-0123-abcd-0123-0123456789ab",
+     "store_url": "https://store.example.com/g"
+    },
+    {
+     "prod_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+     "prod_name": "Game Two",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+     "store_url": ""
+    }
+   ]
+  },
+  {
+   "name": "absolute_href",
+   "html": "<html><body><ul><li><a href=\"https://www.indiegala.com/library/showcase/0123abcd-0123-abcd-0123-0123456789ab\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/0123abcd-0123-abcd-0123-0123456789ab",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "relative_href_other",
+   "html": "<html><body><ul><li><a href=\"/somewhere/else\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/0123abcd-0123-abcd-0123-0123456789ab",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "nohref",
+   "html": "<html><body><ul><li><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/0123abcd-0123-abcd-0123-0123456789ab",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "fig_link",
+   "html": "<html><body><ul><li><figure><a href=\"/library/showcase/zzz\"><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></a></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/zzz",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "src_not_data",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "no_prod_id",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/other/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> No id </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/11111111-2222-3333-4444-555555555555/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Has id </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "11111111-2222-3333-4444-555555555555",
+     "prod_name": "Has id",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/11111111-2222-3333-4444-555555555555/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "no_img",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": []
+  },
+  {
+   "name": "no_title",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+     "prod_name": "Game",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "one_date",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "three_dates",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">a</span><span class=\"profile-private-page-library-date-showcase\">b</span><span class=\"profile-private-page-library-date-showcase\">c</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "b",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "no_dates",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "no_click",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": ""
+    }
+   ]
+  },
+  {
+   "name": "no_panel",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": ""
+    }
+   ]
+  },
+  {
+   "name": "panel_relative",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"/store/x\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": ""
+    }
+   ]
+  },
+  {
+   "name": "panel_showcase",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"http://www.indiegala.com/library/showcase/9\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": ""
+    }
+   ]
+  },
+  {
+   "name": "dup_game",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> A </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> A again </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "A",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": "https://store.example.com/g"
+    },
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "A again",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "name_spaces",
+   "html": "<html><body><ul><li><a href=\"/library/showcase/X\"><figure><img data-src=\"https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg\"></figure><figcaption class=\"profile-private-page-library-title-padding-showcase\"><div class=\"profile-private-page-library-title\"> Game   With  <b>Bold</b> Bits </div><span class=\"profile-private-page-library-date-showcase\">Added</span><span class=\"profile-private-page-library-date-showcase\">2020-05-01 12:30:00</span></figcaption></a><a class=\"fit-click\" onclick=\"showShowcaseContents('7', 2)\"></a></li><div id=\"showcase-7\"><a class=\"library-showcase-title\" href=\"https://store.example.com/g\">S</a></div></ul></body></html>",
+   "out": [
+    {
+     "prod_id": "0123abcd-0123-abcd-0123-0123456789ab",
+     "prod_name": "Game   WithBoldBits",
+     "date_str": "2020-05-01 12:30:00",
+     "img_url": "https://img.indiegala.com/products/0123abcd-0123-abcd-0123-0123456789ab/cover.jpg",
+     "showcase_url": "https://www.indiegala.com/library/showcase/X",
+     "store_url": "https://store.example.com/g"
+    }
+   ]
+  },
+  {
+   "name": "empty",
+   "html": "<html><body><ul></ul></body></html>",
+   "out": []
+  },
+  {
+   "name": "garbage",
+   "html": "not html at all <<<",
+   "out": []
+  }
+ ],
+ "dates": [
+  [
+   "2020-05-01 12:30:00",
+   1588336200
+  ],
+  [
+   "2020-05-01T12:30:00",
+   1588336200
+  ],
+  [
+   "2020-05-01 12:30:00.123",
+   1588336200
+  ],
+  [
+   "2020-05-01 12:30:00 extra",
+   1588336200
+  ],
+  [
+   "2020-5-1 1:2:3",
+   1588294923
+  ],
+  [
+   "2020-05-01",
+   null
+  ],
+  [
+   "",
+   null
+  ],
+  [
+   null,
+   null
+  ],
+  [
+   "garbage",
+   null
+  ],
+  [
+   "2020-02-30 00:00:00",
+   null
+  ],
+  [
+   "2020-05-01 25:00:00",
+   null
+  ],
+  [
+   "2019-12-31 23:59:59",
+   1577836799
+  ],
+  [
+   "2020-05-01T12:30:00+02:00",
+   1588336200
+  ],
+  [
+   " 2020-05-01 12:30:00",
+   null
+  ]
+ ],
+ "names": [
+  [
+   "Game One",
+   "game one"
+  ],
+  [
+   "Game: One",
+   "game one"
+  ],
+  [
+   "game one!!",
+   "game one"
+  ],
+  [
+   "Gam\u00e9 \u00d6ne",
+   "gam\u00e9 \u00f6ne"
+  ],
+  [
+   "Stuff",
+   "stuff"
+  ],
+  [
+   "",
+   ""
+  ],
+  [
+   "A",
+   "a"
+  ],
+  [
+   "The Long Dark",
+   "the long dark"
+  ],
+  [
+   "long dark",
+   "long dark"
+  ],
+  [
+   "Long  Dark (2014)",
+   "long dark 2014"
+  ],
+  [
+   "Zzz",
+   "zzz"
+  ],
+  [
+   "Game One",
+   "game one"
+  ],
+  [
+   "Game Two",
+   "game two"
+  ],
+  [
+   "The Long Dark",
+   "the long dark"
+  ],
+  [
+   "Long Dark Deluxe",
+   "long dark deluxe"
+  ],
+  [
+   "Gam\u00e9 \u00d6ne",
+   "gam\u00e9 \u00f6ne"
+  ],
+  [
+   "",
+   ""
+  ]
+ ],
+ "best": [
+  [
+   "Game One",
+   [
+    1,
+    "Game One"
+   ]
+  ],
+  [
+   "Game: One",
+   [
+    1,
+    "Game One"
+   ]
+  ],
+  [
+   "game one!!",
+   [
+    1,
+    "Game One"
+   ]
+  ],
+  [
+   "Gam\u00e9 \u00d6ne",
+   [
+    5,
+    "Gam\u00e9 \u00d6ne"
+   ]
+  ],
+  [
+   "Stuff",
+   null
+  ],
+  [
+   "",
+   [
+    6,
+    ""
+   ]
+  ],
+  [
+   "A",
+   null
+  ],
+  [
+   "The Long Dark",
+   [
+    3,
+    "The Long Dark"
+   ]
+  ],
+  [
+   "long dark",
+   [
+    3,
+    "The Long Dark"
+   ]
+  ],
+  [
+   "Long  Dark (2014)",
+   [
+    3,
+    "The Long Dark"
+   ]
+  ],
+  [
+   "Zzz",
+   null
+  ]
+ ],
+ "safe": [
+  [
+   "Brand: New/Game!",
+   "Brand NewGame"
+  ],
+  [
+   "",
+   "game"
+  ],
+  [
+   "!!!",
+   "game"
+  ],
+  [
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  [
+   "  Spaced  Name  ",
+   "Spaced  Name"
+  ],
+  [
+   "\u00dcn\u00efcode G\u00e4me",
+   "\u00dcn\u00efcode G\u00e4me"
+  ],
+  [
+   "dots.and-dashes",
+   "dots.and-dashes"
+  ],
+  [
+   "x/y\\z",
+   "xyz"
+  ]
+ ]
+}

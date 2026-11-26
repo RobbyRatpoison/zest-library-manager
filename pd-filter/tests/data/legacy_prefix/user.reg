@@ -1,0 +1,23 @@
+WINE REGISTRY Version 2
+;; All keys relative to \\User\\S-1-5-21-0-0-0-1000
+
+[Software\\Legacy Games\\Hidden Foo] 1757260000
+#time=1dc0000000000000
+"GameExe"="foo.exe"
+"InstDir"="C:\\Program Files\\Legacy Games\\Hidden Foo"
+"InstallerUUID"="uuid-foo"
+"ProductName"="Hidden Foo"
+
+[Software\\Legacy Games\\Hidden Foo\\Settings] 1757260001
+"Volume"="5"
+
+[Software\\Legacy Games\\No Uuid Game] 1757260002
+"GameExe"="x.exe"
+"InstDir"="C:\\Games\\X"
+
+[Software\\Legacy Games\\Dir Only] 1757260003
+"InstallerUUID"="uuid-dir"
+"InstDir"="C:\\Program Files (x86)\\Legacy Games\\Dir Only"
+
+[Software\\Other\\Thing] 1757260004
+"InstallerUUID"="not-ours"

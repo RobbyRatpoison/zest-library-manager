@@ -1,0 +1,320 @@
+{
+ "now": "2026-11-07T12:00:00+00:00",
+ "entries": {
+  "AAAAAAAAAAAA": {
+   "productId": "AAAAAAAAAAAA",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": null
+  },
+  "BBBBBBBBBBBB": {
+   "productId": "BBBBBBBBBBBB",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2020-01-01T00:00:00Z",
+   "satisfiedByProductId": null
+  },
+  "CCCCCCCCCCCC": {
+   "productId": "CCCCCCCCCCCC",
+   "status": "Active",
+   "isTrial": true,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": null
+  },
+  "DDDDDDDDDDDD": {
+   "productId": "DDDDDDDDDDDD",
+   "status": "Active",
+   "isTrial": false,
+   "special": true,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": null
+  },
+  "EEEEEEEEEEEE": {
+   "productId": "EEEEEEEEEEEE",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "Family",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": null
+  },
+  "FFFFFFFFFFFF": {
+   "productId": "FFFFFFFFFFFF",
+   "status": "Revoked",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": null
+  },
+  "GGGGGGGGGGGG": {
+   "productId": "GGGGGGGGGGGG",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": "CFQ7TTC0KGQ8"
+  },
+  "CFQ7TTC0KGQ8": {
+   "productId": "CFQ7TTC0KGQ8",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": null
+  },
+  "HHHHHHHHHHHH": {
+   "productId": "HHHHHHHHHHHH",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": "IIIIIIIIIIII"
+  },
+  "IIIIIIIIIIII": {
+   "productId": "IIIIIIIIIIII",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": "CFQ7TTC0KGQ8"
+  },
+  "JJJJJJJJJJJJ": {
+   "productId": "JJJJJJJJJJJJ",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": "KKKKKKKKKKKK"
+  },
+  "KKKKKKKKKKKK": {
+   "productId": "KKKKKKKKKKKK",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": "JJJJJJJJJJJJ"
+  },
+  "LLLLLLLLLLLL": {
+   "productId": "LLLLLLLLLLLL",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00Z",
+   "satisfiedByProductId": "MISSINGMISS"
+  },
+  "NNNNNNNNNNNN": {
+   "productId": "NNNNNNNNNNNN",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "not a date",
+   "satisfiedByProductId": null
+  },
+  "OOOOOOOOOOOO": {
+   "productId": "OOOOOOOOOOOO",
+   "status": "Active",
+   "isTrial": false,
+   "special": false,
+   "sharingSource": "None",
+   "endDate": "2099-01-01T00:00:00",
+   "satisfiedByProductId": null
+  }
+ },
+ "kinds": {
+  "AAAAAAAAAAAA": "owned",
+  "GGGGGGGGGGGG": "gamepass",
+  "HHHHHHHHHHHH": "gamepass",
+  "IIIIIIIIIIII": "gamepass",
+  "OOOOOOOOOOOO": "owned"
+ },
+ "fetch": {
+  "good_with_noise": [
+   {
+    "ok": [
+     "9NBLGGH4R315",
+     "AAAAAAAAAAAA"
+    ]
+   },
+   "starting...\n{\"schema\": 1, \"market\": \"US\", \"entitlements\": [{\"productId\": \"AAAAAAAAAAAA\", \"status\": \"Active\", \"isTrial\": false, \"special\": false, \"sharingSource\": \"None\", \"endDate\": \"2099-01-01T00:00:00Z\", \"satisfiedByProductId\": null}, {\"productId\": \"short\", \"status\": \"Active\", \"isTrial\": false, \"special\": false, \"sharingSource\": \"None\", \"endDate\": \"2099-01-01T00:00:00Z\", \"satisfiedByProductId\": null}, {\"productId\": 5}, \"junk\", {\"productId\": \"9NBLGGH4R315\", \"status\": \"Active\", \"isTrial\": false, \"special\": false, \"sharingSource\": \"None\", \"endDate\": \"2099-01-01T00:00:00Z\", \"satisfiedByProductId\": null}]}\n",
+   0,
+   "US"
+  ],
+  "bad_rc": [
+   {
+    "err": "Xodus Nexus could not load your account licences. Open Nexus, make sure you are signed in, then try again."
+   },
+   "{\"schema\": 1, \"market\": \"US\", \"entitlements\": [{\"productId\": \"AAAAAAAAAAAA\", \"status\": \"Active\", \"isTrial\": false, \"special\": false, \"sharingSource\": \"None\", \"endDate\": \"2099-01-01T00:00:00Z\", \"satisfiedByProductId\": null}, {\"productId\": \"short\", \"status\": \"Active\", \"isTrial\": false, \"special\": false, \"sharingSource\": \"None\", \"endDate\": \"2099-01-01T00:00:00Z\", \"satisfiedByProductId\": null}, {\"productId\": 5}, \"junk\", {\"productId\": \"9NBLGGH4R315\", \"status\": \"Active\", \"isTrial\": false, \"special\": false, \"sharingSource\": \"None\", \"endDate\": \"2099-01-01T00:00:00Z\", \"satisfiedByProductId\": null}]}",
+   1,
+   "US"
+  ],
+  "no_json": [
+   {
+    "err": "Xodus Nexus returned something unreadable."
+   },
+   "nothing here",
+   0,
+   "US"
+  ],
+  "wrong_schema": [
+   {
+    "err": "Xodus Nexus returned an unexpected format (its backend may have changed)."
+   },
+   "{\"schema\": 2, \"market\": \"US\", \"entitlements\": []}",
+   0,
+   "US"
+  ],
+  "wrong_market": [
+   {
+    "err": "Xodus Nexus returned an unexpected format (its backend may have changed)."
+   },
+   "{\"schema\": 1, \"market\": \"US\", \"entitlements\": [{\"productId\": \"AAAAAAAAAAAA\", \"status\": \"Active\", \"isTrial\": false, \"special\": false, \"sharingSource\": \"None\", \"endDate\": \"2099-01-01T00:00:00Z\", \"satisfiedByProductId\": null}, {\"productId\": \"short\", \"status\": \"Active\", \"isTrial\": false, \"special\": false, \"sharingSource\": \"None\", \"endDate\": \"2099-01-01T00:00:00Z\", \"satisfiedByProductId\": null}, {\"productId\": 5}, \"junk\", {\"productId\": \"9NBLGGH4R315\", \"status\": \"Active\", \"isTrial\": false, \"special\": false, \"sharingSource\": \"None\", \"endDate\": \"2099-01-01T00:00:00Z\", \"satisfiedByProductId\": null}]}",
+   0,
+   "GB"
+  ]
+ },
+ "products": [
+  {
+   "ProductId": "AAAAAAAAAAAA",
+   "ProductType": "Game",
+   "Properties": {
+    "PackageFamilyName": "Pub.GameA_abc"
+   },
+   "LocalizedProperties": [
+    {
+     "ProductTitle": "Game A",
+     "PublisherName": "PubA",
+     "DeveloperName": "DevA",
+     "ShortDescription": "Blurb A"
+    }
+   ]
+  },
+  {
+   "ProductId": "BBBBBBBBBBBB",
+   "ProductType": "Game",
+   "Properties": {},
+   "LocalizedProperties": [
+    {
+     "ProductTitle": "Game B",
+     "PublisherName": "PubB"
+    }
+   ],
+   "DisplaySkuAvailabilities": [
+    {
+     "Sku": {
+      "Properties": {
+       "Packages": [
+        {
+         "PackageFamilyName": "Pub.GameB_abc"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "ProductId": "CCCCCCCCCCCC",
+   "ProductType": "Durable",
+   "Properties": {},
+   "LocalizedProperties": [
+    {
+     "ProductTitle": "A DLC"
+    }
+   ]
+  },
+  {
+   "ProductId": "DDDDDDDDDDDD",
+   "LocalizedProperties": []
+  }
+ ],
+ "catalog": {
+  "AAAAAAAAAAAA": {
+   "type": "Game",
+   "title": "Game A",
+   "publisher": "PubA",
+   "developer": "DevA",
+   "description": "Blurb A",
+   "pfn": "Pub.GameA_abc"
+  },
+  "BBBBBBBBBBBB": {
+   "type": "Game",
+   "title": "Game B",
+   "publisher": "PubB",
+   "developer": null,
+   "description": null,
+   "pfn": "Pub.GameB_abc"
+  },
+  "CCCCCCCCCCCC": {
+   "type": "Durable",
+   "title": "A DLC",
+   "publisher": null,
+   "developer": null,
+   "description": null,
+   "pfn": null
+  },
+  "DDDDDDDDDDDD": {
+   "type": null,
+   "title": null,
+   "publisher": null,
+   "developer": null,
+   "description": null,
+   "pfn": null
+  }
+ },
+ "catalog_batches": [
+  20,
+  5
+ ],
+ "groups": [
+  [
+   "",
+   [
+    "Game Pass"
+   ],
+   "Game Pass"
+  ],
+  [
+   "Mine,Owned (Microsoft Store)",
+   [
+    "Game Pass"
+   ],
+   "Mine,Game Pass"
+  ],
+  [
+   "Game Pass,Mine",
+   [
+    "Owned (Microsoft Store)"
+   ],
+   "Mine,Owned (Microsoft Store)"
+  ],
+  [
+   "Mine",
+   [],
+   "Mine"
+  ],
+  [
+   "Mine,Game Pass",
+   [
+    "Game Pass"
+   ],
+   "Mine,Game Pass"
+  ]
+ ]
+}

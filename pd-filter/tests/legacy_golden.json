@@ -1,0 +1,24 @@
+{
+ "catalog_ids": [
+  101,
+  102
+ ],
+ "host_paths": {
+  "": "",
+  "C:\\Games\\X": "<ROOT>/drive_c/Games/X",
+  "C:\\Program Files\\Legacy Games\\Hidden Foo": "<ROOT>/drive_c/Program Files/Legacy Games/Hidden Foo",
+  "D:\\Other\\Place": "<ROOT>/drive_c/D:/Other/Place"
+ },
+ "registry": {
+  "uuid-dir": {
+   "game_exe": "",
+   "inst_dir": "C:\\Program Files (x86)\\Legacy Games\\Dir Only",
+   "name": "Dir Only"
+  },
+  "uuid-foo": {
+   "game_exe": "foo.exe",
+   "inst_dir": "C:\\Program Files\\Legacy Games\\Hidden Foo",
+   "name": "Hidden Foo"
+  }
+ }
+}

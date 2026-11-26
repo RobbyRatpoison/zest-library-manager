@@ -1,0 +1,338 @@
+{
+ "entries": [
+  {
+   "exe_relative": "Conviction_game.exe",
+   "install_id": "2",
+   "launch_id": "2",
+   "name": "Tom Clancy's Splinter Cell Conviction",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Splinter Cell - Conviction\\InstallDir",
+   "space_id": "36809940-3718-488d-928e-ab4949669622",
+   "third_party_platform": null,
+   "thumb_image": "f55737cd12a1502d6f961ab5ec98b5b1.jpg"
+  },
+  {
+   "exe_relative": null,
+   "install_id": "46",
+   "launch_id": "46",
+   "name": "Far Cry® 3",
+   "registry_key": null,
+   "space_id": "50228b8c-bbaa-4c32-83c6-2831a1ac317c",
+   "third_party_platform": null,
+   "thumb_image": "ed9da50536f11b289121329af97881e1.jpg"
+  },
+  {
+   "exe_relative": "Future Soldier.exe",
+   "install_id": "53",
+   "launch_id": "53",
+   "name": "Tom Clancy's Ghost Recon Future Soldier™",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\UBISOFT\\Tom Clancy's Ghost Recon Future Soldier\\GameUpdate\\InstallDir",
+   "space_id": "5dea230f-c047-4e78-bc4c-4f8b1ffb54d5",
+   "third_party_platform": null,
+   "thumb_image": "252d8d7429d009235c36eed722c6a240.jpg"
+  },
+  {
+   "exe_relative": "AC3SP.exe",
+   "install_id": "54",
+   "launch_id": "54",
+   "name": "Assassin's Creed III",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\UBISOFT\\Assassin's Creed 3\\GameUpdate\\installdir",
+   "space_id": "4a1562a4-c4d2-4bc5-a85e-f3db588b0072",
+   "third_party_platform": null,
+   "thumb_image": "THUMBIMAGE"
+  },
+  {
+   "exe_relative": "Rayman Origins.exe",
+   "install_id": "80",
+   "launch_id": "80",
+   "name": "Rayman Origins",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\UBISOFT\\Rayman Origins\\GameUpdate\\InstallDir",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "168616bac535772d7c19750aec4fa11a.jpg"
+  },
+  {
+   "exe_relative": "Binaries\\EndWar.exe",
+   "install_id": "83",
+   "launch_id": "83",
+   "name": "Tom Clancy's EndWar",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\UBISOFT\\Tom Clancy's EndWar\\GameUpdate\\installdir",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "66e9ee88a624aa6c3f2be43b49ee9d0b.jpg"
+  },
+  {
+   "exe_relative": "R6Vegas_Game.exe",
+   "install_id": "88",
+   "launch_id": "88",
+   "name": "Tom Clancy's Rainbow Six® Vegas",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{5731C0A8-B266-451A-8D3F-8066AA21836F}\\InstallLocation",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "d9f78539238ba5f5d55ab2c1b84865b9.jpg"
+  },
+  {
+   "exe_relative": "Blacklist_Launcher.exe",
+   "install_id": "91",
+   "launch_id": "91",
+   "name": "Tom Clancy's Splinter Cell Blacklist",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Splinter Cell Blacklist\\installdir",
+   "space_id": "a1b16676-daa4-44f9-82bd-1c284017024c",
+   "third_party_platform": null,
+   "thumb_image": "11bb9e1209f0d7f77a826ceb51d78ec4.jpg"
+  },
+  {
+   "exe_relative": "splintercell3.exe",
+   "install_id": "95",
+   "launch_id": "95",
+   "name": "Tom Clancy's Splinter Cell Chaos Theory™",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Tom Clancy's Splinter Cell Chaos Theory\\InstallDir",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "5afce18505053ddcecd8f0cbfc8041e8.jpg"
+  },
+  {
+   "exe_relative": "R6Vegas2_Game.exe",
+   "install_id": "108",
+   "launch_id": "108",
+   "name": "Tom Clancy's Rainbow Six® Vegas 2",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Tom Clancy's Rainbow Six Vegas 2\\GameUpdate\\installdir",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "e5fbce6f4b8e4a15f43a9a1d900620dd.jpg"
+  },
+  {
+   "exe_relative": "SplinterCell.exe",
+   "install_id": "109",
+   "launch_id": "109",
+   "name": "Tom Clancy's Splinter Cell",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubi Soft Entertainment\\SPLINTERCELL\\InstalledPath",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "ad28c12bdc574692d9c954564715c3b9.jpg"
+  },
+  {
+   "exe_relative": "SCDALauncher.exe",
+   "install_id": "110",
+   "launch_id": "110",
+   "name": "Tom Clancy's Splinter Cell Double Agent",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Tom Clancy's Splinter Cell Double Agent\\InstallDir",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "25264fa364a119b2c87aea128aa681d7.jpg"
+  },
+  {
+   "exe_relative": "PrinceOfPersia.exe",
+   "install_id": "111",
+   "launch_id": "111",
+   "name": "Prince of Persia: The Sands of Time™",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Prince of Persia The Sands of Time\\1.00.181\\Product_Path",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "73f5d624f36d0fc38ada32c9e0a20635.jpg"
+  },
+  {
+   "exe_relative": null,
+   "install_id": "205",
+   "launch_id": "205",
+   "name": "Far Cry® 3 Blood Dragon",
+   "registry_key": null,
+   "space_id": "4bd0476b-acec-446d-b526-23a0209101ca",
+   "third_party_platform": null,
+   "thumb_image": "52fbec0acc65df17878df15abeff2f19.jpg"
+  },
+  {
+   "exe_relative": "BGE.exe",
+   "install_id": "232",
+   "launch_id": "232",
+   "name": "Beyond Good and Evil",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Beyond Good & Evil\\Install path",
+   "space_id": "41b67b23-c7e1-417b-af71-4d24a7a50c45",
+   "third_party_platform": null,
+   "thumb_image": "THUMBIMAGE"
+  },
+  {
+   "exe_relative": null,
+   "install_id": "318",
+   "launch_id": "318",
+   "name": "GAMENAME",
+   "registry_key": null,
+   "space_id": "009083ff-8454-40c3-96ed-7a3641fbf2a6",
+   "third_party_platform": "Steam",
+   "thumb_image": "THUMBIMAGE"
+  },
+  {
+   "exe_relative": "TheCrew.exe",
+   "install_id": "413",
+   "launch_id": "413",
+   "name": "The Crew",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Launcher\\Installs\\413\\InstallDir",
+   "space_id": "ee2ed4a6-4d8c-4d20-8777-c6355c21666f",
+   "third_party_platform": null,
+   "thumb_image": "b33ab65fc6ca2c6bd7574b9449f3e6cc.jpg"
+  },
+  {
+   "exe_relative": null,
+   "install_id": "419",
+   "launch_id": "419",
+   "name": "RAYMAN® LEGENDS Demo",
+   "registry_key": null,
+   "space_id": "",
+   "third_party_platform": "Steam",
+   "thumb_image": "55ab468fb7f21ccdfda67cf9f9eb4399.jpg"
+  },
+  {
+   "exe_relative": "ForHonor.exe",
+   "install_id": "569",
+   "launch_id": "569",
+   "name": "ForHonor",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Launcher\\Installs\\569\\InstallDir",
+   "space_id": "c2294cd6-bd01-4f19-81e9-4e5d32cb763a",
+   "third_party_platform": null,
+   "thumb_image": "l2"
+  },
+  {
+   "exe_relative": "ChildofLight.exe",
+   "install_id": "801",
+   "launch_id": "801",
+   "name": "Child of Light Demo",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Launcher\\Installs\\801\\InstallDir",
+   "space_id": "600a36b8-ed3e-40c6-8a5f-c2b890eda50a",
+   "third_party_platform": null,
+   "thumb_image": "e61cb9eceb39205ecb5f0b0d0d38aaaf.jpg"
+  },
+  {
+   "exe_relative": "ACCGame-Win32-Shipping.exe",
+   "install_id": "1651",
+   "launch_id": "1651",
+   "name": "Assassin's Creed® Chronicles China",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Launcher\\Installs\\1651\\InstallDir",
+   "space_id": "92c79ab6-a69a-411d-ba2b-625ab104235d",
+   "third_party_platform": null,
+   "thumb_image": "79b8e5e2468fb3f434b622ee5c5063fb.jpg"
+  },
+  {
+   "exe_relative": null,
+   "install_id": "1843",
+   "launch_id": "1843",
+   "name": "l1",
+   "registry_key": null,
+   "space_id": "0d2ae42d-4c27-4cb7-af6c-2099062302bb",
+   "third_party_platform": "Steam",
+   "thumb_image": "l2"
+  },
+  {
+   "exe_relative": "TheDivision.exe",
+   "install_id": "2036",
+   "launch_id": "2036",
+   "name": "Tom Clancy's The Division Beta",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Launcher\\Installs\\2036\\InstallDir",
+   "space_id": "a1e7474e-6917-4f5b-9edd-f2bc689bf580",
+   "third_party_platform": null,
+   "thumb_image": "THUMBIMAGE"
+  },
+  {
+   "exe_relative": "RavenShield.exe",
+   "install_id": "2235",
+   "launch_id": "2235",
+   "name": "Tom Clancy's Rainbow Six® 3 Gold",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Red Storm Entertainment\\RAVENSHIELD\\InstalledPath",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "5b94d3ffb291570cc0965ddab0cd3f50.jpg"
+  },
+  {
+   "exe_relative": "GhostRecon.exe",
+   "install_id": "2297",
+   "launch_id": "2297",
+   "name": "Tom Clancy's Ghost Recon",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Tom Clancy's Ghost Recon_is1\\InstallLocation",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "48dbbcc5a2db979351657ef2ec3e0810.jpg"
+  },
+  {
+   "exe_relative": "rainbowsix.exe",
+   "install_id": "2298",
+   "launch_id": "2298",
+   "name": "Tom Clancy's Rainbow Six®",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Tom Clancy's Rainbow Six_is1\\InstallLocation",
+   "space_id": "",
+   "third_party_platform": null,
+   "thumb_image": "866ba59aeb1854bef6108e7768cb1a87.jpg"
+  },
+  {
+   "exe_relative": "Trackmania.exe",
+   "install_id": "5595",
+   "launch_id": "5595",
+   "name": "Trackmania",
+   "registry_key": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Launcher\\Installs\\5595\\InstallDir",
+   "space_id": "5d20614c-234d-4cc8-934d-11ff07c2de69",
+   "third_party_platform": null,
+   "thumb_image": "29af1426c8ea0ed58abcc96195c45ef7.jpg"
+  },
+  {
+   "exe_relative": null,
+   "install_id": "7015",
+   "launch_id": "7015",
+   "name": "Trackmania (Steam)",
+   "registry_key": null,
+   "space_id": "5d20614c-234d-4cc8-934d-11ff07c2de69",
+   "third_party_platform": "Steam",
+   "thumb_image": "71076cef0357111b2f2ee4969e727dbf.jpg"
+  },
+  {
+   "exe_relative": null,
+   "install_id": "10424",
+   "launch_id": "10424",
+   "name": "Tom Clancy's Rainbow Six® Siege - Test Server",
+   "registry_key": null,
+   "space_id": "5c22ec5f-d475-4ec1-8c60-0c28ce9affed",
+   "third_party_platform": "Steam",
+   "thumb_image": "70c564386eb2e9b6a0dea545af3036a0.png"
+  }
+ ],
+ "placeholders": {
+  "": true,
+  "  ": true,
+  "ABC": false,
+  "GAMENAME": true,
+  "HOMEPAGE": true,
+  "L1X": false,
+  "L22": true,
+  "Rayman": false,
+  "THUMBIMAGE": true,
+  "Ubisoft Game": true,
+  "l1": true,
+  "name": true
+ },
+ "registry": {
+  "": {
+   "dir": "",
+   "value": null
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Bar\\InstallDir": {
+   "dir": "<ROOT>/drive_c/Program Files (x86)/Ubisoft/Bar",
+   "value": "C:\\Program Files (x86)\\Ubisoft\\Bar"
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Foo\\InstallDir": {
+   "dir": "<ROOT>/drive_c/Games/Foo",
+   "value": "C:\\Games\\Foo"
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Gone\\InstallDir": {
+   "dir": "",
+   "value": "C:\\Games\\Gone"
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\None\\InstallDir": {
+   "dir": "",
+   "value": null
+  }
+ },
+ "slugs": {
+  "  Far Cry 3: Blood Dragon  ": "far-cry-3-blood-dragon",
+  "---": "",
+  "Assassin's Creed III": "assassins-creed-iii",
+  "Prince of Persia: The Sands of Time": "prince-of-persia-the-sands-of-time",
+  "Tom Clancy’s Rainbow Six® Siege": "tom-clancys-rainbow-six-siege",
+  "Trials  Fusion_Deluxe": "trials-fusion-deluxe"
+ }
+}

@@ -1,0 +1,519 @@
+{
+ "names": [
+  [
+   "Game Beta",
+   [
+    "beta"
+   ]
+  ],
+  [
+   "BETA",
+   [
+    "beta"
+   ]
+  ],
+  [
+   "Alphabet Soup",
+   []
+  ],
+  [
+   "Alpha Protocol",
+   [
+    "alpha"
+   ]
+  ],
+  [
+   "Public Test Server",
+   [
+    "public/closed test"
+   ]
+  ],
+  [
+   "Open Testing",
+   [
+    "public/closed test"
+   ]
+  ],
+  [
+   "Closed  test",
+   [
+    "public/closed test"
+   ]
+  ],
+  [
+   "closed tester",
+   []
+  ],
+  [
+   "Unstable Branch",
+   [
+    "unstable/test branch"
+   ]
+  ],
+  [
+   "Playable Teaser",
+   [
+    "playable teaser"
+   ]
+  ],
+  [
+   "Friend's Pass",
+   [
+    "friend's pass"
+   ]
+  ],
+  [
+   "Friends Pass",
+   [
+    "friend's pass"
+   ]
+  ],
+  [
+   "Friend’s Pass",
+   []
+  ],
+  [
+   "Key Only",
+   [
+    "key-only bundle placeholder"
+   ]
+  ],
+  [
+   "Foo - Multiplayer",
+   [
+    "multiplayer-only companion app"
+   ]
+  ],
+  [
+   "Foo -Multiplayer  ",
+   [
+    "multiplayer-only companion app"
+   ]
+  ],
+  [
+   "Foo - Multiplayer Edition",
+   []
+  ],
+  [
+   "The Movie",
+   [
+    "documentary/movie"
+   ]
+  ],
+  [
+   "Movie Maker",
+   []
+  ],
+  [
+   "Demo",
+   [
+    "demo"
+   ]
+  ],
+  [
+   "Demolition Derby",
+   []
+  ],
+  [
+   "Trial of Osiris",
+   [
+    "trial"
+   ]
+  ],
+  [
+   "Trials Rising",
+   []
+  ],
+  [
+   "Prototype X",
+   [
+    "prototype"
+   ]
+  ],
+  [
+   "Sneak Peek",
+   [
+    "sneak peek"
+   ]
+  ],
+  [
+   "SneakPeek",
+   [
+    "sneak peek"
+   ]
+  ],
+  [
+   "Source Code",
+   [
+    "source code"
+   ]
+  ],
+  [
+   "SourceCode",
+   [
+    "source code"
+   ]
+  ],
+  [
+   "Dev Kit",
+   [
+    "dev/mod kit"
+   ]
+  ],
+  [
+   "Modkit",
+   [
+    "dev/mod kit"
+   ]
+  ],
+  [
+   "Mod  Kit",
+   []
+  ],
+  [
+   "SDK",
+   [
+    "SDK"
+   ]
+  ],
+  [
+   "sdk",
+   []
+  ],
+  [
+   "Half-Life SDK",
+   [
+    "SDK"
+   ]
+  ],
+  [
+   "Soundtrack",
+   [
+    "soundtrack"
+   ]
+  ],
+  [
+   "Art Book",
+   [
+    "artbook"
+   ]
+  ],
+  [
+   "Artbook",
+   [
+    "artbook"
+   ]
+  ],
+  [
+   "ArtBook",
+   [
+    "artbook"
+   ]
+  ],
+  [
+   "Art  Book",
+   []
+  ],
+  [
+   "OST",
+   [
+    "soundtrack (OST)"
+   ]
+  ],
+  [
+   "ost",
+   []
+  ],
+  [
+   "Game OST",
+   [
+    "soundtrack (OST)"
+   ]
+  ],
+  [
+   "Beta Alpha Demo",
+   [
+    "beta",
+    "alpha",
+    "demo"
+   ]
+  ],
+  [
+   "Ünïcode demo",
+   [
+    "demo"
+   ]
+  ],
+  [
+   "Démo",
+   []
+  ],
+  [
+   "demoé",
+   []
+  ],
+  [
+   "",
+   []
+  ],
+  [
+   "Portal 2",
+   []
+  ],
+  [
+   "Baldur’s Gate 3",
+   []
+  ],
+  [
+   "Beta-Test",
+   [
+    "beta"
+   ]
+  ],
+  [
+   "Test Drive Unlimited",
+   []
+  ],
+  [
+   "Soundtrack Selector",
+   [
+    "soundtrack"
+   ]
+  ]
+ ],
+ "rows": [
+  [
+   10,
+   "Alpha Game",
+   "steam",
+   0,
+   100
+  ],
+  [
+   11,
+   "Beta Free",
+   "steam",
+   1,
+   3
+  ],
+  [
+   12,
+   "Beta Free Played",
+   "steam",
+   1,
+   200
+  ],
+  [
+   13,
+   "Not Owned Paid",
+   "steam",
+   0,
+   0
+  ],
+  [
+   14,
+   "Owned Demo",
+   "steam",
+   0,
+   5
+  ],
+  [
+   15,
+   "Dismissed Demo",
+   "steam",
+   0,
+   5
+  ],
+  [
+   16,
+   "Blacklisted Demo",
+   "steam",
+   0,
+   5
+  ],
+  [
+   -1,
+   "Humble Prototype",
+   "humble",
+   0,
+   0
+  ],
+  [
+   -2,
+   "GOG Soundtrack",
+   "gog",
+   0,
+   0
+  ],
+  [
+   17,
+   "Real Game",
+   "steam",
+   0,
+   40
+  ],
+  [
+   18,
+   "Gone But Pattern Demo",
+   "steam",
+   0,
+   0
+  ],
+  [
+   -3,
+   "No Platform Soundtrack",
+   null,
+   0,
+   0
+  ]
+ ],
+ "dismissed": [
+  15
+ ],
+ "blacklisted": [
+  "16"
+ ],
+ "owned": [
+  10,
+  12,
+  14,
+  15,
+  16,
+  17
+ ],
+ "with_ownership": {
+  "owned": [
+   {
+    "appid": 13,
+    "name": "Not Owned Paid"
+   },
+   {
+    "appid": 18,
+    "name": "Gone But Pattern Demo"
+   },
+   {
+    "appid": -3,
+    "name": "No Platform Soundtrack"
+   }
+  ],
+  "patterns": [
+   {
+    "appid": 10,
+    "name": "Alpha Game",
+    "platform": "steam",
+    "reasons": [
+     "alpha"
+    ]
+   },
+   {
+    "appid": 11,
+    "name": "Beta Free",
+    "platform": "steam",
+    "reasons": [
+     "beta"
+    ]
+   },
+   {
+    "appid": 12,
+    "name": "Beta Free Played",
+    "platform": "steam",
+    "reasons": [
+     "beta"
+    ]
+   },
+   {
+    "appid": 14,
+    "name": "Owned Demo",
+    "platform": "steam",
+    "reasons": [
+     "demo"
+    ]
+   },
+   {
+    "appid": -1,
+    "name": "Humble Prototype",
+    "platform": "humble",
+    "reasons": [
+     "prototype"
+    ]
+   },
+   {
+    "appid": -2,
+    "name": "GOG Soundtrack",
+    "platform": "gog",
+    "reasons": [
+     "soundtrack"
+    ]
+   }
+  ]
+ },
+ "without_ownership": {
+  "owned": [],
+  "patterns": [
+   {
+    "appid": 10,
+    "name": "Alpha Game",
+    "platform": "steam",
+    "reasons": [
+     "alpha"
+    ]
+   },
+   {
+    "appid": 11,
+    "name": "Beta Free",
+    "platform": "steam",
+    "reasons": [
+     "beta"
+    ]
+   },
+   {
+    "appid": 12,
+    "name": "Beta Free Played",
+    "platform": "steam",
+    "reasons": [
+     "beta"
+    ]
+   },
+   {
+    "appid": 14,
+    "name": "Owned Demo",
+    "platform": "steam",
+    "reasons": [
+     "demo"
+    ]
+   },
+   {
+    "appid": -1,
+    "name": "Humble Prototype",
+    "platform": "humble",
+    "reasons": [
+     "prototype"
+    ]
+   },
+   {
+    "appid": -2,
+    "name": "GOG Soundtrack",
+    "platform": "gog",
+    "reasons": [
+     "soundtrack"
+    ]
+   },
+   {
+    "appid": 18,
+    "name": "Gone But Pattern Demo",
+    "platform": "steam",
+    "reasons": [
+     "demo"
+    ]
+   },
+   {
+    "appid": -3,
+    "name": "No Platform Soundtrack",
+    "platform": "steam",
+    "reasons": [
+     "soundtrack"
+    ]
+   }
+  ]
+ }
+}

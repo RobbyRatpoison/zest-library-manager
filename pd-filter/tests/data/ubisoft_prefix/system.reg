@@ -1,0 +1,9 @@
+WINE REGISTRY Version 2
+;; comment
+
+[Software\\Ubisoft\\Foo] 1700000000
+"InstallDir"="C:\\Games\\Foo"
+[Software\\Wow6432Node\\Ubisoft\\Bar] 1700000001
+"InstallDir"="C:\\Program Files (x86)\\Ubisoft\\Bar"
+[Software\\Ubisoft\\Gone] 1700000002
+"InstallDir"="C:\\Games\\Gone"

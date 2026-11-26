@@ -1,0 +1,16 @@
+--- a/crates/egui/src/containers/scroll_area.rs
++++ b/crates/egui/src/containers/scroll_area.rs
+@@ -72,6 +72,13 @@
+ }
+ 
+ impl State {
++    /// Zest patch: scroll to `y` at once and drop any smooth scroll still under way (egui starts one when keyboard focus lands on a half-hidden widget, and it would pull a
++    /// programmatic jump back towards that widget a few frames later).
++    pub fn jump_y(&mut self, y: f32) {
++        self.offset.y = y;
++        self.offset_target[1] = None;
++    }
++
+     pub fn load(ctx: &Context, id: Id) -> Option<Self> {
+         ctx.data_mut(|d| d.get_persisted(id))
+     }

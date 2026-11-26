@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.robbyratpoison.Zest</id>
+  <name>Zest</name>
+  <summary>A local game library manager for people who take their backlog seriously</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <description>
+    <p>
+      Browse your Steam library and any connected stores, track completion, and decide what to play next.
+      Runs entirely locally in a small native window.
+    </p>
+  </description>
+  <launchable type="desktop-id">io.github.robbyratpoison.Zest.desktop</launchable>
+  <url type="homepage">https://github.com/RobbyRatpoison/zest-library-manager</url>
+  <url type="bugtracker">https://github.com/RobbyRatpoison/zest-library-manager/issues</url>
+  <content_rating type="oars-1.1" />
+</component>

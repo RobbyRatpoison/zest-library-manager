@@ -1,0 +1,24 @@
+[workspace]
+members = ["grid-core", "grid-own", "pd-filter", "zest-login"]
+resolver = "2"
+
+# A copy of egui with one change: double click selects a word on press, and dragging from there extends by words
+# (`Interaction::select_word_on_press`). The change is also kept as patches/egui-select-word-on-press.patch.
+[patch.crates-io]
+egui = { path = "vendor/egui" }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+# For day-to-day testing: no link-time optimisation and many code-generation units, so a rebuild uses all cores.
+# Slower and a little bigger than `release`; use `release` for anything measured (speed, memory) or shipped.
+[profile.fast]
+inherits = "release"
+lto = false
+codegen-units = 16
+incremental = true
+strip = false

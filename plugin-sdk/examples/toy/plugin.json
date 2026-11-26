@@ -1,0 +1,13 @@
+{
+  "id": "toy",
+  "name": "Toy Store",
+  "version": "2026.11.1",
+  "platform": "toy",
+  "zest": {
+    "api": 1,
+    "run": ["python3", "plugin.py"],
+    "capabilities": ["auth", "sync", "rescrape", "description", "launch", "installed_scan"],
+    "store_url": "https://toy.example/game/{slug}",
+    "store_label": "View on Toy Store"
+  }
+}
