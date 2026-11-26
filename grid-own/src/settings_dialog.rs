@@ -1118,7 +1118,7 @@ impl SettingsDialog {
         });
         if let Some(m) = &self.sdl_msg { ui.label(ui_kit::muted(m.clone(), 0.8 * r)); }
         ui.add_space(0.4 * r);
-        ui.label(ui_kit::muted("A step-by-step layout wizard, button names and the controller drawing from PlayDate's Gamepad Setup are not in Zest.", 0.78 * r));
+        ui.label(ui_kit::muted("PlayDate's step-by-step layout wizard and its custom controller drawing are not in Zest: for a controller SDL does not know, paste a mapping line above.", 0.78 * r));
         changed
     }
 

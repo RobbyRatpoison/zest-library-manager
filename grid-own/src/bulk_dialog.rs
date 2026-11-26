@@ -178,7 +178,7 @@ impl BulkDialog {
                 egui::ScrollArea::vertical().max_height(f32::INFINITY).auto_shrink([false, true]).show(ui, |ui| {
                     if self.tab == 2 {
                         panel(ui, "DATES", r, |ui| {
-                            note(ui, "Reads when you got each game and sets Date Added, replacing the date Zest first saw it. Games from GOG, Epic Games, EA App and IndieGala ask the store's account in the background (the store must be connected). Steam games read their activation date from Steam's Help site in your browser (needs the Zest Companion userscript and a Steam sign-in there).");
+                            note(ui, "Reads when you got each game and sets Date Added, replacing the date Zest first saw it. Games from GOG, Epic Games, EA App, IndieGala and PlayStation ask the store's account in the background (the store must be connected). Steam games read their activation date from Steam's Help pages, which Zest reads itself with your Steam sign-in (a Steam sign-in window opens first if you are not signed in).");
                             ui.add_space(0.3 * r);
                             if wide(ui, "Fetch Dates", !busy) { out = BulkOut::FetchDates { scope: self.scope }; }
                         });
@@ -268,8 +268,8 @@ impl BulkDialog {
                 self.error = None;
             }
             ui.label(ui_kit::muted("Edit Mode", 0.8 * r));
-            let cur = match self.mode { "append" => "Append \u{2014} add to the existing values", "remove" => "Remove \u{2014} take out matching values", _ => "Replace \u{2014} overwrite the entire column value" };
-            let opts: &[&str] = if self.is_list() { &["Replace \u{2014} overwrite the entire column value", "Append \u{2014} add to the existing values", "Remove \u{2014} take out matching values"] } else { &["Replace \u{2014} overwrite the entire column value"] };
+            let cur = match self.mode { "append" => "Append: add to the existing values", "remove" => "Remove: take out matching values", _ => "Replace: overwrite the entire column value" };
+            let opts: &[&str] = if self.is_list() { &["Replace: overwrite the entire column value", "Append: add to the existing values", "Remove: take out matching values"] } else { &["Replace: overwrite the entire column value"] };
             if let Some(p) = EditDialog::dropdown(ui, "bulk_mode", cur, opts, w, r) { self.mode = if p.starts_with("Append") { "append" } else if p.starts_with("Remove") { "remove" } else { "replace" }; }
             ui.label(ui_kit::muted(match self.mode { "append" => "Adds the values to every matching game, skipping ones it already has.", "remove" => "Removes the values from every matching game.", _ => "Overwrites the entire value for every matching game." }, 0.7 * r));
             ui.label(ui_kit::muted("Value", 0.8 * r));
