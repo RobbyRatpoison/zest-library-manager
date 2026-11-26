@@ -105,6 +105,16 @@ pub struct Imported { pub libraries: usize, pub files: usize, pub covers: usize 
 /// Copies PlayDate's library from `from` into the Zest data folder `to`. The databases go last, so a folder with a library in it always has its settings and covers too
 /// (an import stopped half-way leaves no library, and the first-run window simply shows again). Refuses a folder that already holds a library, and `from` = `to`.
 /// `progress(done, total)` counts files.
+/// The `state.json` key the first start reads: a library copied from PlayDate is shown What's New, a fresh one the tutorial.
+pub const FROM_PLAYDATE_KEY: &str = "zest_from_playdate";
+
+fn mark_from_playdate(to: &Path) {
+    let p = to.join("state.json");
+    let mut v = std::fs::read_to_string(&p).ok().and_then(|t| serde_json::from_str::<serde_json::Value>(&t).ok()).filter(|v| v.is_object()).unwrap_or_else(|| serde_json::json!({}));
+    v[FROM_PLAYDATE_KEY] = serde_json::Value::Bool(true);
+    let _ = crate::account::write_json(&p, &v);
+}
+
 pub fn import(from: &Path, to: &Path, progress: &mut dyn FnMut(usize, usize), cancel: &Cancel) -> Result<Imported, String> {
     if !is_library(from) { return Err(format!("{} does not hold a PlayDate library.", from.display())); }
     let same = std::fs::canonicalize(from).ok().zip(std::fs::canonicalize(to).ok()).map_or(false, |(a, b)| a == b);
@@ -144,6 +154,8 @@ pub fn import(from: &Path, to: &Path, progress: &mut dyn FnMut(usize, usize), ca
     }
     // window placement, renderer and update links belong to the old program
     let dropped = crate::backup::sanitize_state(to);
+    // tells the first start this library came from PlayDate, so it shows what changed instead of the tutorial
+    mark_from_playdate(to);
     crate::net::log(&format!("PlayDate import from {}: {} librar{}, {} settings file(s), {} cover(s){}", from.display(), out.libraries, if out.libraries == 1 { "y" } else { "ies" }, out.files, out.covers,
         if dropped.is_empty() { String::new() } else { format!("; dropped {dropped:?}") }));
     progress(total, total);
@@ -184,6 +196,8 @@ mod tests {
         for f in ["config.json", "humble_cache.json", "group_sources_76561198000000001.json", "static/img/library/vertical/10.jpg", "static/img/badges/b.png"] { assert!(to.join(f).is_file(), "{f}"); }
         for f in ["playdate.log", "main.py", "plugins"] { assert!(!to.join(f).exists(), "{f} is not data"); }
         assert!(!std::fs::read_to_string(to.join("state.json")).unwrap().contains("window_state"), "the old window placement is dropped");
+        let st: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(to.join("state.json")).unwrap()).unwrap();
+        assert_eq!(st[FROM_PLAYDATE_KEY], serde_json::json!(true), "the library is marked as copied from PlayDate");
         assert!(!to.join("games_76561198000000001.db.importing").exists());
         assert_eq!(steps.last(), Some(&(7, 7)));
         assert!(import(&from, &to, &mut |_, _| {}, &Cancel::new()).unwrap_err().contains("already has a library"));

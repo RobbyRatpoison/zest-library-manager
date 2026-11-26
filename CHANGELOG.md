@@ -3,8 +3,8 @@
 Notes shown in Zest's "What's new" window after an update. One `## vX.Y.Z` section per release, newest first; bullets under `###` headings such as `### New`, `### Improvements` or `### Fixes`.
 
 ## v2026.11.1
-### Zest replaces PlayDate
-- Rewritten from scratch in Rust as a native app, with no built-in browser.
+### Welcome to Zest
+- The successor to PlayDate, rewritten from scratch in Rust as a native app, with no built-in browser.
 - Copies your PlayDate library on first start.
 - Backups are cross-compatible with PlayDate.
 

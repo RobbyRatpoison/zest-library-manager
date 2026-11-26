@@ -294,7 +294,7 @@ struct HomeState {
     confirm: Option<i64>,   // a delete waiting for the user's answer
     update_rx: Option<mpsc::Receiver<Result<Option<pd_filter::updater::Update>, String>>>,   // the quiet daily check for a newer Zest
     update_started: bool,
-    populate_pending: bool,   // first run: add the account's games as soon as the window is up
+    populate_pending: bool,   // add the account's new games as soon as the window is up (every start)
     job_queue: Vec<(egui::Context, sync::Kind, Vec<i64>, String)>,   // jobs waiting for the running one to end (the fill-in of a game just added)
     /// The game whose install is running: when it ends with several programs in its folder and none chosen, the user is asked which one starts it.
     install_target: Option<i64>,
@@ -2672,11 +2672,18 @@ impl Own {
                 key => { if let Some((_, label)) = MENU.iter().find(|m| m.0 == key) { self.modal = Some(Modal::Placeholder(label)); } }
             }
         }
-        // the first start of a new version: the changelog sections newer than the last one shown, once (a first-ever start only records the version)
+        // the first start of a new version: the changelog sections newer than the last one shown, once. A first-ever start shows the running version's notes
+        // when the library was copied from PlayDate (what changed), else the tutorial (it opens with the welcome)
         if !std::mem::replace(&mut self.whats_new_checked, true) && self.modal.is_none() {
             let running = pd_filter::updater::VERSION;
             let seen = hs.data.state_json().get("whats_new_seen").and_then(|v| v.as_str()).map(String::from);
-            if seen.as_deref() != Some(running) {
+            if seen.is_none() {
+                let from_playdate = hs.data.state_json().get(pd_filter::import_playdate::FROM_PLAYDATE_KEY).and_then(|v| v.as_bool()) == Some(true);
+                let run_t = pd_filter::whats_new::version_tuple(running);
+                let sections: Vec<_> = pd_filter::whats_new::parse(pd_filter::whats_new::CHANGELOG).into_iter().filter(|s| pd_filter::whats_new::version_tuple(&s.version) == run_t).collect();
+                if from_playdate && !sections.is_empty() { self.modal = Some(Modal::WhatsNew { sections }); }
+                else { hs.data.save_pref("whats_new_seen", serde_json::json!(running)); self.modal = Some(Modal::Tutorial(Box::new(tutorial_dialog::TutorialDialog::new()))); }
+            } else if seen.as_deref() != Some(running) {
                 let sections = pd_filter::whats_new::due(&pd_filter::whats_new::parse(pd_filter::whats_new::CHANGELOG), seen.as_deref(), running);
                 if sections.is_empty() { hs.data.save_pref("whats_new_seen", serde_json::json!(running)); } else { self.modal = Some(Modal::WhatsNew { sections }); }
             }
@@ -5207,6 +5214,10 @@ fn build_own(root: &PathBuf, args: &[String], first_note: Option<String>, ctx: e
     if let (Some(hs), Some(m)) = (&mut home, arg("--pick-mode")) { hs.pick.set_mode(&m); }
     if let (Some(hs), Some(v)) = (&mut home, arg("--home-scroll").and_then(|v| v.parse::<f32>().ok())) { hs.home_scroll = v; hs.home_scroll_target = v; }
     if let (Some(hs), Some(n)) = (&mut home, first_note) { hs.toast(n); hs.populate_pending = true; }
+    // every start adds the games bought since the last one, as PlayDate did once per session (it only adds what is missing; headless runs skip it)
+    else if let Some(hs) = &mut home {
+        if !no_sync() && pd_filter::account::load_account(&hs.data.root_dir()).map_or(false, |a| !a.steam_id.is_empty()) { hs.populate_pending = true; }
+    }
     if args.iter().any(|a| a == "--auto-pick") { if let Some(hs) = &mut home { hs.pick.pick(&mut hs.data); } }
     let cw = if args.iter().any(|a| a == "--cw") { cw } else { home.as_ref().and_then(|h| h.data.state_json().get("card_height").or_else(|| h.data.state_json().get("zest_card_size"))).and_then(|v| v.as_f64()).map(|v| v as f32).unwrap_or(cw) };
     let theme = theme::Theme::load(&root);

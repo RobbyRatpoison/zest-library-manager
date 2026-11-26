@@ -123,8 +123,17 @@ jobs:
         with: { path: dist, merge-multiple: true }
       # install.sh checks each download against this list
       - run: cd dist && sha256sum * > SHA256SUMS && cat SHA256SUMS
+      - uses: actions/checkout@v4
+        with: { path: src, sparse-checkout: CHANGELOG.md, sparse-checkout-cone-mode: false }
+      # the release notes are this version's CHANGELOG section (a beta uses its base version's section)
+      - run: |
+          base="${GITHUB_REF_NAME%%-*}"
+          awk -v h="## $base" 'index($0, "## ")==1 { on = ($0 == h || index($0, h" ")==1); next } on' src/CHANGELOG.md > notes.md
+          test -s notes.md || echo "See CHANGELOG.md." > notes.md
+          cat notes.md
       - uses: softprops/action-gh-release@v2
         with:
           # a plain v2026.11.1 is a normal release (install.sh and the updater take "latest"); v2026.11.1-beta.1 is a prerelease
           prerelease: ${{ contains(github.ref_name, '-') }}
+          body_path: notes.md
           files: dist/*
