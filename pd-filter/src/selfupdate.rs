@@ -111,6 +111,7 @@ pub fn install_at(exe: &Path, root: &Path, archive: &Path, to_version: &str, sta
     if let Err(e) = std::fs::rename(&new, &exe) { let _ = std::fs::rename(&replaced, &exe); return Err(format!("Could not put the new program in place: {e}")); }
     #[cfg(unix)] { let _ = std::fs::remove_file(&replaced); }   // a running program's file can be deleted here; Windows leaves it for the next start (`cleanup`)
     if let Some(h) = helper { if let Err(e) = swap_helper(&exe, &h) { eprintln!("zest update: {e} (the old helper stays)"); } let _ = std::fs::remove_file(&h); }
+    resign_app_bundle(&exe);
     let _ = std::fs::create_dir_all(root.join(".rollback"));
     let pending = json!({ "old_token": crate::rollback_marker::token(), "started": now(), "to": to_version, "kind": "zest-binary" });
     std::fs::write(marker(root), pending.to_string()).map_err(|e| format!("Could not write the update marker: {e}"))?;
@@ -125,6 +126,26 @@ pub fn install_at(exe: &Path, root: &Path, archive: &Path, to_version: &str, sta
 
 #[cfg(unix)] fn alive(pid: u32) -> bool { unsafe { libc::kill(pid as i32, 0) == 0 } }
 #[cfg(not(unix))] fn alive(_pid: u32) -> bool { false }
+
+/// The `.app` folder a macOS program file sits in (`.../Zest.app/Contents/MacOS/Zest` -> `.../Zest.app`), if it is in one.
+pub fn app_bundle_of(exe: &Path) -> Option<PathBuf> {
+    let macos = exe.parent()?; let contents = macos.parent()?; let app = contents.parent()?;
+    let named = |p: &Path, n: &str| p.file_name().map_or(false, |f| f == n);
+    (named(macos, "MacOS") && named(contents, "Contents") && app.extension().map_or(false, |e| e.eq_ignore_ascii_case("app"))).then(|| app.to_path_buf())
+}
+
+/// macOS: Zest.app carries an ad-hoc signature that also seals the other files in the app (zest-login, Info.plist). Swapping the program files in place
+/// leaves that seal out of date, which Apple Silicon may refuse to start, so the app is signed again (ad hoc, as package/make-macos-app.sh does) after a
+/// swap and after a rollback. `codesign` is part of macOS. A failure is only logged: the new program file still carries its own signature.
+fn resign_app_bundle(exe: &Path) {
+    if !cfg!(target_os = "macos") { return; }
+    let Some(app) = app_bundle_of(exe) else { return };
+    match Command::new("/usr/bin/codesign").args(["--force", "--deep", "--sign", "-"]).arg(&app).stdin(Stdio::null()).stdout(Stdio::null()).stderr(Stdio::piped()).output() {
+        Ok(o) if o.status.success() => {}
+        Ok(o) => eprintln!("zest update: could not re-sign {}: {}", app.display(), String::from_utf8_lossy(&o.stderr).trim()),
+        Err(e) => eprintln!("zest update: could not run codesign: {e}"),
+    }
+}
 
 fn record_failure(root: &Path, version: &str) {
     let p = root.join(".rollback/failed.json");
@@ -159,6 +180,7 @@ pub fn watch(exe: &Path, old: &Path, root: &Path, old_pid: u32, to_version: &str
     let _ = std::fs::rename(exe, &failed);
     if std::fs::copy(old, exe).is_err() { return 1; }
     restore_helper(exe);
+    resign_app_bundle(exe);
     #[cfg(unix)] { use std::os::unix::fs::PermissionsExt; let _ = std::fs::set_permissions(exe, std::fs::Permissions::from_mode(0o755)); }
     record_failure(root, to_version);
     let _ = std::fs::remove_file(marker(root));
@@ -175,6 +197,11 @@ mod tests {
     fn script(p: &Path, body: &str) { std::fs::write(p, format!("#!/bin/sh\n{body}\n")).unwrap(); std::fs::set_permissions(p, std::fs::Permissions::from_mode(0o755)).unwrap(); }
     fn wait_for(p: &Path) -> bool { for _ in 0..100 { if p.exists() { return true; } std::thread::sleep(Duration::from_millis(50)); } false }
 
+    #[test] fn the_app_bundle_is_found_only_for_a_program_inside_one() {
+        assert_eq!(app_bundle_of(Path::new("/Users/r/Applications/Zest.app/Contents/MacOS/Zest")), Some(PathBuf::from("/Users/r/Applications/Zest.app")));
+        assert_eq!(app_bundle_of(Path::new("/home/r/.local/share/zest/app/zest")), None);
+        assert_eq!(app_bundle_of(Path::new("/x/Contents/MacOS/Zest")), None, "Contents/MacOS outside an .app is not a bundle");
+    }
     #[test] fn names_go_before_the_extension() {
         assert_eq!(sibling(Path::new("/a/zest"), "old"), Path::new("/a/zest-old")); assert_eq!(sibling(Path::new("C:/z/Zest.exe"), "new"), Path::new("C:/z/Zest-new.exe"));
     }
