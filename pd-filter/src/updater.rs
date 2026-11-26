@@ -31,8 +31,22 @@ pub fn is_newer(a: &str, b: &str) -> bool {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub enum Install { Flatpak, Windows, Linux, Mac }
-impl Install { pub fn current() -> Install { if cfg!(windows) { Install::Windows } else if cfg!(target_os = "macos") { Install::Mac } else if crate::sandbox::in_flatpak() { Install::Flatpak } else { Install::Linux } } }
+/// How this copy was installed, which decides the download and how it is put in place. `Windows` is a portable copy (the zip; the program swaps
+/// itself, see selfupdate.rs); `WindowsSetup` was installed by Zest-Setup.exe and is updated by running the new installer silently.
+pub enum Install { Flatpak, Windows, WindowsSetup, Linux, Mac }
+impl Install {
+    pub fn current() -> Install {
+        if cfg!(windows) { if installed_by_setup() { Install::WindowsSetup } else { Install::Windows } }
+        else if cfg!(target_os = "macos") { Install::Mac } else if crate::sandbox::in_flatpak() { Install::Flatpak } else { Install::Linux }
+    }
+}
+/// The installer leaves its uninstaller (unins000.exe) next to Zest.exe; a portable copy has none.
+pub fn installed_by_setup() -> bool {
+    std::env::current_exe().ok().and_then(|e| e.parent().map(|d| d.join("unins000.exe").exists())).unwrap_or(false)
+}
+/// The arguments that run Zest-Setup.exe without questions: it closes a Zest still running, installs over this copy and starts the new version
+/// (package/zest.iss starts Zest after a silent install).
+pub fn setup_silent_args() -> Vec<String> { ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/SP-"].iter().map(|s| s.to_string()).collect() }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Asset { pub name: String, pub url: String, pub size: u64 }
@@ -46,7 +60,8 @@ pub fn choose_asset(assets: &[Asset], kind: Install, arch: &str) -> Option<Asset
     let pick = |f: &dyn Fn(&str) -> bool| assets.iter().find(|a| f(&l(a))).cloned();
     match kind {
         Install::Flatpak => pick(&|n| n.ends_with(".flatpak")),
-        Install::Windows => pick(&|n| n.ends_with(".exe") && n.contains("zest")).or_else(|| pick(&|n| n.ends_with(".zip") && n.contains("windows"))),
+        Install::Windows => pick(&|n| n.ends_with(".zip") && n.contains("windows")),
+        Install::WindowsSetup => pick(&|n| n.ends_with(".exe") && n.contains("zest") && n.contains("setup")),
         Install::Linux => pick(&|n| n.ends_with(".tar.gz") && n.contains("-linux-") && n.contains(arch)),
         // the universal Zest.app (package/make-macos-app.sh) fits both processors; a per-processor build is the fallback
         Install::Mac => pick(&|n| n.ends_with(".tar.gz") && n.contains("-macos-universal")).or_else(|| pick(&|n| n.ends_with(".tar.gz") && n.contains("-darwin-") && n.contains(arch))),
@@ -131,6 +146,10 @@ mod tests {
         let all = [a("Zest-2026.11.1-Linux.flatpak"), a("Zest-windows.zip"), a("zest-2026.11.1-linux-x86_64.tar.gz"), a("zest-2026.11.1-linux-aarch64.tar.gz"), a("zest-2026.11.1-darwin-arm64.tar.gz"), a("PlayDate-Setup-1.exe")];
         assert_eq!(choose_asset(&all, Install::Flatpak, "x86_64").unwrap().name, "Zest-2026.11.1-Linux.flatpak");
         assert_eq!(choose_asset(&all, Install::Windows, "x86_64").unwrap().name, "Zest-windows.zip", "PlayDate's installer is not Zest's");
+        let win = [a("Zest-Setup.exe"), a("Zest-Windows-Portable.zip"), a("PlayDate-Setup.exe"), a("zest-2026.11.1-linux-x86_64.tar.gz")];
+        assert_eq!(choose_asset(&win, Install::Windows, "x86_64").unwrap().name, "Zest-Windows-Portable.zip", "a portable copy stays portable");
+        assert_eq!(choose_asset(&win, Install::WindowsSetup, "x86_64").unwrap().name, "Zest-Setup.exe", "an installed copy takes the installer");
+        assert!(choose_asset(&[a("PlayDate-Setup.exe"), a("Zest-Windows-Portable.zip")], Install::WindowsSetup, "x86_64").is_none(), "never PlayDate's installer, never a zip over an installed copy");
         assert_eq!(choose_asset(&all, Install::Linux, "aarch64").unwrap().name, "zest-2026.11.1-linux-aarch64.tar.gz");
         assert_eq!(choose_asset(&all, Install::Mac, "arm64").unwrap().name, "zest-2026.11.1-darwin-arm64.tar.gz");
         assert!(choose_asset(&all, Install::Mac, "x86_64").is_none());

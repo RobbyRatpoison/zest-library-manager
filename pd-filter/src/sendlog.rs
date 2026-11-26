@@ -55,7 +55,7 @@ pub fn install_file_logger(root: &std::path::Path) {
 }
 
 /// What the support message names the install: `zest-flatpak`, `zest-windows`, ...
-pub fn channel() -> &'static str { use crate::updater::Install::*; match crate::updater::Install::current() { Flatpak => "zest-flatpak", Windows => "zest-windows", Mac => "zest-mac", Linux => "zest-linux" } }
+pub fn channel() -> &'static str { use crate::updater::Install::*; match crate::updater::Install::current() { Flatpak => "zest-flatpak", Windows => "zest-windows-portable", WindowsSetup => "zest-windows", Mac => "zest-mac", Linux => "zest-linux" } }
 
 /// The settings and library counts that help reproduce a bug (no secrets live in state.json).
 pub fn snapshot(state: &Value, conn: Option<&rusqlite::Connection>, plugins: &[(String, String)]) -> Value {

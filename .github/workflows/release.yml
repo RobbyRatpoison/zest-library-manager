@@ -77,13 +77,22 @@ jobs:
           cargo build --release -p grid-own -p zest-login
       - shell: bash
         run: |
-          mkdir zest-windows
-          cp target/release/grid-own.exe zest-windows/Zest.exe
-          cp target/release/zest-login.exe zest-windows/zest-login.exe
-          cp assets/favicon.png zest-windows/zest.png
-          7z a Zest-windows.zip ./zest-windows/*
+          mkdir -p dist/windows
+          cp target/release/grid-own.exe dist/windows/Zest.exe
+          cp target/release/zest-login.exe dist/windows/zest-login.exe
+          7z a Zest-Windows-Portable.zip ./dist/windows/*
+      # the installer (package/zest.iss); Inno Setup 6 from Chocolatey, as PlayDate's workflow does
+      - run: choco install innosetup --yes --no-progress
+      - shell: pwsh
+        run: |
+          $ver = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart("v") } else { "0.0.0" }
+          # Inno's version fields take numbers only: a -beta.N suffix goes into the display name, not VersionInfoVersion
+          $num = $ver -replace '-.*$', ''
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "/DAppVersion=$ver" "/DNumVersion=$num" "/DDistDir=..\dist\windows" package\zest.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Move-Item package\dist\Zest-Setup.exe Zest-Setup.exe
       - uses: actions/upload-artifact@v4
-        with: { name: zest-windows, path: Zest-windows.zip }
+        with: { name: zest-windows, path: "Zest-Windows-Portable.zip\nZest-Setup.exe" }
 
   macos:
     name: macOS program

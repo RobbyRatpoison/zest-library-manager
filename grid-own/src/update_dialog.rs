@@ -42,6 +42,13 @@ impl UpdateDialog {
                     if !out.status.success() { return Err(format!("flatpak could not install the update ({}). The file is at {}; a system-wide install needs: sudo flatpak install --system -y --reinstall {}", String::from_utf8_lossy(&out.stderr).trim(), path.display(), path.display())); }
                     return Ok(format!("INSTALLED:{}", path.display()));
                 }
+                // installed by Zest-Setup.exe: the new installer runs silently, closes this Zest (which quits anyway), installs and starts the new version
+                if Install::current() == Install::WindowsSetup && path.extension().map_or(false, |e| e.eq_ignore_ascii_case("exe")) {
+                    let mut c = std::process::Command::new(&path);
+                    c.args(updater::setup_silent_args()).stdin(std::process::Stdio::null()).stdout(std::process::Stdio::null()).stderr(std::process::Stdio::null());
+                    #[cfg(windows)] { use std::os::windows::process::CommandExt; c.creation_flags(0x0000_0008); }   // DETACHED_PROCESS: it outlives Zest
+                    return match c.spawn() { Ok(_) => Ok("SETUP:".to_string()), Err(e) => Ok(format!("SWAPFAIL:Could not start the installer: {e}.\n{}", path.display())) };
+                }
                 // a tarball or zip of the program itself: swap it in and let the supervisor start it (the download stays in Downloads if that cannot be done here)
                 let n = path.file_name().map(|n| n.to_string_lossy().to_lowercase()).unwrap_or_default();
                 if n.ends_with(".tar.gz") || (n.ends_with(".zip") && Install::current() == Install::Windows) {
@@ -59,6 +66,7 @@ impl UpdateDialog {
                 Msg::Checked(r) => { self.busy = false; match r { Ok(Some(u)) => { self.status = String::new(); self.found = Some(u); } Ok(None) => self.status = format!("You're up to date (Zest {}).", updater::VERSION), Err(e) => self.status = e } }
                 Msg::Downloaded(r) => { self.busy = false; match r {
                     Ok(s) if s.starts_with("INSTALLED:") => self.status = "Installed. Restart Zest to use the new version.".into(),
+                    Ok(s) if s.starts_with("SETUP:") => { self.status = "Installing the update. Zest closes now and starts again when it is done.".into(); out = UpdateOut::Restart; }
                     Ok(s) if s.starts_with("SWAPPED:") => { self.status = "Updated. Zest restarts now; if the new version does not start, the old one comes back.".into(); out = UpdateOut::Restart; }
                     Ok(s) if s.starts_with("SWAPFAIL:") => { let (why, p) = s.trim_start_matches("SWAPFAIL:").split_once('\n').unwrap_or((&s, "")); self.status = format!("{why} The download is at {p}."); if let Some(d) = std::path::Path::new(p).parent() { out = UpdateOut::Open(d.to_string_lossy().to_string()); } }
                     Ok(s) => { let p = s.trim_start_matches("FILE:").to_string(); self.status = format!("Downloaded to {p}"); if let Some(d) = std::path::Path::new(&p).parent() { out = UpdateOut::Open(d.to_string_lossy().to_string()); } }
@@ -77,7 +85,7 @@ impl UpdateDialog {
                 if !u.notes.is_empty() { egui::ScrollArea::vertical().max_height(12.0 * r).auto_shrink([false, true]).show(ui, |ui| { ui.label(ui_kit::muted(u.notes.clone(), 0.8 * r)); }); }
                 ui.add_space(0.3 * r);
                 ui.horizontal(|ui| {
-                    let label = if Install::current() == Install::Flatpak || u.asset.as_ref().map_or(false, |a| a.name.ends_with(".tar.gz") || a.name.ends_with(".zip")) { "DOWNLOAD AND INSTALL" } else { "DOWNLOAD" };
+                    let label = if matches!(Install::current(), Install::Flatpak | Install::WindowsSetup) || u.asset.as_ref().map_or(false, |a| a.name.ends_with(".tar.gz") || a.name.ends_with(".zip")) { "DOWNLOAD AND INSTALL" } else { "DOWNLOAD" };
                     if ui_kit::button(ui, label, Kind::Primary, accent, r).clicked() && !self.busy { download = true; }
                     if ui_kit::button(ui, "RELEASE PAGE", Kind::Plain, accent, r).clicked() { page = Some(u.page.clone()); }
                     if self.busy && ui_kit::button(ui, "CANCEL", Kind::Plain, accent, r).clicked() { self.cancel.cancel(); }
