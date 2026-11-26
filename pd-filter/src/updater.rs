@@ -8,7 +8,7 @@ use serde_json::Value;
 use std::time::Duration;
 
 /// This build's version. CI stamps it from the tag (`ZEST_BUILD_VERSION`); a local build says it is a beta of the first native release.
-pub const VERSION: &str = match option_env!("ZEST_BUILD_VERSION") { Some(v) => v, None => "2026.11.0-beta.1" };
+pub const VERSION: &str = match option_env!("ZEST_BUILD_VERSION") { Some(v) => v, None => "2026.11.1-dev" };
 /// The repositories the check asks, first answer wins.
 pub const REPOS: &[&str] = &["RobbyRatpoison/zest-library-manager"];
 pub const TAG_PREFIX: &str = "v";
