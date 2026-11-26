@@ -33,7 +33,9 @@ impl UpdateDialog {
         let (tx, ctx, cancel, prog, root, version) = (self.tx.clone(), self.ctx.clone(), self.cancel.clone(), self.progress.clone(), self.root.clone(), u.version.clone());
         std::thread::spawn(move || {
             let http = pd_filter::net::UreqHttp::new();
-            let r = updater::download(&http, &a, &updater::download_dir(), &cancel, &mut |d, t| { if let Ok(mut p) = prog.lock() { *p = (d, t); } ctx.request_repaint(); }).and_then(|path| {
+            // an installer run by the updater is not something to keep: it goes to a temporary folder, not Downloads (left there 14 MB per update, test VM 2026-11-26)
+            let dir = if Install::current() == Install::WindowsSetup { std::env::temp_dir().join("zest-update") } else { updater::download_dir() };
+            let r = updater::download(&http, &a, &dir, &cancel, &mut |d, t| { if let Ok(mut p) = prog.lock() { *p = (d, t); } ctx.request_repaint(); }).and_then(|path| {
                 if Install::current() == Install::Flatpak {
                     // inside a sandbox the bundle is installed on the host: flatpak itself is not in here
                     let args = updater::flatpak_install_args(&path);
