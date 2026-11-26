@@ -6,4 +6,4 @@ Exec=zest
 Icon=zest
 Terminal=false
 Categories=Game;
-StartupWMClass=zest-dev
+StartupWMClass=zest

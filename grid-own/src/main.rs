@@ -5021,7 +5021,8 @@ impl ApplicationHandler for Own {
         #[cfg(target_os = "linux")]
         {
             use winit::platform::wayland::WindowAttributesExtWayland;
-            let id = std::env::var("FLATPAK_ID").unwrap_or_else(|_| "zest-dev".into());   // the desktop entry whose name matches this gives the window its icon
+            // the desktop entry whose name matches this gives the window its icon: the Flatpak's own id, "zest" for a release build (install.sh's zest.desktop), "zest-dev" for a dev build
+            let id = std::env::var("FLATPAK_ID").unwrap_or_else(|_| if option_env!("ZEST_BUILD_VERSION").is_some() { "zest".into() } else { "zest-dev".into() });
             attrs = attrs.with_name(id.clone(), id);
         }
         let window = Rc::new(el.create_window(attrs).expect("window"));

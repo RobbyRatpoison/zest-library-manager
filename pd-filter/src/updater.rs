@@ -48,7 +48,8 @@ pub fn choose_asset(assets: &[Asset], kind: Install, arch: &str) -> Option<Asset
         Install::Flatpak => pick(&|n| n.ends_with(".flatpak")),
         Install::Windows => pick(&|n| n.ends_with(".exe") && n.contains("zest")).or_else(|| pick(&|n| n.ends_with(".zip") && n.contains("windows"))),
         Install::Linux => pick(&|n| n.ends_with(".tar.gz") && n.contains("-linux-") && n.contains(arch)),
-        Install::Mac => pick(&|n| n.ends_with(".tar.gz") && n.contains("-darwin-") && n.contains(arch)),
+        // the universal Zest.app (package/make-macos-app.sh) fits both processors; a per-processor build is the fallback
+        Install::Mac => pick(&|n| n.ends_with(".tar.gz") && n.contains("-macos-universal")).or_else(|| pick(&|n| n.ends_with(".tar.gz") && n.contains("-darwin-") && n.contains(arch))),
     }
 }
 
@@ -133,6 +134,9 @@ mod tests {
         assert_eq!(choose_asset(&all, Install::Linux, "aarch64").unwrap().name, "zest-2026.11.1-linux-aarch64.tar.gz");
         assert_eq!(choose_asset(&all, Install::Mac, "arm64").unwrap().name, "zest-2026.11.1-darwin-arm64.tar.gz");
         assert!(choose_asset(&all, Install::Mac, "x86_64").is_none());
+        let with_universal = [a("zest-2026.11.1-darwin-arm64.tar.gz"), a("zest-2026.11.1-macos-universal.tar.gz"), a("zest-2026.11.1-linux-x86_64.tar.gz")];
+        assert_eq!(choose_asset(&with_universal, Install::Mac, "x86_64").unwrap().name, "zest-2026.11.1-macos-universal.tar.gz");
+        assert_eq!(choose_asset(&with_universal, Install::Mac, "arm64").unwrap().name, "zest-2026.11.1-macos-universal.tar.gz");
     }
     #[test] fn the_right_release_is_offered_to_stable_and_beta_installs() {
         let files = ["zest-1-linux-x86_64.tar.gz"];
