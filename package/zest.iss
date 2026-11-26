@@ -50,7 +50,8 @@ DisableDirPage=no
 DisableReadyPage=no
 
 PrivilegesRequired=lowest
-PrivilegesRequiredOverridesAllowed=dialog
+; no "Install for all users" choice: an all-users install goes to Program Files, which a normal user cannot write to, and Zest keeps its
+; library next to Zest.exe. (Found on the test VM, 2026-11-26.)
 ; a running Zest is asked to close (the in-app updater has already quit it)
 CloseApplications=yes
 RestartApplications=no
@@ -68,12 +69,19 @@ VersionInfoProductVersion={#NumVersion}
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
+[Messages]
+; shown when something is left in the install folder: normally the library and settings the user chose to keep
+UninstalledMost=%1 was removed.%n%nYour library and settings were kept in its folder, so reinstalling Zest finds them again.
+
 [Tasks]
 Name: "desktopicon"; Description: "Create a &desktop shortcut"; GroupDescription: "Additional icons:"; Flags: unchecked
 
 [Files]
 Source: "{#DistDir}\Zest.exe";       DestDir: "{app}"; Flags: ignoreversion
 Source: "{#DistDir}\zest-login.exe"; DestDir: "{app}"; Flags: ignoreversion
+; only a MinGW build (the Linux cross-builds used for testing) needs the WebView2 loader as a separate file; the release build (MSVC) links it
+; into zest-login.exe, so the file is not there and nothing is installed
+Source: "{#DistDir}\WebView2Loader.dll"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\.rollback"
@@ -107,16 +115,46 @@ begin
   end;
 end;
 
-{ Everything Zest saves next to the program: settings, the library databases, caches and state files, cover art (static), store data (plugins).
-  In a folder named Zest (the default) everything left is Zest's, so the folder goes. In a folder the user chose with another name, only Zest's
-  known files go, so nothing else in that folder is touched (a rare cache file may be left behind). }
+{ True for the install's own program files, which the uninstaller removes itself (and the uninstaller's own files). }
+function IsProgramFile(Name: String): Boolean;
+begin
+  Result := (CompareText(Name, 'Zest.exe') = 0) or (CompareText(Name, 'zest-login.exe') = 0) or
+    (CompareText(Name, 'WebView2Loader.dll') = 0) or (CompareText(Copy(Name, 1, 5), 'unins') = 0);
+end;
+
+{ Everything Zest saves next to the program: settings, the library databases, caches and state files, cover art (static), store data (plugins),
+  the sign-in window's browser data (zest-login.exe.WebView2). In a folder named Zest (the default) everything except the program files is
+  Zest's, so all of it goes and the uninstaller then removes the emptied folder. In a folder the user chose with another name, only Zest's known
+  files go, so nothing else in that folder is touched (a rare cache file may be left behind). Runs before the uninstaller removes the program
+  files, so its final message reflects what is really left. }
 procedure DeleteUserData(Dir: String);
+var
+  FindRec: TFindRec;
 begin
   if CompareText(ExtractFileName(RemoveBackslash(Dir)), 'Zest') = 0 then
   begin
-    DelTree(Dir, True, True, True);
+    if FindFirst(Dir + '\*', FindRec) then
+    begin
+      try
+        repeat
+          if (FindRec.Name <> '.') and (FindRec.Name <> '..') and not IsProgramFile(FindRec.Name) then
+          begin
+            if (FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0 then
+              DelTree(Dir + '\' + FindRec.Name, True, True, True)
+            else
+              DeleteFile(Dir + '\' + FindRec.Name);
+          end;
+        until not FindNext(FindRec);
+      finally
+        FindClose(FindRec);
+      end;
+    end;
     exit;
   end;
+  DeleteFile(Dir + '\owned_checked.json');
+  DeleteFile(Dir + '\zest_sync_status.json');
+  DelTree(Dir + '\.rollback', True, True, True);
+  DelTree(Dir + '\zest-login.exe.WebView2', True, True, True);
   DeleteFile(Dir + '\config.json');
   DeleteFile(Dir + '\state.json');
   DeleteFile(Dir + '\theme.json');
@@ -134,6 +172,35 @@ begin
   DelTree(Dir + '\plugins', True, True, True);
 end;
 
+{ Is the Zest installed here running? A running Zest.exe cannot be deleted, and it would keep writing to the library. Asked through WMI by the
+  program's full path, so another Zest elsewhere (a portable copy) does not count. }
+function ZestRunning(): Boolean;
+var
+  Locator, Service, Procs, P: Variant;
+  I: Integer;
+  Exe: String;
+begin
+  Result := False;
+  Exe := ExpandConstant('{app}\Zest.exe');
+  try
+    Locator := CreateOleObject('WbemScripting.SWbemLocator');
+    Service := Locator.ConnectServer('.', 'root\CIMV2');
+    Procs := Service.ExecQuery('SELECT ExecutablePath FROM Win32_Process WHERE Name = ''Zest.exe''');
+    for I := 0 to Procs.Count - 1 do
+    begin
+      P := Procs.ItemIndex(I);
+      if not VarIsNull(P.ExecutablePath) then
+        if CompareText(P.ExecutablePath, Exe) = 0 then
+        begin
+          Result := True;
+          exit;
+        end;
+    end;
+  except
+    Result := False;
+  end;
+end;
+
 var
   DeleteData: Boolean;
 
@@ -144,6 +211,15 @@ begin
   Result := True;
   DeleteData := False;
   NL := Chr(13) + Chr(10);
+  { Zest must be closed first: a running Zest.exe cannot be removed }
+  while ZestRunning() do
+  begin
+    if UninstallSilent or (MsgBox('Zest is running. Close Zest, then click Retry.', mbError, MB_RETRYCANCEL) <> IDRETRY) then
+    begin
+      Result := False;
+      exit;
+    end;
+  end;
   { a silent uninstall never deletes the library }
   if UninstallSilent then
     exit;
@@ -156,7 +232,11 @@ end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
-  { after the program files are gone, so the folder can be removed whole }
-  if (CurUninstallStep = usPostUninstall) and DeleteData then
+  { before the program files go: the uninstaller then removes the emptied folder, and its last message reflects what is really left }
+  if (CurUninstallStep = usUninstall) and DeleteData then
     DeleteUserData(ExpandConstant('{app}'));
+  { the uninstaller only removes folders it created; a reinstall into a folder that held kept data did not create it, so the emptied folder
+    would stay. RemoveDir only removes an empty folder. (Found on the test VM, 2026-11-26.) }
+  if (CurUninstallStep = usPostUninstall) and DeleteData then
+    RemoveDir(ExpandConstant('{app}'));
 end;
