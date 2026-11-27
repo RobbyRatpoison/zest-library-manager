@@ -200,10 +200,6 @@ fn records_from_order(gamekey: &str, order: &Value, seen: &mut HashSet<String>, 
     (names, batch)
 }
 
-/// The orders worth reading: all but those whose every game is already in the library or was removed by the user. Shared by the cookie sync and the browser import.
-fn pending_orders<'a>(all: &'a [String], map: &HashMap<String, Vec<String>>, existing: &HashSet<String>, blacklisted: &HashSet<String>) -> Vec<&'a String> {
-    all.iter().filter(|k| map.get(*k).map_or(true, |names| names.iter().any(|n| !existing.contains(n) && !blacklisted.contains(n)))).collect()
-}
 
 fn sleep_unless(c: &Cancel, ms: u64) { let end = std::time::Instant::now() + Duration::from_millis(ms); while !c.is_set() && std::time::Instant::now() < end { std::thread::sleep(Duration::from_millis(25)); } }
 
@@ -332,32 +328,6 @@ impl LibrarySource for HumbleSource {
     fn auth_disconnect(&self) -> Result<(), String> {
         for k in ["session_cookie", "username"] { crate::account::plugin_secret_set(&self.config_dir, "humble", k, None).map_err(|_| "Could not save".to_string())?; }
         let _ = std::fs::remove_file(self.cache_path()); Ok(())
-    }
-
-    fn import_plan(&self, keys: &[String]) -> Option<Vec<String>> {
-        let mut map = self.orders_in_library();
-        map.extend(self.load_cache());
-        let (existing, blacklisted) = self.known_ids();
-        Some(pending_orders(keys, &map, &existing, &blacklisted).into_iter().cloned().collect())
-    }
-    /// Orders the userscript fetched in the browser: `{"orders": [{"gamekey": "...", "order": {...}}]}`, trimmed to the fields the game filter reads.
-    /// Same rules as a sync; the order cache is updated so a later cookie sync skips them.
-    fn import_pushed(&self, data: &Value) -> Result<Vec<GameRecord>, String> {
-        let orders = data.get("orders").and_then(|o| o.as_array()).ok_or("No orders were sent")?;
-        let (_, blacklisted) = self.known_ids();
-        let mut map = self.orders_in_library();
-        // The first order to list a game keeps it, across batches too: a game already in the library with its order link (`gamekey/machine_name`) is not
-        // sent again, so a later order cannot repoint it. One without a link is still filled in.
-        let (mut seen, mut out): (HashSet<String>, Vec<GameRecord>) = (map.values().flatten().cloned().collect(), vec![]);
-        map.extend(self.load_cache());
-        for o in orders {
-            let (Some(key), Some(order)) = (o.get("gamekey").and_then(|k| k.as_str()).filter(|k| !k.is_empty()), o.get("order").filter(|v| v.is_object())) else { continue };
-            let (names, batch) = records_from_order(key, order, &mut seen, &blacklisted);
-            map.insert(key.to_string(), names);
-            out.extend(batch);
-        }
-        self.save_cache(&map);
-        Ok(out)
     }
 
     fn sync(&self, _cx: &SourceCtx, sink: &mut dyn FnMut(Vec<GameRecord>), cancel: &Cancel) -> Result<usize, String> {
@@ -752,58 +722,6 @@ mod tests {
         s.auth_disconnect().unwrap();
         assert!(!d.join("humble_cache.json").exists() && crate::account::plugin_secret_get(&d, "humble", "session_cookie").is_none());
         assert!(!s.auth_status().unwrap().connected);
-    }
-    /// The old order shape the browser import still sends (`{"orders": [{"gamekey", "order"}]}`): the same rules apply.
-    fn dl(p: &str) -> Value { json!({"platform": p, "download_struct": [{"name": "Download"}]}) }
-    fn order(created: &str, subs: Vec<Value>) -> Value { json!({"created": created, "product": {"human_name": "Some Bundle", "machine_name": "b"}, "subproducts": subs}) }
-    fn sub(machine: &str, name: &str, payee: &str) -> Value { json!({"machine_name": machine, "human_name": name, "downloads": [dl("windows")], "payee": {"machine_name": "studio", "human_name": payee}}) }
-    fn old_order(created: &str, subs: Vec<Value>) -> Value { order(created, subs) }
-    fn old_sub(machine: &str, name: &str) -> Value { sub(machine, name, "Studio A") }
-    #[test] fn orders_pushed_from_the_browser_follow_the_same_rules_and_feed_the_order_cache() {
-        let (p, _, _d) = setup("pushed", site());
-        let orders = vec![json!({"gamekey": "K1", "order": old_order("2020-05-17T13:45:10", vec![old_sub("game_a", "Game A"), old_sub("game_a_ost", "Game A Soundtrack"), old_sub("game_b", " Game B ")])}),
-            json!({"gamekey": "K2", "order": old_order("2021-01-02T00:00:00", vec![old_sub("game_a", "Game A again"), old_sub("game_c", "Game C")])})];
-        let pushed = p.import_pushed(&json!({"orders": orders})).unwrap();
-        assert_eq!(pushed.iter().map(|r| r.platform_id.as_str()).collect::<Vec<_>>(), ["game_a", "game_b", "game_c"], "extras skipped, first order wins");
-        assert_eq!((pushed[0].slug.as_deref(), pushed[0].date_added, pushed[0].developers.as_deref()), (Some("K1/game_a"), Some(1589723110), Some("Studio A")));
-        assert!(p.load_cache().contains_key("K1"), "a later sync skips these orders");
-        assert!(p.import_pushed(&json!({})).is_err());
-        assert!(p.import_pushed(&json!({"orders": [{"gamekey": "", "order": {}}, {"order": {}}, {"gamekey": "K"}]})).unwrap().is_empty(), "malformed entries are skipped");
-    }
-    #[test] fn the_browser_is_only_asked_for_orders_not_already_imported() {
-        let (s, site, d) = setup("plan", site());
-        let keys: Vec<String> = ["K1", "K2", "K3"].iter().map(|k| k.to_string()).collect();
-        assert_eq!(s.import_plan(&keys).unwrap(), keys, "nothing imported yet: read everything");
-        let _ = &site;
-        let orders: Vec<Value> = vec![json!({"gamekey": "K1", "order": order("2020-05-17T13:45:10", vec![sub("game_a", "Game A", "Studio A"), sub("game_a_ost", "Game A Soundtrack", "Studio A"), sub("game_b", " Game B ", "")])}),
-            json!({"gamekey": "K2", "order": order("2021-01-02T00:00:00", vec![sub("game_a", "Game A again", "Studio A"), sub("game_c", "Game C", "Studio C")])})];
-        let recs = s.import_pushed(&json!({"orders": orders})).unwrap();
-        // the library now holds what the import produced (the app would save it)
-        let db = rusqlite::Connection::open(d.join("games_1.db")).unwrap();
-        for r in &recs { db.execute("INSERT INTO games (appid, platform, platform_id, platform_slug) VALUES (1, 'humble', ?, ?)", [&r.platform_id, r.slug.as_ref().unwrap()]).unwrap(); }
-        assert_eq!(s.import_plan(&keys).unwrap(), vec!["K3".to_string()], "K1 and K2 are done; only the unknown order is read");
-        // a game the user deleted from the library (not blacklisted) brings its order back
-        db.execute("DELETE FROM games WHERE platform_id = 'game_b'", []).unwrap();
-        assert!(s.import_plan(&keys).unwrap().contains(&"K1".to_string()));
-        // a game the user removed AND blacklisted does not
-        db.execute("INSERT INTO blacklist (appid, platform_id, platform) VALUES (1, 'game_b', 'humble')", []).unwrap();
-        assert_eq!(s.import_plan(&keys).unwrap(), vec!["K3".to_string()]);
-    }
-
-    #[test] fn a_game_in_two_batches_keeps_the_first_orders_link_and_a_linkless_one_is_filled_in() {
-        let (s, _, d) = setup("batches", site());
-        let db = rusqlite::Connection::open(d.join("games_1.db")).unwrap();
-        let o = |k: &str, subs: Vec<Value>| json!({"gamekey": k, "order": order("2020-01-01T00:00:00", subs)});
-        // batch 1 saved, as the app would
-        let b1 = s.import_pushed(&json!({"orders": [o("K1", vec![sub("game_a", "Game A", "S")])]})).unwrap();
-        for r in &b1 { db.execute("INSERT INTO games (appid, platform, platform_id, platform_slug) VALUES (1, 'humble', ?, ?)", [&r.platform_id, r.slug.as_ref().unwrap()]).unwrap(); }
-        // batch 2 lists game_a again (a later order) plus a new game: only the new one comes back
-        let b2 = s.import_pushed(&json!({"orders": [o("K2", vec![sub("game_a", "Game A", "S"), sub("game_c", "Game C", "S")])]})).unwrap();
-        assert_eq!(b2.iter().map(|r| r.platform_id.as_str()).collect::<Vec<_>>(), ["game_c"]);
-        // a game saved with no order link (e.g. an older import) is sent again so it gets one
-        db.execute("INSERT INTO games (appid, platform, platform_id, platform_slug) VALUES (2, 'humble', 'game_d', '')", []).unwrap();
-        let b3 = s.import_pushed(&json!({"orders": [o("K3", vec![sub("game_d", "Game D", "S")])]})).unwrap();
-        assert_eq!((b3.len(), b3[0].slug.as_deref()), (1, Some("K3/game_d")));
     }
 }
 

@@ -1,5 +1,6 @@
 //! Test harness for the Zest Companion userscript. Starts the real listener against a THROWAWAY config folder (never the real
-//! one) with the real Humble / Nintendo / PlayStation sign-ins, prints the four addresses to open, and reports what arrives.
+//! one) with the real PlayStation sign-in, prints the addresses to open, and reports what arrives. (SteamGifts needs the app's library and account,
+//! so it is not available here: its routes answer "not available".)
 //!   cargo run -p pd-filter --bin companion_dev [config-dir]      (default: $TMPDIR/zest-companion-test)
 //! The sign-ins talk to the real services, so a captured cookie is genuinely tested; it is saved only in the throwaway folder.
 use pd_filter::companion::{Event, Listener, SERVICES};
@@ -9,7 +10,7 @@ use std::sync::Arc;
 fn main() {
     let dir = std::env::args().nth(1).map(std::path::PathBuf::from).unwrap_or_else(|| std::env::temp_dir().join("zest-companion-test"));
     std::fs::create_dir_all(&dir).expect("could not create the test folder");
-    // A small library in the throwaway folder so imports are really saved (and a second run shows what gets skipped).
+    // A small library in the throwaway folder, for the PlayStation purchase dates to match against.
     let db_path = dir.join("games.db");
     {
         let c = rusqlite::Connection::open(&db_path).expect("could not open the test library");
@@ -19,15 +20,8 @@ fn main() {
     }
     let mut reg = Registry::builtin();
     reg.register_builtins(&pd_filter::sources::SourceEnv { http: Arc::new(pd_filter::net::UreqHttp::new()), config_dir: dir.clone(), db: dir.join("games.db") });
-    let save_to = db_path.clone();
     let l = Listener::start(Arc::new(reg), Arc::new(move |e| match e {
         Event::Connected { platform, username } => println!("CONNECTED  {platform} as {}", username.as_deref().unwrap_or("(no name)")),
-        Event::Imported { platform, records } => {
-            let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_secs() as i64).unwrap_or(0);
-            let saved = rusqlite::Connection::open(&save_to).ok().and_then(|mut c| pd_filter::importer::import(&mut c, &platform, &records, now).ok());
-            println!("IMPORTED   {} {platform} games; earliest date {:?}; saved to the test library: {}", records.len(), records.iter().filter_map(|r| r.date_added).min(), if saved.is_some() { "yes" } else { "NO" });
-            for r in records.iter().take(5) { println!("           {}  {}", r.platform_id, r.name); }
-        }
         Event::SteamGifts { message, .. } => println!("STEAMGIFTS {message}"),
         Event::Refused { platform } => println!("REFUSED    {platform} did not accept the captured value"),
         Event::PurchaseDates { online_id, read, matched, set, .. } => println!("PURCHASES  {read} read from {online_id:?}, {matched} games matched, {set} dates set"),

@@ -1,49 +1,39 @@
 // ==UserScript==
 // @name         Zest Companion
 // @namespace    zest
-// @version      0.4
-// @description  Lets Zest read your Humble Bundle, IndieGala, Nintendo, PlayStation and SteamGifts accounts, and sign in to itch.io, Xbox, Amazon Games and GOG, through your own signed-in browser
-// @match        https://www.humblebundle.com/*
-// @match        https://accounts.nintendo.com/*
+// @version      0.5
+// @description  Signs Zest in to PlayStation and reads your PlayStation purchase dates and SteamGifts wins, through your own signed-in browser. Does nothing on a page Zest did not open.
 // @match        https://ca.account.sony.com/api/v1/ssocookie*
 // @match        https://store.playstation.com/*
-// @match        https://www.indiegala.com/*
 // @match        https://www.steamgifts.com/*
-// @match        https://help.steampowered.com/*
-// @match        https://itch.io/*
-// @match        https://login.live.com/*
-// @match        https://amazon.com/*
-// @match        https://www.amazon.com/*
-// @match        https://auth.gog.com/*
-// @match        https://login.gog.com/*
-// @match        https://embed.gog.com/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_deleteValue
 // @connect      127.0.0.1
 // @connect      localhost
+// @updateURL    https://github.com/RobbyRatpoison/zest-library-manager/raw/main/userscript/zest_companion.user.js
+// @downloadURL  https://github.com/RobbyRatpoison/zest-library-manager/raw/main/userscript/zest_companion.user.js
 // @license      MIT
 // ==/UserScript==
 
 // How it works
 //   Zest opens a service's page with a fragment: #zest=<port>.<token>.<service>
-//   (service: humble | indiegala | nintendo | psn-login | psn-dates | itch | xbox | amazon | gog | steamgifts | steamgifts-full | steam-dates). The script "arms" itself from it and keeps the
+//   (service: psn-login | psn-dates | steamgifts | steamgifts-full). The script "arms" itself from it and keeps the
 //   state with GM_setValue, because sign-in bounces through other sites and a fragment or sessionStorage
 //   would be lost on the way. Armed state expires after 15 minutes and is cleared when a run ends.
 //   Nothing happens on a page that was not opened by Zest: the script is inert unless armed.
 //   All traffic goes to http://127.0.0.1:<port>/zest/... with the token in X-Zest-Token. Secrets (session
 //   cookies, the NPSSO) are sent only there, never shown on the page and never logged.
-//   Zest side (not built yet): POST /zest/capture {service, ...}, POST /zest/purchase-dates, GET /zest/hello.
 
 (function () {
     'use strict';
 
     // ZC-BEGIN (pure helpers; tests/test_zest_companion.py runs this block in node)
     const ARM_TTL_MS = 15 * 60 * 1000;
-    const SERVICES = ['humble', 'nintendo', 'psn-login', 'psn-dates', 'indiegala', 'itch', 'xbox', 'amazon', 'gog', 'steamgifts', 'steamgifts-full', 'steam-dates'];
+    const SERVICES = ['psn-login', 'psn-dates', 'steamgifts', 'steamgifts-full'];
 
-    // '#zest=51234.AbC_123-token.humble' -> {port, token, service}, or null for anything else.
+    // '#zest=51234.AbC_123-token.psn-login' -> {port, token, service}, or null for anything else.
     function parseArmFragment(hash) {
         const m = /^#?(?:.*&)?zest=(\d{4,5})\.([A-Za-z0-9_-]{16,128})\.([a-z-]+)(?:&.*)?$/.exec(hash || '');
         if (!m) return null;
@@ -62,26 +52,6 @@
             return (j && typeof j.npsso === 'string' && /^[A-Za-z0-9]{20,}$/.test(j.npsso)) ? j.npsso : null;
         } catch (e) { return null; }
     }
-    // One Humble order cut down to what Zest's game filter reads (a full order holds every download link and is far larger).
-    function trimHumbleOrder(o) {
-        const p = o && o.product && typeof o.product === 'object' ? { human_name: o.product.human_name, machine_name: o.product.machine_name } : undefined;
-        return {
-            created: o && o.created, product: p,
-            subproducts: ((o && o.subproducts) || []).map(sp => ({
-                machine_name: sp.machine_name, human_name: sp.human_name,
-                payee: sp.payee && typeof sp.payee === 'object' ? { machine_name: sp.payee.machine_name, human_name: sp.payee.human_name } : undefined,
-                downloads: (sp.downloads || []).map(d => ({ platform: d.platform,
-                    download_struct: ((d && d.download_struct) || []).map(x => ({ name: x && x.name })) })),
-            })),
-        };
-    }
-    // The three JSON blocks Nintendo embeds in its signed-in page. `read(id)` returns the element's data-json text or null.
-    // Null unless the session block carries the idToken Zest needs.
-    function nintendoBlocks(read) {
-        const get = id => { try { return JSON.parse(read(id)); } catch (e) { return null; } };
-        const data = get('data'), state = get('state'), meta = get('meta');
-        return (data && typeof data.idToken === 'string' && data.idToken && state) ? { data, state, meta } : null;
-    }
     // Why a page that should have held the NPSSO did not: Sony's own error text when it is JSON, else a plain note.
     // Never includes a value from a successful reply.
     function psnPageProblem(text) {
@@ -91,53 +61,6 @@
             const m = j && (j.error_description || j.message || j.error);
             return typeof m === 'string' && m ? m.slice(0, 100) : 'no sign-in was found';
         } catch (e) { return 'the page was not JSON'; }
-    }
-    // Nintendo's library page is the signed-in one when it embeds the session data (see nintendo.py _load_page).
-    function nintendoSignedIn(pathname, hasData) { return /^\/portal\/vgcs/.test(pathname || '') && !!hasData; }
-    // Where a sign-in that ends on a page carrying the code lands: Microsoft's blank desktop page (code=), Amazon's home page
-    // (openid.oa2.authorization_code=), GOG's on_login_success page (code=). null = not there yet; {ok:true, address} = the full
-    // address Zest's sign-in reads the code from; {ok:false, problem} = the provider sent an error instead.
-    function landingAddress(service, href) {
-        let u; try { u = new URL(href); } catch (e) { return null; }
-        const q = k => u.searchParams.get(k) || '';
-        let key = '', on = false;
-        if (service === 'xbox') { on = u.hostname === 'login.live.com' && u.pathname === '/oauth20_desktop.srf'; key = 'code'; }
-        else if (service === 'amazon') { on = /^(www\.)?amazon\.com$/.test(u.hostname); key = 'openid.oa2.authorization_code'; }
-        else if (service === 'gog') { on = u.hostname === 'embed.gog.com' && u.pathname === '/on_login_success'; key = 'code'; }
-        if (!on) return null;
-        if (q(key)) return { ok: true, address: href };
-        if (q('error')) return { ok: false, problem: (q('error_description') || q('error')).slice(0, 120) };
-        return null;
-    }
-    // An itch.io API key among the texts of a settings page: 32-64 characters of [A-Za-z0-9_-] (the page also lists
-    // shorter labels and dotted or spaced text, which are not keys).
-    function itchKeyFrom(values) {
-        for (const v of (values || [])) {
-            const t = typeof v === 'string' ? v.trim() : '';
-            if (t.length >= 32 && t.length <= 64 && /^[A-Za-z0-9_-]+$/.test(t)) return t;
-        }
-        return null;
-    }
-    // IndieGala's library page: signed in when it was not sent to /login and carries the library markup; a page holds games when it has a card.
-    function indiegalaSignedIn(finalPath, html) { return !/^\/login/.test(finalPath || '') && String(html || '').indexOf('profile-private-page-library') >= 0; }
-    function indiegalaHasGames(html) { return String(html || '').indexOf('profile-private-page-library-title-padding-showcase') >= 0; }
-    // Steam Help shows an activation date as "Oct 1, 2017" or, for this year, "Mar 25". -> 'YYYY-MM-DD' or null. Month names only, so the machine's time zone cannot move the day.
-    const STEAM_MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-    function steamDate(str, year) {
-        const t = String(str || '').replace(/\u00a0/g, ' ').trim();
-        let m = /^([A-Za-z]{3,9})\.?\s+(\d{1,2})(?:,?\s+(\d{4}))?$/.exec(t), mon, day, yr;
-        if (m) { mon = m[1]; day = m[2]; yr = m[3]; }
-        else if ((m = /^(\d{1,2})\s+([A-Za-z]{3,9})\.?(?:,?\s+(\d{4}))?$/.exec(t))) { day = m[1]; mon = m[2]; yr = m[3]; }
-        else return null;
-        const mi = STEAM_MONTHS.indexOf(mon.slice(0, 3).toLowerCase());
-        const y = yr ? Number(yr) : year, d = Number(day);
-        if (mi < 0 || !y || d < 1 || d > new Date(Date.UTC(y, mi + 1, 0)).getUTCDate()) return null;
-        return y + '-' + String(mi + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-    }
-    // The earliest date among a Help page's line-item texts ("Oct 1, 2017 - Added to account ..."), else among its "Activated:" values.
-    function earliestSteamDate(rowTexts, activatedTexts, year) {
-        const pick = list => (list || []).map(x => steamDate(String(x).replace(/\u00a0/g, ' ').split('-')[0], year)).filter(Boolean).sort()[0] || null;
-        return pick(rowTexts) || pick(activatedTexts);
     }
     // ZC-END
 
@@ -286,74 +209,6 @@
             else ui.end('Zest: ' + (r.message || 'it did not accept that.'), false);
         } catch (e) { ui.end(e.message, false); }
     }
-    // ---- Humble Bundle -----------------------------------------------------------------------------
-    // Read in this signed-in tab: the browser attaches the session cookie itself, so the script never touches it.
-    // Zest gets the orders, trimmed, and applies its own game filter.
-    async function runHumble() {
-        const ui = panel('Zest: read Humble Bundle');
-        ui.say('Checking your Humble Bundle sign-in...');
-        let list = null;
-        try { const r = await fetch('/api/v1/user/order', { credentials: 'include' }); if (r.ok) list = await r.json(); } catch (e) { /* below */ }
-        if (!Array.isArray(list)) {
-            ui.say('Sign in to Humble Bundle in this tab. Zest continues by itself once you are signed in.');
-            if (!/^\/login/.test(location.pathname)) location.href = 'https://www.humblebundle.com/login';
-            return;
-        }
-        const all = list.map(o => o && o.gamekey).filter(k => typeof k === 'string' && k);
-        // Zest knows which orders it has already imported (every game of them in the library or removed by you) and says
-        // which are worth reading; if it cannot answer, everything is read.
-        let keys = all;
-        ui.say('Asking Zest which of your ' + all.length + ' orders are new...');
-        try { const p = await zest('/zest/plan', { service: 'humble', keys: all }); if (p.ok && Array.isArray(p.read)) keys = p.read.filter(k => typeof k === 'string'); }
-        catch (e) { ui.end(e.message, false); return; }
-        if (!keys.length) { ui.end('Nothing new: all ' + all.length + ' orders were already imported.', true); done(); return; }
-        // Sent in batches, so progress is kept: a closed tab or a failure part-way loses at most the batch in flight, and the
-        // next run skips everything already saved (Zest answers /zest/plan from what it holds).
-        const BATCH = 25;
-        let batch = [], failed = 0, ordersSent = 0, gamesSent = 0;
-        const progress = () => 'Saved ' + ordersSent + ' order' + (ordersSent === 1 ? '' : 's') + ' (' + gamesSent + ' games) so far.';
-        const flush = async () => {
-            if (!batch.length) return true;
-            const body = { service: 'humble', data: { orders: batch } };
-            if (JSON.stringify(body).length > 14 * 1024 * 1024) { ui.end('A batch was too large to send. ' + progress(), false); return false; }
-            let r;
-            try { r = await zest('/zest/import', body); } catch (e) { ui.end(e.message + '\n' + progress() + ' Run it again to continue.', false); return false; }
-            if (!r.ok) { ui.end('Zest: ' + (r.message || 'it did not accept that.') + '\n' + progress() + ' Run it again to continue.', false); return false; }
-            ordersSent += batch.length; gamesSent += (typeof r.count === 'number' ? r.count : 0); batch = [];
-            return true;
-        };
-        for (let i = 0; i < keys.length; i++) {
-            ui.say('Reading order ' + (i + 1) + ' of ' + keys.length + ' (' + (all.length - keys.length) + ' already imported, skipped)\n' + progress());
-            try {
-                const r = await fetch('/api/v1/order/' + encodeURIComponent(keys[i]), { credentials: 'include' });
-                if (!r.ok) { failed++; continue; }
-                batch.push({ gamekey: keys[i], order: trimHumbleOrder(await r.json()) });
-            } catch (e) { failed++; }
-            if (batch.length >= BATCH && !(await flush())) return;
-            await new Promise(r => setTimeout(r, 150));                 // be gentle: hundreds of orders
-        }
-        if (!(await flush())) return;
-        if (!ordersSent) { ui.end('No orders could be read' + (failed ? ' (' + failed + ' failed)' : '') + '.', false); return; }
-        ui.end('Done: ' + progress().replace(' so far', '') + (failed ? ' ' + failed + ' could not be read and were skipped; run it again to retry them.' : ' You can close this tab.'), true);
-        done();
-    }
-
-    // ---- Nintendo ----------------------------------------------------------------------------------
-    // The signed-in Virtual Game Cards page embeds the session data (an idToken) Zest needs to ask Nintendo for the list;
-    // the cookie only ever loaded this page. The token goes to Zest and nowhere else, and is never shown.
-    async function runNintendo() {
-        const ui = panel('Zest: read Nintendo');
-        const blocks = location.pathname.indexOf('/portal/vgcs') === 0
-            ? nintendoBlocks(id => { const el = document.getElementById(id); return el ? el.getAttribute('data-json') : null; }) : null;
-        if (!blocks) {
-            ui.say('Sign in to your Nintendo Account in this tab. Zest continues by itself once the game cards page loads.');
-            // Nintendo's own login redirects back to the page that asked, so start from the cards page.
-            if (!/^\/(portal|login|connect)/.test(location.pathname)) location.href = 'https://accounts.nintendo.com/portal/vgcs';
-            return;
-        }
-        await send(ui, '/zest/import', { service: 'nintendo', data: blocks }, 'Done. You can close this tab.');
-    }
-
     // ---- PlayStation: sign-in ----------------------------------------------------------------------
     // Sony's ssocookie endpoint answers a signed-in browser with the NPSSO as JSON. The page is fetched again
     // rather than read from the document, because some browsers show JSON through a viewer that changes the text.
@@ -421,65 +276,6 @@
         }, 'Done. You can close this tab.');
     }
 
-    // ---- IndieGala ---------------------------------------------------------------------------------
-    // The library pages are read in this signed-in tab and sent as they are; Zest parses them with the same code its own sync uses.
-    async function runIndiegala() {
-        const ui = panel('Zest: read IndieGala');
-        ui.say('Checking your IndieGala sign-in...');
-        const pages = []; let bytes = 0;
-        for (let n = 1; n <= 200; n++) {
-            let res, html;
-            try { res = await fetch(n === 1 ? '/library' : '/library/showcase/' + n + '/', { credentials: 'include' }); html = await res.text(); }
-            catch (e) { ui.end('Could not read page ' + n + ' of your library.', false); return; }
-            let path = ''; try { path = new URL(res.url).pathname; } catch (e) { /* treated as signed out */ }
-            if (n === 1 && !indiegalaSignedIn(path, html)) {
-                ui.say('Sign in to IndieGala in this tab. Zest continues by itself once you are signed in.');
-                if (!/^\/login/.test(location.pathname)) location.href = 'https://www.indiegala.com/login';
-                return;
-            }
-            if (!indiegalaHasGames(html)) break;
-            pages.push(html); bytes += html.length;
-            if (bytes > 14 * 1024 * 1024) { ui.end('Your library is larger than one message to Zest can hold.', false); return; }
-            ui.say('Read page ' + n + ' of your library...');
-            await new Promise(r => setTimeout(r, 300));
-        }
-        if (!pages.length) { ui.end('No games were found in your IndieGala library.', false); done(); return; }
-        await send(ui, '/zest/import', { service: 'indiegala', data: { pages } }, 'Done. You can close this tab.');
-    }
-
-    // ---- itch.io -----------------------------------------------------------------------------------
-    // The API keys page shows a key once you generate one or press View; the script waits for it to appear.
-    async function runItch() {
-        const ui = panel('Zest: get your itch.io API key');
-        if (!/^\/user\/settings\/api-keys/.test(location.pathname)) {
-            ui.say('Sign in to itch.io in this tab. Zest continues by itself once the API keys page opens.');
-            if (!/^\/login/.test(location.pathname)) location.href = 'https://itch.io/user/settings/api-keys';
-            return;
-        }
-        ui.say('Press "Generate new API key" (or "View" next to a key you already have). Zest picks it up from the page.');
-        const until = Date.now() + 3 * 60 * 1000;
-        while (Date.now() < until) {
-            const vals = Array.prototype.map.call(document.querySelectorAll('input,textarea,code,pre,span,td,div'),
-                el => (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') ? el.value : (el.childNodes.length === 1 ? el.textContent : ''));
-            const key = itchKeyFrom(vals);
-            if (key) { await send(ui, '/zest/capture', { service: 'itch', api_key: key }, 'Connected. You can close this tab.'); return; }
-            await new Promise(r => setTimeout(r, 1000));
-        }
-        ui.end('No API key appeared on the page. Use Get API key in Zest again, or paste a key there.', false);
-        done();
-    }
-
-    // ---- Xbox, Amazon, GOG: sign-in -----------------------------------------------------------------
-    // The provider's sign-in ends on a page whose address carries the code; the script sends that address to Zest, whose
-    // sign-in exchanges it. Until then it only waits (the sign-in pages themselves are the provider's).
-    async function runLanding(label) {
-        const ui = panel('Zest: connect ' + label);
-        const r = landingAddress(armed.service, location.href);
-        if (!r) { ui.say('Sign in to ' + label + ' in this tab. Zest continues by itself once you are signed in.'); return; }
-        if (!r.ok) { ui.end(label + ' did not sign you in: ' + r.problem, false); done(); return; }
-        await send(ui, '/zest/capture', { service: armed.service, address: r.address }, 'Connected. You can close this tab.');
-    }
-
     // ---- SteamGifts wins -----------------------------------------------------------------------------
     // SteamGifts is behind Cloudflare, so the pages are read here, in the signed-in tab, and their HTML handed to Zest, which parses it and says whether to read another.
     // Public pass: the account's /user/<name>/giveaways/won pages. Private pass (only while signed in as that account): /giveaways/won, for the "received" state.
@@ -533,56 +329,11 @@
         done();
     }
 
-    // ---- Steam activation dates ----------------------------------------------------------------------
-    // Zest names the games (POST /zest/steam/plan); each one's Help page is fetched here, in the signed-in tab, and the earliest activation date goes back with /zest/steam/result.
-    async function runSteamDates() {
-        const ui = panel('Zest: Steam activation dates');
-        const sleep = ms => new Promise(r => setTimeout(r, ms));
-        let plan;
-        try { plan = await zest('/zest/steam/plan', {}); } catch (e) { ui.end(e.message, false); return; }
-        if (!plan.ok) { ui.end('Zest: ' + (plan.message || 'it has no games to read.'), false); done(); return; }
-        let pageId = '';
-        try { if (window.HelpWizard && window.HelpWizard.m_steamid) pageId = String(window.HelpWizard.m_steamid); } catch (e) { /* the check is skipped when the page does not say */ }
-        if (pageId && plan.steam_id && pageId !== String(plan.steam_id)) {
-            ui.end('Steam is signed in as ' + pageId + ' but Zest is set up for ' + plan.steam_id + '. Nothing was imported.', false); done(); return;
-        }
-        const items = plan.items || [];
-        let saved = 0, missing = 0, idx = 0;
-        for (const it of items) {
-            idx++;
-            ui.say('Reading Steam (' + idx + ' of ' + items.length + ')\n' + (it.name || it.appid));
-            let date = null;
-            try {
-                const res = await fetch('https://help.steampowered.com/en/wizard/HelpWithGame/?appid=' + it.appid, { credentials: 'include' });
-                const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
-                const rows = Array.prototype.map.call(doc.querySelectorAll('.LineItemRow span:first-child'), el => el.textContent);
-                const act = [];
-                doc.querySelectorAll('.account_details .help_highlight_text').forEach(el => { if (el.textContent.trim() === 'Activated:' && el.nextElementSibling) act.push(el.nextElementSibling.textContent); });
-                date = earliestSteamDate(rows, act, new Date().getFullYear());
-            } catch (e) { /* a network error counts as not found */ }
-            let r;
-            try { r = await zest('/zest/steam/result', { appid: it.appid, date, steam_id: pageId }); } catch (e) { ui.end(e.message, false); return; }
-            if (!r.ok) { ui.end('Zest: ' + (r.message || 'it did not accept the answer.'), false); done(); return; }
-            if (date) saved++; else missing++;
-            if (idx < items.length) await sleep(600);
-        }
-        ui.end('Done: ' + saved + ' date' + (saved === 1 ? '' : 's') + ' saved, ' + missing + ' not found. You can close this tab.', true);
-        done();
-    }
-
     // ---- dispatch ----------------------------------------------------------------------------------
     const host = location.hostname;
-    if (armed.service === 'humble' && /humblebundle\.com$/.test(host)) runHumble();
-    else if (armed.service === 'nintendo' && host === 'accounts.nintendo.com') runNintendo();
-    else if (armed.service === 'psn-login') {
+    if (armed.service === 'psn-login') {
         if (host === 'ca.account.sony.com') runPsnLogin();
         else if (host === 'store.playstation.com') psnStoreHop();
     } else if (armed.service === 'psn-dates' && host === 'store.playstation.com') runPsnDates();
-    else if (armed.service === 'indiegala' && host === 'www.indiegala.com') runIndiegala();
-    else if (armed.service === 'itch' && host === 'itch.io') runItch();
-    else if (armed.service === 'xbox' && host === 'login.live.com') runLanding('Xbox');
-    else if (armed.service === 'amazon' && /(^|\.)amazon\.com$/.test(host)) runLanding('Amazon Games');
-    else if (armed.service === 'gog' && /\.gog\.com$/.test(host)) runLanding('GOG');
-    else if (armed.service === 'steam-dates' && host === 'help.steampowered.com') runSteamDates();
     else if ((armed.service === 'steamgifts' || armed.service === 'steamgifts-full') && host === 'www.steamgifts.com') runSteamGifts(armed.service === 'steamgifts-full');
 })();

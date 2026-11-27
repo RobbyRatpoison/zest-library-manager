@@ -291,12 +291,6 @@ impl LibrarySource for NintendoSource {
         *self.views.lock().unwrap() = None; Ok(())
     }
 
-    /// The account page's embedded blocks as read in the user's signed-in browser: `{"data": {...}, "state": {...}, "meta": {...}}`. The `idToken` in them is
-    /// what the library query needs (the cookie only ever fetched this page), so the list is fetched here; no session is kept.
-    fn import_pushed(&self, data: &Value) -> Result<Vec<GameRecord>, String> {
-        let page = page_from_embedded(data.get("data").cloned(), data.get("state").cloned(), data.get("meta").cloned()).ok_or("Nintendo's page did not hold a signed-in session. Sign in and try again.")?;
-        Ok(records_from_views(&self.fetch_views(&page, &Cancel::new())?))
-    }
 
     fn sync(&self, _cx: &SourceCtx, sink: &mut dyn FnMut(Vec<GameRecord>), cancel: &Cancel) -> Result<usize, String> {
         let cookie = self.cookie().ok_or("Not connected")?;
@@ -432,15 +426,4 @@ mod tests {
         assert_eq!(cols(&u2), ["release_date", "developers", "platform_slug"], "genres and categories left to the Steam data");
     }
 
-    #[test] fn a_page_read_in_the_browser_lists_the_same_games_without_any_cookie() {
-        let (s, site, d) = src("pushed", true, json!([]));
-        let mut synced = vec![]; s.auth_complete("a=1").unwrap(); s.sync(&cx(&d, site.clone()), &mut |b| synced.extend(b), &Cancel::new()).unwrap();
-        let (p, _, _) = src("pushed2", true, json!([]));
-        let blocks = json!({"data": {"idToken": "TOK", "savannaClientId": "CID", "shopGraphQLApiUrl": "https://shop.example/graphql"},
-            "state": {"lang": "en-US", "user": {"nickname": "Zelda Fan", "countryId": 1}}, "meta": {"countries": [{"id": 1, "code": "US"}]}});
-        assert_eq!(p.import_pushed(&blocks).unwrap(), synced);
-        assert!(p.cookie().is_none(), "nothing is stored as a session");
-        assert!(p.import_pushed(&json!({"data": {}, "state": {}, "meta": {}})).is_err(), "a signed-out page has no idToken");
-        assert!(p.import_pushed(&json!({})).is_err());
-    }
 }

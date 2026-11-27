@@ -318,15 +318,6 @@ impl LibrarySource for IndiegalaSource {
         Ok(Action::RemoveInstall { delete: crate::installdir::is_inside(std::path::Path::new(&dir), &self.dir()), dir })
     }
     fn store_url(&self, g: &GameRef) -> Option<String> { Some(g.slug.clone()).filter(|s| s.starts_with("http")) }
-    /// The library pages the Zest Companion userscript read in the signed-in browser: `{"pages": ["<html>", ...]}`, in order. Nothing is stored as a session.
-    fn import_pushed(&self, data: &serde_json::Value) -> Result<Vec<GameRecord>, String> {
-        let pages = data.get("pages").and_then(|p| p.as_array()).ok_or("No pages were sent")?;
-        let (mut seen, mut out) = (std::collections::HashSet::new(), vec![]);
-        let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_secs() as i64).unwrap_or(0);
-        for html in pages.iter().filter_map(|p| p.as_str()) { out.extend(records_from(&parse_page(html), &mut seen, now)); }
-        if out.is_empty() { return Err("No games were found on the pages the browser sent".into()); }
-        Ok(out)
-    }
 
     fn sync(&self, _cx: &SourceCtx, sink: &mut dyn FnMut(Vec<GameRecord>), cancel: &Cancel) -> Result<usize, String> {
         let cookie = self.cookie().ok_or("Not connected")?;
@@ -429,14 +420,6 @@ mod behaviour {
         // no link to the showcase page: built from the product id; a store link back into IndieGala's library is not a store page
         assert_eq!(games[1].showcase_url, format!("https://www.indiegala.com/library/showcase/{PID2}")); assert_eq!(games[1].store_url, "");
         assert_eq!(parse_dt("2020-05-01 12:30:00"), Some(1588336200)); assert_eq!(parse_dt("garbage"), None);
-    }
-    #[test] fn pages_read_in_the_browser_become_the_same_records_as_a_sync() {
-        let (s, _, _) = setup("push", None, false);
-        let pages = json!({"pages": [page(&[card(PID1, "Game One", "2020-05-01 12:30:00", 7, true)]), page(&[card(PID1, "Game One again", "2021-01-01 00:00:00", 7, true), card(PID2, "Game Two", "2020-06-01 00:00:00", 8, false)]), "not html"]});
-        let r = s.import_pushed(&pages).unwrap();
-        assert_eq!(r.iter().map(|g| g.name.as_str()).collect::<Vec<_>>(), ["Game One", "Game Two"]);
-        assert_eq!(r[0].slug.as_deref(), Some("https://store.example.com/game-one"));
-        assert!(s.import_pushed(&json!({"pages": ["<html></html>"]})).is_err() && s.import_pushed(&json!({})).is_err());
     }
     /// Read-only look at the real library page (for working out the download links): `ZEST_DATA=<data dir> ZEST_OUT=<file> cargo test -p pd-filter real_indiegala_page -- --ignored`.
     #[test] #[ignore] fn real_indiegala_page() {

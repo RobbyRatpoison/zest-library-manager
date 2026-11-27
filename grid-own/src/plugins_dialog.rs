@@ -353,8 +353,9 @@ impl PluginsDialog {
                         if !steps.is_empty() {
                             ui.horizontal(|ui| {
                                 for (service, text) in steps { if ui_kit::button(ui, text, Kind::Plain, accent, r).clicked() { out = PluginsOut::Companion(service.to_string()); } }
+                                if ui_kit::button(ui, "INSTALL USERSCRIPT", Kind::Plain, accent, r).clicked() { out = PluginsOut::OpenUrl(pd_filter::companion::INSTALL_URL.to_string()); }
                             });
-                            ui.label(ui_kit::muted("Uses the Zest Companion userscript in your browser (Tampermonkey): it opens the page and reads it while you are signed in.", 0.72 * r));
+                            ui.label(ui_kit::muted("These use the Zest Companion userscript in your browser (it needs Tampermonkey): it opens the page and reads it while you are signed in. INSTALL USERSCRIPT opens it on GitHub, where Tampermonkey offers to install it.", 0.72 * r));
                         }
                     });
                     ui.add_space(0.5 * r);

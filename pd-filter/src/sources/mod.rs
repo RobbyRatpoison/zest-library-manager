@@ -141,11 +141,6 @@ pub trait LibrarySource: Send + Sync {
     fn auth_begin(&self) -> Result<AuthBegin, String> { Err(format!("{} has no sign-in", self.label())) }
     fn auth_complete(&self, _value: &str) -> Result<AuthStatus, String> { Err(format!("{} has no sign-in", self.label())) }
     fn auth_disconnect(&self) -> Result<(), String> { Err(format!("{} has no sign-in", self.label())) }
-    /// Before the browser reads anything: which of the account's order keys are worth reading (the rest were already imported). `None` = read them all.
-    fn import_plan(&self, _keys: &[String]) -> Option<Vec<String>> { None }
-    /// Data the Zest Companion userscript read in the user's own signed-in browser (see `companion.rs`) turned into library records, for a source whose
-    /// login can't be captured as a cookie. Nothing is stored as a session. Default: not supported.
-    fn import_pushed(&self, _data: &serde_json::Value) -> Result<Vec<crate::importer::GameRecord>, String> { Err(format!("{} cannot take data from the browser", self.label())) }
 
     /// Purchases a browser read (ISO time, store name, sku) matched to the library and set as `date_added`, earliest wins. (read, matched, set). Default: not supported.
     /// When the account bought each of these games (PlayDate's `fetch_purchase_dates`): (appid, Unix time or None when the store has no date for it). The sources read what they need

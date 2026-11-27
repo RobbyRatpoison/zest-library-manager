@@ -18,15 +18,13 @@ pub struct SyncJob {
 }
 
 #[derive(Clone, Copy, PartialEq)]
-pub enum Kind { Rescrape, ProtonDb, Hltb, Backfill, Art, ArtEdit, PluginSync, PluginPush, PluginInstall, LauncherInstall, XboxOwned, Populate, HltbConfirm, PurchaseDates }
+pub enum Kind { Rescrape, ProtonDb, Hltb, Backfill, Art, ArtEdit, PluginSync, PluginInstall, LauncherInstall, XboxOwned, Populate, HltbConfirm, PurchaseDates }
 
 /// One art operation from the Edit dialog's art tabs.
 #[derive(Clone)]
 pub enum ArtOp { Order(pd_filter::artclient::Kind), FromSteam(pd_filter::artclient::Kind), Url(pd_filter::artclient::Kind, String) }
 
 pub struct Params { pub kind: Kind, pub meta: bool, pub cheevo: bool, pub art_kinds: Vec<pd_filter::artclient::Kind>, pub art_source: String, pub sources: Arc<pd_filter::sources::Registry>, pub plugin_platform: Option<String>, pub art_op: Option<ArtOp>, pub sgdb_key: Option<String>, pub art_prefs: serde_json::Value, pub prefer_fit: bool, pub hltb_threshold: i64, pub db: PathBuf, pub root: PathBuf, pub steam_root: Option<PathBuf>, pub half_trust: f64, pub promote: bool, pub downgrade: bool,
-    /// Records a source's data read in the browser became (`Kind::PluginPush`).
-    pub pushed: Vec<pd_filter::importer::GameRecord>,
     /// `Kind::Art`: ranks the games still waiting (what is on screen first, see `pd_filter::artfocus`); None = the order the list was given in.
     pub art_rank: Option<Arc<dyn Fn(&i64) -> u32 + Send + Sync>> }
 
@@ -46,7 +44,6 @@ pub fn start(p: Params, appids: Vec<i64>, label: &str, target: Option<i64>, ctx:
     let (promote, downgrade, p_kind, hltb_threshold, root) = (p.promote, p.downgrade, p.kind, p.hltb_threshold, p.root.clone());
     let acct_id: Option<String> = db.file_stem().and_then(|n| n.to_str()).and_then(|n| n.strip_prefix("games_")).map(String::from);
     let (sources, plugin_platform) = (p.sources.clone(), p.plugin_platform.clone());
-    let pushed = p.pushed.clone();
     let steam_root = p.steam_root.clone();
     let (p_meta, p_cheevo, art_kinds, art_source) = (p.meta, p.cheevo, p.art_kinds.clone(), p.art_source.clone());
     let (sgdb_key, art_prefs, prefer_fit, art_op) = (p.sgdb_key.clone(), p.art_prefs.clone(), p.prefer_fit, p.art_op.clone());
@@ -116,10 +113,6 @@ pub fn start(p: Params, appids: Vec<i64>, label: &str, target: Option<i64>, ctx:
         }
         if p_kind == Kind::PluginInstall {
             let counts = run_plugin_install(&sources, plugin_platform.as_deref().unwrap_or(""), appids[0], &db, &root, steam, appinfo, &today, &c2);
-            let _ = tx2.send(Msg::End(counts)); ctx.request_repaint(); return;
-        }
-        if p_kind == Kind::PluginPush {
-            let counts = run_plugin_push(&sources, plugin_platform.as_deref().unwrap_or(""), &pushed, &db, &root, steam, appinfo, &today, &c2, &cb);
             let _ = tx2.send(Msg::End(counts)); ctx.request_repaint(); return;
         }
         if p_kind == Kind::ArtEdit {
@@ -349,27 +342,6 @@ fn after_import(src: &Arc<dyn pd_filter::sources::LibrarySource>, cx: &pd_filter
         jobs::bulk_backfill(db.to_path_buf(), st2, http2, Arc::new(pd_filter::sources::Registry::builtin_with(root, db)), Arc::new(move |id| ai2(id)), today.to_string(), new_ids.to_vec(), std::time::Duration::from_millis(300), cancel.clone(), fill_cb);
         pd_filter::net::set_activity("");
     }
-}
-
-/// Records a source's data read in the user's browser (the Zest Companion userscript): imported like a sync's batches, then the same follow-up.
-#[allow(clippy::too_many_arguments)]
-fn run_plugin_push(sources: &pd_filter::sources::Registry, platform: &str, records: &[pd_filter::importer::GameRecord], db: &Path, root: &Path, steam: Arc<Steam>, appinfo: Arc<std::collections::HashMap<i64, pd_filter::steamlocal::AppInfo>>, today: &str, cancel: &Cancel, cb: &Arc<dyn Fn(Event) + Send + Sync>) -> Counts {
-    let Some(src) = sources.get(platform) else { pd_filter::net::log(&format!("import: no source for {platform}")); return Counts { failed: 1, ..Default::default() } };
-    let Ok(mut conn) = rusqlite::Connection::open(db) else { return Counts { failed: 1, ..Default::default() } };
-    let _ = conn.busy_timeout(std::time::Duration::from_secs(10));
-    let http: Arc<dyn pd_filter::net::Http> = Arc::new(UreqHttp::new());
-    let cx = pd_filter::sources::SourceCtx { http, steam, root: root.to_path_buf(), db: db.to_path_buf(), today: today.to_string(),
-        appinfo: Arc::new(move |id| appinfo.get(&id).map(|a| AppinfoDates { original: a.original_release_date, steam: a.steam_release_date }).unwrap_or_default()), account_id: None };
-    let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_secs() as i64).unwrap_or(0);
-    let st = match pd_filter::importer::import(&mut conn, platform, records, now) { Ok(st) => st, Err(e) => { pd_filter::net::log(&format!("import {platform}: failed: {e}")); cb(Event::Failed { appid: 0, total: 0 }); return Counts { failed: 1, ..Default::default() }; } };
-    for _ in 0..(st.added + st.updated) { cb(Event::Done { appid: 0, total: 0 }); }
-    let status = pd_filter::status::SyncStatus { at: now, found: records.len(), added: st.added, updated: st.updated, blocked: st.skipped_blacklisted, error: None };
-    pd_filter::net::log(&format!("import {platform} (read in the browser): {}", pd_filter::status::describe(&status, now)));
-    let _ = pd_filter::status::record(root, platform, &status);
-    let merged = tidy_same_store(&mut conn, platform, root);
-    if merged > 0 { pd_filter::net::set_note(&format!("{merged} same-store duplicate{} merged", if merged == 1 { "" } else { "s" })); }
-    after_import(src, &cx, &conn, platform, &st.new_appids, root, db, today, cancel);
-    Counts { done: st.added + st.updated, cancelled: cancel.is_set(), ..Default::default() }
 }
 
 /// A store's download-and-unpack for one game: progress goes to the status line, the result to the database (installed, folder, chosen executable) and a note for the app to show.

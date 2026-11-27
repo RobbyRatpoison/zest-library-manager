@@ -325,7 +325,6 @@ struct HomeState {
     art_staged_for: Option<i64>,
     companion_events: Arc<std::sync::Mutex<Vec<pd_filter::companion::Event>>>,
     companion_ctx: Option<egui::Context>,
-    pushes: Vec<(String, Vec<pd_filter::importer::GameRecord>)>,
     companion_gen: u64,
     /// Messages from threads that watch a started game (it died at once); shown by the next frame.
     late_notices: Arc<std::sync::Mutex<Vec<String>>>,
@@ -611,7 +610,7 @@ impl HomeState {
         self.art_focus.ranker(hidden)
     }
     fn start_sync(&mut self, ctx: &egui::Context, kind: sync::Kind, appids: Vec<i64>, label: &str, target: Option<i64>) { self.start_sync_with(ctx, kind, None, None, appids, label, target) }
-    fn start_sync_with(&mut self, ctx: &egui::Context, kind: sync::Kind, art_op: Option<sync::ArtOp>, plugin_platform: Option<String>, appids: Vec<i64>, label: &str, target: Option<i64>) { self.start_job(ctx, kind, art_op, plugin_platform, appids, label, target, Vec::new()); }
+    fn start_sync_with(&mut self, ctx: &egui::Context, kind: sync::Kind, art_op: Option<sync::ArtOp>, plugin_platform: Option<String>, appids: Vec<i64>, label: &str, target: Option<i64>) { self.start_job(ctx, kind, art_op, plugin_platform, appids, label, target); }
     /// The background half of a Steam sync (the store's owned-apps list and the dates from the licenses list) has finished: show what it changed, fill in the games it added, and read the
     /// Help pages for those it could not date.
     fn poll_late(&mut self) {
@@ -637,12 +636,12 @@ impl HomeState {
         self.auto_dates(late.undated);
     }
     #[allow(clippy::too_many_arguments)]
-    fn start_job(&mut self, ctx: &egui::Context, kind: sync::Kind, art_op: Option<sync::ArtOp>, plugin_platform: Option<String>, appids: Vec<i64>, label: &str, target: Option<i64>, pushed: Vec<pd_filter::importer::GameRecord>) {
+    fn start_job(&mut self, ctx: &egui::Context, kind: sync::Kind, art_op: Option<sync::ArtOp>, plugin_platform: Option<String>, appids: Vec<i64>, label: &str, target: Option<i64>) {
         if kind == sync::Kind::ArtEdit { if self.art_job.is_some() { self.toast("An art change is already running"); return; } }
         else if kind == sync::Kind::Art && self.art_to_fill { if self.fill_art.is_some() { self.art_to_fill = false; return; } }
         else if self.sync.is_some() { self.toast("A sync is already running"); return; }
         let p = sync::Params { kind, meta: self.opt_meta, cheevo: self.opt_cheevo, art_kinds: self.opt_art_kinds.clone(), art_source: self.opt_art_source.to_string(), sources: self.sources.clone(), plugin_platform, art_op, sgdb_key: pd_filter::account::sgdb_key(&self.data.root_dir()), art_prefs: self.data.state_json().get("art_source_prefs").cloned().unwrap_or(serde_json::Value::Null), prefer_fit: self.data.state_bool("art_prefer_fit", true), hltb_threshold: self.data.state_f64("hltb_match_threshold", 99.0) as i64, db: self.data.db_path(), root: self.data.root_dir(), steam_root: self.data.steam_root(), half_trust: self.data.state_f64("review_half_trust_count", 10.0),
-            promote: self.data.state_bool("auto_complete_on_100pct", true), downgrade: self.data.state_bool("auto_downgrade_completed", true), pushed,
+            promote: self.data.state_bool("auto_complete_on_100pct", true), downgrade: self.data.state_bool("auto_downgrade_completed", true),
             art_rank: if kind == sync::Kind::Art { Some(self.art_ranker()) } else { None } };
         // the games on screen are filled in first, then the ones just off screen, the filtered ones, the rest, and the hidden duplicates last (the order the cover job already uses)
         let mut appids = appids;
@@ -652,12 +651,10 @@ impl HomeState {
     }
 
     /// Asks the user's browser (the Zest Companion userscript) to do `service`'s step: the listener starts on first use and the service's page opens with its address and token.
-    fn companion_open(&mut self, ctx: &egui::Context, service: &str) { self.companion_open_at(ctx, service, None) }
-    /// Asks the user's browser to open `base` (when given) with the service's address and token on it.
     fn ensure_steam_dates(&mut self) {
         if self.steam_dates.is_none() { self.steam_dates = pd_filter::account::load_account(&self.data.root_dir()).filter(|a| !a.steam_id.is_empty()).map(|a| Arc::new(pd_filter::steam_dates::SteamDates::new(self.data.db_path(), a.steam_id))); }
     }
-    /// Reads the activation dates of these Steam games in the browser (the Zest Companion userscript, on the signed-in Steam Help site) and saves each as its Date Added.
+    /// Reads the activation dates of these Steam games on the signed-in Steam Help site (Zest's own sign-in window) and saves each as its Date Added.
     /// New Steam games: when Steam is already signed in (the sign-in window was used earlier in this run of Zest), read their real purchase dates in the background and set Date Added.
     /// Nothing opens by itself: with no sign-in this does nothing, and a big batch (a first sync) is left to Bulk Ops > Steam activation dates.
     fn auto_dates(&mut self, ids: Vec<i64>) {
@@ -684,12 +681,12 @@ impl HomeState {
         sd.set_plan(games);
         sd.run_direct(Arc::new(pd_filter::net::UreqHttp::new()), Duration::from_millis(600));
     }
-    fn steam_dates_run(&mut self, ctx: &egui::Context, appids: &[i64], to_db: bool) {
+    fn steam_dates_run(&mut self, _ctx: &egui::Context, appids: &[i64], to_db: bool) {
         self.ensure_steam_dates();
         let games: Vec<(i64, String)> = appids.iter().filter_map(|id| self.data.info(*id).filter(|g| g.platform == "steam").map(|g| (g.appid, g.name.clone()))).collect();
-        let (Some(sd), Some(first)) = (self.steam_dates.clone(), games.first().map(|g| g.0)) else { self.toast("No Steam games to read dates for (or no Steam account is set up)"); return };
+        let (Some(sd), Some(_)) = (self.steam_dates.clone(), games.first()) else { self.toast("No Steam games to read dates for (or no Steam account is set up)"); return };
         let n = games.len();
-        // with the sign-in window installed, Zest reads the Help pages itself using Steam's own sign-in (no browser script); without it, the Companion userscript does the reading
+        // Zest reads the Help pages itself using Steam's own sign-in (no browser script)
         if let (Some(helper), Some(acct)) = (pd_filter::weblogin::helper_path(), pd_filter::account::load_account(&self.data.root_dir()).filter(|a| !a.steam_id.is_empty())) {
             let (sd2, http) = (sd.clone(), Arc::new(pd_filter::net::UreqHttp::new()));
             std::thread::spawn(move || {
@@ -717,12 +714,10 @@ impl HomeState {
             self.dirty = true;
             return;
         }
-        if to_db { sd.set_plan(games); } else { sd.set_plan_for_dialog(games); }
-        self.companion_open_at(ctx, "steam-dates", Some(&format!("https://help.steampowered.com/en/wizard/HelpWithGame/?appid={first}")));
-        self.toast(format!("Reading {n} game{} on Steam's Help site; the dates are saved as the browser finds them", if n == 1 { "" } else { "s" }));
-        self.dirty = true;
+        // only a development build lacks the sign-in window (every release ships zest-login next to Zest)
+        self.toast(if pd_filter::weblogin::helper_path().is_none() { "Steam dates need Zest's sign-in window (zest-login), which is missing next to Zest. Reinstall Zest to get it back." } else { "Set up your Steam account first (Settings > Account)" });
     }
-    fn companion_open_at(&mut self, ctx: &egui::Context, service: &str, base: Option<&str>) {
+    fn companion_open(&mut self, ctx: &egui::Context, service: &str) {
         self.ensure_steam_dates();
         if self.companion.is_none() {
             let q = self.companion_events.clone(); let c2 = ctx.clone();
@@ -731,20 +726,15 @@ impl HomeState {
             let acct = pd_filter::account::load_account(&self.data.root_dir()).filter(|a| !a.steam_id.is_empty());
             let sg_runner: Option<Arc<dyn pd_filter::companion::SteamGiftsHandler>> = acct.clone().map(|a|
                 Arc::new(pd_filter::steamgifts_runner::Runner::new(self.data.root_dir(), self.data.db_path(), a.steam_id, Arc::new(pd_filter::net::UreqHttp::new()), Duration::from_secs(1), on_event.clone())) as Arc<dyn pd_filter::companion::SteamGiftsHandler>);
-            let sg: Option<Arc<dyn pd_filter::companion::SteamGiftsHandler>> = Some(Arc::new(CompanionHandlers { sg: sg_runner, steam: self.steam_dates.clone() }));
+            let sg = sg_runner;
             match pd_filter::companion::Listener::start_with(self.sources.clone(), on_event, sg) {
                 Ok(l) => { self.companion = Some(l); self.companion_ctx = Some(ctx.clone()); }
                 Err(e) => { pd_filter::net::log(&format!("companion: could not start: {e}")); self.toast("Could not start the listener the browser script talks to (see the log)"); return; }
             }
         }
-        // a sign-in that ends on a page carrying the code starts from the source's own sign-in address (it holds this attempt's secrets)
-        let url = self.companion.as_ref().and_then(|l| base.and_then(|b| l.arm_url_for(service, b)).or_else(|| l.arm_url(service)).or_else(|| {
-            let src = pd_filter::companion::platform_of(service).and_then(|p| self.sources.get(p))?;
-            let begin = src.auth_begin().ok()?;
-            l.arm_url_for(service, &begin.url)
-        }));
+        let url = self.companion.as_ref().and_then(|l| l.arm_url(service));
         match url {
-            Some(u) => { open_url(&u); self.toast("Opened in your browser: the Zest Companion userscript takes it from there (it needs Tampermonkey)"); }
+            Some(u) => { open_url(&u); self.toast("Opened in your browser: the Zest Companion userscript takes it from there (it needs Tampermonkey; see Plugins for the install link)"); }
             None => self.toast("That step is not available"),
         }
     }
@@ -827,16 +817,8 @@ impl HomeState {
             match e {
                 E::Connected { platform, username } => { self.toast(format!("{} connected{}", self.sources.label(&platform), username.map(|u| format!(" as {u}")).unwrap_or_default())); self.dirty = true; }
                 E::Refused { platform } => self.toast(format!("{} did not accept what the browser sent (see the browser tab)", self.sources.label(&platform))),
-                E::Imported { platform, records } => self.pushes.push((platform, records)),
                 E::SteamGifts { message, .. } => { self.toast(message); self.data.refresh_info(); self.dirty = true; }
                 E::PurchaseDates { read, matched, set, .. } => { self.toast(format!("PlayStation purchase dates: {read} read, {matched} games matched, {set} dates set")); self.dirty = true; if set > 0 { self.data.library_changed(); } }
-            }
-        }
-        if self.sync.is_none() && !self.pushes.is_empty() {
-            if let Some(ctx) = self.companion_ctx.clone() {
-                let (platform, records) = self.pushes.remove(0);
-                let label = format!("Syncing {} (read in your browser)", self.sources.label(&platform));
-                self.start_job(&ctx, sync::Kind::PluginPush, None, Some(platform), vec![0], &label, None, records);
             }
         }
     }
@@ -905,7 +887,7 @@ impl HomeState {
             }
         }
         if let Some(rx) = &self.update_rx { if let Ok(r) = rx.try_recv() { self.update_rx = None; if let Ok(Some(u)) = r { self.toast(format!("Zest {} is available. Menu > Check for Updates.", u.version)); } } }
-        if self.populate_pending && self.sync.is_none() { if let Some(ctx) = self.companion_ctx.clone() { self.populate_pending = false; self.start_job(&ctx, sync::Kind::Populate, None, None, vec![0], "Adding new games", None, Vec::new()); } }
+        if self.populate_pending && self.sync.is_none() { if let Some(ctx) = self.companion_ctx.clone() { self.populate_pending = false; self.start_job(&ctx, sync::Kind::Populate, None, None, vec![0], "Adding new games", None); } }
         self.poll_late();
         // the Edit dialog's art change: done on its own, whatever else is running
         if let Some(j) = self.art_job.as_mut() {
@@ -922,8 +904,8 @@ impl HomeState {
             else if n != self.art_seen && self.art_seen_at.map_or(true, |t| t.elapsed() >= Duration::from_secs(2)) { self.art_seen = n; self.art_seen_at = Some(Instant::now()); self.packs_stale = true; self.covers.refresh_changed(); }
         }
         // covers of new games run beside the details being filled in: a queued cover job goes to its own slot at once, the job behind it starts in the main one
-        if self.fill_art.is_none() && self.job_queue.first().map_or(false, |j| j.1 == sync::Kind::Art) { let (ctx, kind, ids, label) = self.job_queue.remove(0); self.art_to_fill = true; self.start_job(&ctx, kind, None, None, ids, &label, None, Vec::new()); }
-        if self.sync.is_none() && !self.job_queue.is_empty() { let (ctx, kind, ids, label) = self.job_queue.remove(0); self.start_job(&ctx, kind, None, None, ids, &label, None, Vec::new()); }
+        if self.fill_art.is_none() && self.job_queue.first().map_or(false, |j| j.1 == sync::Kind::Art) { let (ctx, kind, ids, label) = self.job_queue.remove(0); self.art_to_fill = true; self.start_job(&ctx, kind, None, None, ids, &label, None); }
+        if self.sync.is_none() && !self.job_queue.is_empty() { let (ctx, kind, ids, label) = self.job_queue.remove(0); self.start_job(&ctx, kind, None, None, ids, &label, None); }
         let Some(j) = self.sync.as_mut() else { return };
         let polled = j.poll();
         let (is_art, n_done) = (j.label.starts_with("Art"), j.done + j.failed);
@@ -987,7 +969,7 @@ impl HomeState {
         let label = format!("Installing {name}");
         let Some(ctx) = self.companion_ctx.clone() else { return };
         self.install_target = Some(appid);
-        self.start_job(&ctx, sync::Kind::PluginInstall, None, Some(platform.to_string()), vec![appid], &label, None, Vec::new());
+        self.start_job(&ctx, sync::Kind::PluginInstall, None, Some(platform.to_string()), vec![appid], &label, None);
     }
     /// The builds a worker found for "ask each time": more than one asks the person, one is taken, none starts the install as usual (the install says why when it cannot).
     fn poll_install_options(&mut self) {
@@ -1205,14 +1187,6 @@ impl pd_filter::pop_sync::Groups for PopGroups<'_> {
 /// An open dialog. Only the Blacklist manager has real content so far; the rest say so.
 enum Modal { SendLog(Box<sendlog_dialog::SendLogDialog>), Tutorial(Box<tutorial_dialog::TutorialDialog>), Update(Box<update_dialog::UpdateDialog>), Hltb(Box<hltb_dialog::HltbDialog>), Data(Box<data_dialog::DataDialog>), Playnite(Box<playnite_dialog::PlayniteDialog>), HomeEdit(Box<home_edit_ui::HomeEditor>), AddGame(Box<add_game_dialog::AddGameDialog>), Junk(Box<junk_dialog::JunkDialog>), Emulators(Box<emulators_dialog::EmulatorsDialog>), Community, Settings(Box<settings_dialog::SettingsDialog>), Plugins(Box<plugins_dialog::PluginsDialog>), Placeholder(&'static str), WhatsNew { sections: Vec<pd_filter::whats_new::Section> }, KeyringChoice, Blacklist { entries: Vec<home::BlEntry>, query: String }, Duplicates { items: Vec<(pd_filter::dupes::Suggestion, bool)> } }
 
-/// What the Companion listener calls: the SteamGifts import and the Steam date import share its two route prefixes.
-struct CompanionHandlers { sg: Option<Arc<dyn pd_filter::companion::SteamGiftsHandler>>, steam: Option<Arc<pd_filter::steam_dates::SteamDates>> }
-impl pd_filter::companion::SteamGiftsHandler for CompanionHandlers {
-    fn call(&self, route: &str, body: &serde_json::Value) -> Result<serde_json::Value, String> {
-        if route.starts_with("steam/") { return self.steam.as_ref().ok_or_else(|| "the Steam date import is not available".to_string())?.call(route, body); }
-        self.sg.as_ref().ok_or_else(|| "the SteamGifts import is not available".to_string())?.call(route, body)
-    }
-}
 
 const MENU: [(&str, &str); 12] = [("add_game", "Add Game"), ("edit_home", "Edit Home Page"), ("duplicates", "Duplicates"), ("community", "Community Tools"), ("plugins", "Plugins"), ("data", "Data"), ("emulators", "Emulators"),
     ("blacklist", "Blacklist / Junk Finder"), ("hltb", "HLTB"), ("settings", "Settings"), ("tutorial", "Tutorial"), ("update", "Check for Updates")];
@@ -2647,6 +2621,7 @@ impl Own {
         if let Some(a) = self.menu_action.take() {
             match a {
                 "discord" => open_url("https://discord.gg/ESqXvFWkFe"),
+                "companion" => { open_url(pd_filter::companion::INSTALL_URL); hs.toast("Opened in your browser: with Tampermonkey installed it offers to install the Zest Companion userscript"); }
                 "blaeo_ready" => self.blaeo_open = true,
                 "tutorial" => self.modal = Some(Modal::Tutorial(Box::new(tutorial_dialog::TutorialDialog::new()))),
                 "update" => { let beta = hs.data.state_bool("beta_updates", pd_filter::updater::VERSION.contains('-')); let auto = hs.data.state_bool("check_updates", true); self.modal = Some(Modal::Update(Box::new(update_dialog::UpdateDialog::new(&ui.ctx().clone(), hs.data.root_dir(), beta, auto)))); }
@@ -2849,7 +2824,8 @@ impl Own {
                         if ui_kit::button(ui, "Sync SteamGifts Wins", ui_kit::Kind::Plain, accent, r).clicked() { pick = Some("sg"); }
                         if ui_kit::button(ui, "Full refresh (re-check every win, drop stale ones)", ui_kit::Kind::Plain, accent, r).clicked() { pick = Some("sg_full"); }
                         if ui_kit::button(ui, "Wins not in your library...", ui_kit::Kind::Plain, accent, r).clicked() { pick = Some("sg_unmatched"); }
-                        ui.label(ui_kit::muted("Reads your won giveaways in your own browser (needs the Zest Companion userscript).", 0.78 * r));
+                        ui.label(ui_kit::muted("Reads your won giveaways in your own browser, because SteamGifts blocks programs. It needs the Zest Companion userscript in Tampermonkey.", 0.78 * r));
+                        if ui_kit::button(ui, "Install the Companion userscript", ui_kit::Kind::Plain, accent, r).clicked() { pick = Some("companion_install"); }
                         ui.add_space(0.6 * r);
                         ui.label(egui::RichText::new("PLAY OR PAY").size(0.78 * r).color(ui_kit::MUTED()));
                         if ui_kit::button(ui, if busy { "Syncing..." } else { "Sync Play or Pay Picks" }, ui_kit::Kind::Plain, accent, r).clicked() && !busy { pick = Some("pop"); }
@@ -2871,6 +2847,7 @@ impl Own {
                     Some("santa") => { self.santa_open = true; None }
                     Some("blaeo") => { self.blaeo_open = true; None }
                     Some("sg_unmatched") => { self.sg_unmatched_open = true; None }
+                    Some("companion_install") => { open_url(pd_filter::companion::INSTALL_URL); hs.toast("Opened in your browser: with Tampermonkey installed it offers to install the script"); Some(Modal::Community) }
                     Some(k @ ("sg" | "sg_full")) => { hs.companion_open(&ctx, if k == "sg" { "steamgifts" } else { "steamgifts-full" }); Some(Modal::Community) }
                     Some("pop") => { self.pop_start(hs, &ctx); Some(Modal::Community) }
                     Some(k @ ("pop_yes" | "pop_no")) => { if let Some((plan, _)) = self.pop_plan.take() { self.pop_apply(hs, plan, Some(k == "pop_yes")); } Some(Modal::Community) }
@@ -5237,7 +5214,7 @@ fn build_own(root: &PathBuf, args: &[String], first_note: Option<String>, ctx: e
     ctx.all_styles_mut(|s| s.interaction.select_word_on_press = true);
     ctx.all_styles_mut(|s| s.spacing.scroll.fade.strength = 0.0);   // egui's gradient at the edge of every scroll area faded the buttons that sat there
     let loaded = load_sources(&root);
-    let home = match home::load(&root) { Ok(d) => { let rules = card_actions::rules_from_state(d.state_json()); let state_for_pick = d.state_json().clone(); Some(HomeState { art_staged_for: None, lib_gen_seen: sync::library_gen(), lib_gen_at: None, art_seen: 0, art_seen_at: None, late_notices: Default::default(), dates_run: None, installed_scanned: false, custom_checked: None, playtime_rx: None, playtime_started: false, startup_at: None, startup_checked: false, startup_ready: Default::default(), live_rx: None, live_at: None, live_arrived: false, companion_gen: 0, companion: None, steam_dates: None, edit_art: None, companion_events: Default::default(), companion_ctx: None, pushes: Vec::new(), steam_watch: None, install_watch: None, steam_pending: None, data: d, covers: home::Covers::new(root.clone()), size: (0, 0), changed_at: Instant::now(), engine: card_actions::Engine::new(rules), pointer: None, press: None, hover: Default::default(), anim_at: Instant::now(), shelf_pos: Default::default(), slide_at: Instant::now(), home_scroll: 0.0, home_scroll_target: 0.0, scroll_at: Instant::now(), notices: Vec::new(), sync_status: pd_filter::status::load(&root), menu: None, menu_rect: None, confirm: None, update_rx: None, update_started: args.iter().any(|a| a == "--screenshot" || a == "--auto" || a.starts_with("--selftest") || a == "--update-packs" || a == "--build-tier" || a == "--build-pack"), populate_pending: false, job_queue: Vec::new(), install_target: None, install_opts_slot: Default::default(), install_pick: None, exe_pick: None, sub_rect: None, open_edit: None, tip_pin: None, shelf_off: Default::default(), wheel_acc: 0.0, entering: true, hold_until: None, accent: egui::Color32::from_rgb(0x66, 0xc0, 0xf4), dirty: false, pick: pick_page::PickState::new(&state_for_pick), sync: None, art_job: None, fill_art: None, art_to_fill: false, opt_meta: true, opt_cheevo: true, opt_art_kinds: vec![pd_filter::artclient::Kind::Vertical, pd_filter::artclient::Kind::Horizontal, pd_filter::artclient::Kind::Icon], opt_art_source: "auto", sources: loaded.0, plugins: loaded.1, plugin_errors: loaded.2, packs_stale: false, art_focus: pd_filter::artfocus::ArtFocus::new(), focus_sig: (usize::MAX, 0, 0, 0), dates_pending: Vec::new(), base: None }) }, Err(e) => { eprintln!("Home page not available: {e}"); None } };
+    let home = match home::load(&root) { Ok(d) => { let rules = card_actions::rules_from_state(d.state_json()); let state_for_pick = d.state_json().clone(); Some(HomeState { art_staged_for: None, lib_gen_seen: sync::library_gen(), lib_gen_at: None, art_seen: 0, art_seen_at: None, late_notices: Default::default(), dates_run: None, installed_scanned: false, custom_checked: None, playtime_rx: None, playtime_started: false, startup_at: None, startup_checked: false, startup_ready: Default::default(), live_rx: None, live_at: None, live_arrived: false, companion_gen: 0, companion: None, steam_dates: None, edit_art: None, companion_events: Default::default(), companion_ctx: None, steam_watch: None, install_watch: None, steam_pending: None, data: d, covers: home::Covers::new(root.clone()), size: (0, 0), changed_at: Instant::now(), engine: card_actions::Engine::new(rules), pointer: None, press: None, hover: Default::default(), anim_at: Instant::now(), shelf_pos: Default::default(), slide_at: Instant::now(), home_scroll: 0.0, home_scroll_target: 0.0, scroll_at: Instant::now(), notices: Vec::new(), sync_status: pd_filter::status::load(&root), menu: None, menu_rect: None, confirm: None, update_rx: None, update_started: args.iter().any(|a| a == "--screenshot" || a == "--auto" || a.starts_with("--selftest") || a == "--update-packs" || a == "--build-tier" || a == "--build-pack"), populate_pending: false, job_queue: Vec::new(), install_target: None, install_opts_slot: Default::default(), install_pick: None, exe_pick: None, sub_rect: None, open_edit: None, tip_pin: None, shelf_off: Default::default(), wheel_acc: 0.0, entering: true, hold_until: None, accent: egui::Color32::from_rgb(0x66, 0xc0, 0xf4), dirty: false, pick: pick_page::PickState::new(&state_for_pick), sync: None, art_job: None, fill_art: None, art_to_fill: false, opt_meta: true, opt_cheevo: true, opt_art_kinds: vec![pd_filter::artclient::Kind::Vertical, pd_filter::artclient::Kind::Horizontal, pd_filter::artclient::Kind::Icon], opt_art_source: "auto", sources: loaded.0, plugins: loaded.1, plugin_errors: loaded.2, packs_stale: false, art_focus: pd_filter::artfocus::ArtFocus::new(), focus_sig: (usize::MAX, 0, 0, 0), dates_pending: Vec::new(), base: None }) }, Err(e) => { eprintln!("Home page not available: {e}"); None } };
     let mut home = home;
     if let Some(h) = home.as_mut() {
         // what Steam says is installed right now, and a watcher so it stays true while the app is open
