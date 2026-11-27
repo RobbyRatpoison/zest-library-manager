@@ -18,7 +18,7 @@ The design history, decisions and per-feature notes live in PlayDate's `NATIVE_U
 | `zest-login/` | The sign-in window helper (wry + WebKitGTK 4.1 on Linux); Zest starts it from next to its own program file (`pd-filter/src/weblogin.rs`) |
 | `plugin-sdk/` | JSON-RPC protocol and Python SDK for third-party plugins (`PROTOCOL.md`, toy example) |
 | `vendor/egui`, `patches/` | Patched egui (see the patch files) |
-| `assets/` | Embedded at compile time: favicon (`.png`, `.icns`), platform badge PNGs, the two PAGYWOSG JSON files |
+| `assets/` | Embedded at compile time: favicon (`.png`, `.icns`), platform badge PNGs, the default page background, the two PAGYWOSG JSON files |
 | `userscript/` | Zest Companion Tampermonkey script |
 | `package/` | `build-release.sh` (Linux tarball), `make-macos-app.sh` (universal ad-hoc-signed Zest.app), `zest.iss` (Windows Inno Setup installer), `flatpak/` (app id `io.github.robbyratpoison.Zest`, GNOME 50 runtime) |
 | `install.sh` | User installer for Linux (`~/.local/share/zest/app`) and macOS (`~/Applications/Zest.app`); checks the release's `SHA256SUMS`; `ZEST_UNINSTALL=1` removes the program only |

@@ -86,6 +86,8 @@ impl Appearance {
     }
     fn set(&mut self, key: &str, v: String) { if let Some(e) = self.vars.iter_mut().find(|(k, _)| k == key) { e.1 = v; } }
     fn get(&self, key: &str) -> &str { self.vars.iter().find(|(k, _)| k == key).map_or("", |(_, v)| v.as_str()) }
+    /// A picture was chosen or reset while CLEAR had the opacity at 0: bring it back to full, or the new picture would not show. Saved with the theme.
+    fn unclear(&mut self) { if self.get("--bg-image-opacity").parse::<f64>().map_or(false, |o| o <= 0.0) { self.set("--bg-image-opacity", "1".into()); let _ = theme::save_active(&self.root, &self.vars); } }
     fn pick(&mut self, what: &'static str, save_name: Option<String>) {
         let (tx, rx) = channel(); self.rx = Some(rx);
         std::thread::spawn(move || {
@@ -210,7 +212,7 @@ impl Appearance {
             self.rx = None;
             if let Some(p) = p {
                 let res: Result<AppearanceOut, String> = match what {
-                    "bg" => theme::set_background(&self.root, &p).map(|_| AppearanceOut::Background),
+                    "bg" => theme::set_background(&self.root, &p).map(|_| { self.unclear(); AppearanceOut::Background }),
                     "import" => std::fs::read_to_string(&p).map_err(|e| e.to_string()).and_then(|t| serde_json::from_str::<serde_json::Value>(&t).map_err(|_| "That is not a theme file.".to_string())).and_then(|v| {
                         let src = v.get("playdate_theme").or_else(|| v.get("theme")).unwrap_or(&v);   // PlayDate's export wraps the variables in "playdate_theme"
                         let mut n = 0;
@@ -292,7 +294,12 @@ impl Appearance {
         ui.horizontal(|ui| {
             if ui_kit::button(ui, "CHOOSE PICTURE...", Kind::Plain, accent, r).clicked() { self.pick("bg", None); }
             if ui_kit::button(ui, "RESET TO DEFAULT", Kind::Plain, accent, r).clicked() {
-                match theme::reset_background(&self.root) { Ok(()) => { out = AppearanceOut::Background; self.status = Some(("Background reset.".into(), true)); } Err(e) => self.status = Some((e, false)) }
+                match theme::reset_background(&self.root) { Ok(()) => { self.unclear(); out = AppearanceOut::Background; self.status = Some(("Background reset.".into(), true)); } Err(e) => self.status = Some((e, false)) }
+            }
+            // just the page color: the picture fades out completely (opacity 0, the same setting PlayDate uses, so a backup keeps it in either program)
+            if ui_kit::button(ui, "CLEAR", Kind::Plain, accent, r).clicked() {
+                self.set("--bg-image-opacity", "0".into());
+                match theme::save_active(&self.root, &self.vars) { Ok(()) => { out = AppearanceOut::Theme; self.status = Some(("Background cleared: only the page color shows. Choose a picture or raise the opacity to bring one back.".into(), true)); } Err(e) => self.status = Some((e, false)) }
             }
         });
         let mut o = self.get("--bg-image-opacity").parse::<f64>().unwrap_or(1.0).clamp(0.0, 1.0);
