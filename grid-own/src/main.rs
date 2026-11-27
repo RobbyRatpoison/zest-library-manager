@@ -753,7 +753,8 @@ impl HomeState {
         self.poll_install_options();
         let late: Vec<String> = self.late_notices.lock().map(|mut v| std::mem::take(&mut *v)).unwrap_or_default();
         for m in late { self.toast(m); }
-        if let Some(m) = self.steam_dates.as_ref().and_then(|sd| sd.tick()) { self.toast(m); self.dirty = true; }
+        // new dates change what Home's date-sorted shelves show, not just the Library's order: the shelves are asked again too
+        if let Some(m) = self.steam_dates.as_ref().and_then(|sd| sd.tick()) { self.toast(m); self.dirty = true; self.data.library_changed(); }
         if !self.dates_pending.is_empty() { self.start_pending_dates(); }
         // once, early: playtime and achievements from Steam's own files, off the UI thread (PlayDate's `sync_recent_playtime`)
         if !self.playtime_started {
@@ -828,7 +829,7 @@ impl HomeState {
                 E::Refused { platform } => self.toast(format!("{} did not accept what the browser sent (see the browser tab)", self.sources.label(&platform))),
                 E::Imported { platform, records } => self.pushes.push((platform, records)),
                 E::SteamGifts { message, .. } => { self.toast(message); self.data.refresh_info(); self.dirty = true; }
-                E::PurchaseDates { read, matched, set, .. } => { self.toast(format!("PlayStation purchase dates: {read} read, {matched} games matched, {set} dates set")); self.dirty = true; }
+                E::PurchaseDates { read, matched, set, .. } => { self.toast(format!("PlayStation purchase dates: {read} read, {matched} games matched, {set} dates set")); self.dirty = true; if set > 0 { self.data.library_changed(); } }
             }
         }
         if self.sync.is_none() && !self.pushes.is_empty() {

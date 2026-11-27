@@ -265,7 +265,7 @@ impl Background {
     pub fn load(root: &Path, t: &Theme) -> Background {
         let dir = root.join("static/img/backgrounds");
         // the user's own picture, else Zest's default built into the program (PlayDate's old default is not used: Zest has its own; drawn with PlayDate's
-        // tools/gen_background.py, seed 458590, navy palette, density 0.99, 2560x1440, picked with tools/bg_picker.py)
+        // tools/gen_background.py, seed 458590, navy palette, density 0.99, 2560x1440, picked with ~/Projects/tools/BackgroundPicker)
         let src = load_rgb(&dir.join("background.jpg"))
             .or_else(|| image::load_from_memory(include_bytes!("../../assets/default_background.jpg")).ok().map(|i| i.to_rgb8())).map(|i| {
             // a decorative, faded image: a 4K source only costs RAM, so keep at most 2560 px on the long side
