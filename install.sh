@@ -76,8 +76,16 @@ else GOT="$(shasum -a 256 "$TMP/$ASSET" | awk '{print $1}')"; fi
 mkdir -p "$TMP/x"
 tar -xzf "$TMP/$ASSET" -C "$TMP/x"
 
+# only this install's own program counts (a dev build or a Flatpak named zest is another copy), and only when there was one to replace
 running() {
-  if [ "$OS" = Darwin ]; then pgrep -x Zest >/dev/null 2>&1; else pgrep -x zest >/dev/null 2>&1; fi
+  if [ "$OS" = Darwin ]; then [ -d "$MAC_APP" ] && pgrep -f "^$MAC_APP/Contents/MacOS/Zest" >/dev/null 2>&1
+  else
+    [ -e "$APP_DIR/zest" ] || return 1
+    for p in $(pgrep -x zest 2>/dev/null); do
+      [ "$(readlink "/proc/$p/exe" 2>/dev/null)" = "$APP_DIR/zest" ] && return 0
+    done
+    return 1
+  fi
 }
 if running; then
   say "Zest is running: it keeps the old version until you close and reopen it."
