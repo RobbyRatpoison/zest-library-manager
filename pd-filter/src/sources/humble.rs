@@ -792,15 +792,17 @@ mod install_tests {
         assert!(dir.join("game/run").is_file() && !dir.join("game_win.zip").exists());
         assert!(texts.first().unwrap().contains("asking Humble") && texts.iter().any(|t| t.starts_with("Unpacking")), "{texts:?}");
         assert_eq!(site.asked.lock().unwrap().iter().filter(|u| u.contains("game_win.zip")).count(), 1);
-        // two programs tie for the best (the sample has `run` and `link`): Zest asks which; the answer is run in its folder
-        std::fs::write(dir.join("game/run"), [0x7fu8, b'E', b'L', b'F', 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).unwrap();
-        std::fs::write(dir.join("game/link"), [0x7fu8, b'E', b'L', b'F', 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).unwrap();
-        let g = GameRef { installed: true, install_path: Some(dir.to_string_lossy().into()), ..gref() };
-        let l = s.launch(&g).unwrap();
-        assert!(!l.record);
-        match &l.action { Action::PickExecutable { candidates, dir: d } => { assert_eq!(candidates, &vec!["game/link".to_string(), "game/run".to_string()]); assert_eq!(d, &dir.to_string_lossy().to_string()); } a => panic!("{a:?}") }
-        let l = s.launch(&GameRef { executable: Some("game/run".into()), ..g.clone() }).unwrap();
-        assert!(l.record && matches!(l.action, Action::Spawn { ref program, ref dir, .. } if program.ends_with("game/run") && dir.as_deref().map_or(false, |d| d.ends_with("My Game/game"))));
+        // two programs tie for the best (the sample has `run` and `link`): Zest asks which; the answer is run in its folder (Linux and macOS programs: Windows runs .exe files only)
+        if !cfg!(windows) {
+            std::fs::write(dir.join("game/run"), [0x7fu8, b'E', b'L', b'F', 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).unwrap();
+            std::fs::write(dir.join("game/link"), [0x7fu8, b'E', b'L', b'F', 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).unwrap();
+            let g = GameRef { installed: true, install_path: Some(dir.to_string_lossy().into()), ..gref() };
+            let l = s.launch(&g).unwrap();
+            assert!(!l.record);
+            match &l.action { Action::PickExecutable { candidates, dir: d } => { assert_eq!(candidates, &vec!["game/link".to_string(), "game/run".to_string()]); assert_eq!(d, &dir.to_string_lossy().to_string()); } a => panic!("{a:?}") }
+            let l = s.launch(&GameRef { executable: Some("game/run".into()), ..g.clone() }).unwrap();
+            assert!(l.record && matches!(l.action, Action::Spawn { ref program, ref dir, .. } if program.ends_with("game/run") && dir.as_deref().map_or(false, |d| d.ends_with("My Game/game"))));
+        }
         // the install scan sees the folder, uninstall removes it (it is inside the games folder)
         std::fs::write(d.join("games.db"), b"").ok();
         let c = rusqlite::Connection::open(d.join("games.db")).unwrap();

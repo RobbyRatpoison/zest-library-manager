@@ -372,6 +372,8 @@ mod tests {
         println!("entries {} named-and-not-cross-linked {}; first: {:?}", e.len(), named.len(), named.iter().take(6).map(|x| x.name.as_str()).collect::<Vec<_>>());
         assert!(!e.is_empty());
     }
+    // the fixture cache is encrypted with the Wine prefix's key; on Windows the real DPAPI key of the user is used (windpapi)
+    #[cfg(not(windows))]
     #[test] fn a_current_clients_encrypted_cache_gives_the_same_games_as_the_plain_one() {
         use ring::aead::{Aad, LessSafeKey, Nonce, UnboundKey, AES_256_GCM};
         fn varint(mut v: u64) -> Vec<u8> { let mut o = vec![]; loop { let b = (v & 0x7f) as u8; v >>= 7; if v == 0 { o.push(b); return o; } o.push(b | 0x80); } }
@@ -406,6 +408,8 @@ mod tests {
                 thumb_image: w["thumb_image"].as_str().unwrap().into(), exe_relative: opt(&w["exe_relative"]), registry_key: opt(&w["registry_key"]), third_party_platform: opt(&w["third_party_platform"]) }, "{}", w["name"]);
         }
     }
+    // the registry here is the fixture prefix's user.reg; on Windows it is the real registry
+    #[cfg(not(windows))]
     #[test] fn slugs_placeholders_and_the_registry_agree_with_the_python() {
         let g = golden();
         for (n, s) in g["slugs"].as_object().unwrap() { assert_eq!(slugify(n), s.as_str().unwrap(), "{n:?}"); }

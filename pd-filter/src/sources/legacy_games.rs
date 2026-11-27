@@ -229,7 +229,7 @@ mod tests {
         let recs = records(&state, &reg, &fixture());
         assert_eq!(recs.iter().map(|r| (r.platform_id.as_str(), r.name.as_str())).collect::<Vec<_>>(), vec![("101", "Hidden Foo"), ("102", "Dir Only Product"), ("999", "Legacy Games 999")]);
         assert_eq!((recs[0].slug.as_deref(), recs[0].appname.as_deref(), recs[0].installed), (Some("hidden-foo"), Some("uuid-foo"), Some(true)));
-        assert_eq!(recs[0].install_path.as_deref(), Some(&*fixture().join("drive_c/Program Files/Legacy Games/Hidden Foo").to_string_lossy()));
+        assert_eq!(recs[0].install_path.as_deref().map(|p| p.replace('\\', "/")), Some(fixture().join("drive_c/Program Files/Legacy Games/Hidden Foo").to_string_lossy().replace('\\', "/")));
         assert_eq!((recs[1].installed, recs[1].appname.as_deref()), (Some(false), None), "a product with no game entry has no installer uuid");
         assert_eq!(recs[2].installed, Some(false));
         let cat = catalog(&state);
