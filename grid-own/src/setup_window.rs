@@ -32,6 +32,12 @@ pub struct App {
     playdate: Vec<(PathBuf, Vec<(String, i64)>)>,
     /// A running PlayDate import: its answer, and (files done, files in all).
     importing: Option<mpsc::Receiver<Result<String, String>>>, ip: (Arc<AtomicBool>, Arc<AtomicUsize>, Arc<AtomicUsize>),
+    /// Presses from the gamepad thread (the same one the main window keeps after the hand-over), so the window works with a controller alone (Steam Deck Game Mode).
+    pub pad: Option<crate::gamepad::Queue>,
+    /// The controller has been used: the focused control gets the same ring the main window draws (buttons draw none of their own).
+    pad_used: bool,
+    /// The right stick's vertical position (thousandths, up positive) from the gamepad thread, and when it was last read: it scrolls the window.
+    pub pad_scroll: Option<crate::gamepad::Scroll>, stick_at: Instant,
 }
 
 /// Runs the window; true when a library exists afterwards.
@@ -45,7 +51,7 @@ pub fn run(root: PathBuf) -> bool {
 impl App {
     pub fn new(root: PathBuf, ctx: egui::Context) -> App {
         crate::theme::install_fonts(&ctx, false);
-        App { root, window: None, surface: None, ctx, egui_winit: None, renderer: EguiSoftwareRender::new(ColorFieldOrder::Bgra), form: { let mut f = crate::account_form::AccountForm::default(); f.detect(true); f }, status: None, restoring: None, done: false, rp: Default::default(), shot: std::env::var_os("ZEST_SETUP_SHOT").map(|p| (PathBuf::from(p), 0)), finished: false, next_wake: None, announced: false, playdate: pd_filter::import_playdate::find(&pd_filter::installdir::home()).into_iter().map(|d| { let s = pd_filter::import_playdate::summary(&d); (d, s) }).collect(), importing: None, ip: Default::default() }
+        App { root, window: None, surface: None, ctx, egui_winit: None, renderer: EguiSoftwareRender::new(ColorFieldOrder::Bgra), form: { let mut f = crate::account_form::AccountForm::default(); f.detect(true); f }, status: None, restoring: None, done: false, rp: Default::default(), shot: std::env::var_os("ZEST_SETUP_SHOT").map(|p| (PathBuf::from(p), 0)), finished: false, next_wake: None, announced: false, playdate: pd_filter::import_playdate::find(&pd_filter::installdir::home()).into_iter().map(|d| { let s = pd_filter::import_playdate::summary(&d); (d, s) }).collect(), importing: None, ip: Default::default(), pad: None, pad_used: false, pad_scroll: None, stick_at: Instant::now() }
     }
     /// The window, its drawing surface and egui's window state, for the main app to carry on with once `finished`.
     pub fn take_handles(&mut self) -> Option<(Rc<Window>, softbuffer::Surface<winit::event_loop::OwnedDisplayHandle, Rc<Window>>, egui_winit::State)> {
@@ -109,7 +115,16 @@ impl App {
                 Err(_) => {}
             }
         }
-        let raw = st.take_egui_input(&window);
+        let mut raw = st.take_egui_input(&window);
+        // the controller walks the controls in order (down/right = next, up/left = previous) and A presses the focused one
+        if let Some(q) = &self.pad {
+            use crate::gamepad::Nav;
+            for (n, pressed) in q.lock().unwrap().drain(..) {
+                self.pad_used = true;
+                let (key, shift) = match n { Nav::Down | Nav::Right => (egui::Key::Tab, false), Nav::Up | Nav::Left => (egui::Key::Tab, true), Nav::Confirm => (egui::Key::Enter, false), _ => continue };
+                raw.events.push(egui::Event::Key { key, physical_key: Some(key), pressed, repeat: false, modifiers: egui::Modifiers { shift, ..Default::default() } });
+            }
+        }
         let accent = ui_kit::accent();
         let mut create = false; let mut restore = false; let mut open: Option<&str> = None;
         let busy = self.restoring.is_some() || self.importing.is_some();
@@ -128,10 +143,16 @@ impl App {
         } else { self.status.clone() };
         let status = match import_status { Some(m) if !opening => Some((m, true)), _ => status };
         let mut closed = false;
+        let pad_used = self.pad_used;
+        // the right stick scrolls, as in the main window's dialogs (not while typing in a text box); about 1,200 px a second at full tilt
+        let now = Instant::now(); let dt = now.duration_since(self.stick_at).as_secs_f32().min(0.1); self.stick_at = now;
+        let up = self.pad_scroll.as_ref().map_or(0.0, |s| s.load(Ordering::Relaxed) as f32 / 1000.0);
+        let stick_dy = if up.abs() >= crate::gamepad::dead_zone() && !self.ctx.text_edit_focused() { up * 20.0 * 60.0 * dt } else { 0.0 };
         let out = self.ctx.run_ui(raw, |ui| {
             egui::CentralPanel::default().frame(egui::Frame::new().fill(egui::Color32::from_rgb(0x0d, 0x11, 0x17))).show_inside(ui, |_| {});
             let res = ui_kit::modal(ui.ctx(), "setup", "Welcome to Zest", 36.0, |ui, r| {
                 ui_kit::style_fields(ui);
+                if stick_dy != 0.0 { ui.scroll_with_delta(egui::vec2(0.0, stick_dy)); ui.ctx().request_repaint(); }
                 // coming from PlayDate: its library is copied (PlayDate keeps its own, so it still works)
                 ui.label(egui::RichText::new("Coming from PlayDate?").strong().color(crate::ui_kit::heading()).size(r));
                 ui.label(ui_kit::muted(if found.is_empty() { "Zest did not find a PlayDate library on this computer. If you have one, choose its folder (the one with games_....db in it)." } else { "Zest can copy your PlayDate library: games, statuses, settings, sign-ins and covers. PlayDate keeps its own copy and still works." }, 0.82 * r));
@@ -161,6 +182,15 @@ impl App {
                 if let Some((m, ok)) = new_status.as_ref().or(status.as_ref()) { ui.add_space(0.3 * r); ui.label(egui::RichText::new(m).size(0.85 * r).color(if *ok { egui::Color32::from_rgb(0x8b, 0xb4, 0x2c) } else { crate::ui_kit::text_danger() })); }
             });
             closed = res.closed && !(busy && picked);
+            // the focus ring, as the main window draws it (pad_focus_ring in main.rs)
+            if pad_used {
+                if let Some(resp) = ui.ctx().memory(|m| m.focused()).and_then(|id| ui.ctx().read_response(id)) {
+                    let p = ui.ctx().layer_painter(egui::LayerId::new(egui::Order::Tooltip, egui::Id::new("pad_focus_ring")));
+                    let rr = resp.rect.expand(2.0);
+                    p.rect_stroke(rr.expand(1.0), 4, egui::Stroke::new(3.0_f32, egui::Color32::BLACK), egui::StrokeKind::Outside);
+                    p.rect_stroke(rr, 4, egui::Stroke::new(2.0_f32, ui_kit::focus_ring()), egui::StrokeKind::Outside);
+                }
+            }
             if busy { ui.ctx().request_repaint_after(Duration::from_millis(100)); }
         });
         self.form = form; if new_status.is_some() { self.status = new_status; }
@@ -196,6 +226,11 @@ impl App {
     }
 }
 
+impl App {
+    /// The gamepad thread has something: draw, which reads it.
+    pub fn wake(&self) { if let Some(w) = &self.window { w.request_redraw(); } }
+}
+
 impl ApplicationHandler<()> for App {
     fn resumed(&mut self, el: &ActiveEventLoop) {
         if self.window.is_some() { return; }
@@ -207,6 +242,8 @@ impl ApplicationHandler<()> for App {
         #[cfg(target_os = "linux")]
         { use winit::platform::wayland::WindowAttributesExtWayland; let id = std::env::var("FLATPAK_ID").unwrap_or_else(|_| "zest-dev".into()); attrs = attrs.with_name(id.clone(), id); }
         let window = Rc::new(el.create_window(attrs).expect("window"));
+        // Steam Deck Game Mode (gamescope): full screen, as the main window opens there (it keeps this window after the questions)
+        if std::env::var_os("GAMESCOPE_WAYLAND_DISPLAY").is_some() || std::env::var("XDG_SESSION_DESKTOP").map_or(false, |d| d == "gamescope") { window.set_fullscreen(Some(winit::window::Fullscreen::Borderless(None))); }
         let context = softbuffer::Context::new(el.owned_display_handle()).expect("softbuffer context");
         self.surface = Some(softbuffer::Surface::new(&context, window.clone()).expect("surface"));
         self.egui_winit = Some(egui_winit::State::new(self.ctx.clone(), egui::ViewportId::ROOT, &window, Some(window.scale_factor() as f32), None, None));

@@ -76,7 +76,8 @@ fn jars_value(jars: &[Jar], have: &[Vec<(String, String)>], grace_over: bool) ->
     Some(serde_json::Value::Object(out).to_string())
 }
 
-enum Ev { Page { url: String, text: String }, Probe { url: String, text: String }, Url(String) }
+enum Ev { Page { url: String, text: String }, Probe { url: String, text: String }, Url(String), /// The page's Cancel button or the controller's B (Game Mode has no title bar to close with).
+    Cancel }
 
 fn out(ok: bool, key: &str, v: &str) -> ! {
     trace(&format!("finished: ok={ok} {key} ({} characters{})", v.chars().count(), if ok { String::new() } else { format!(": {v}") }));   // a failure's reason is a message; a value only has its length
@@ -135,9 +136,16 @@ fn main() {
 
     let event_loop = EventLoopBuilder::<Ev>::with_user_event().build();
     let proxy = event_loop.create_proxy();
-    // tall enough for a store's whole sign-in form (Steam's runs long): most of the screen's height, 740 to 1000 points, and still resizable
-    let height = event_loop.primary_monitor().map(|m| m.size().to_logical::<f64>(m.scale_factor()).height * 0.85).unwrap_or(900.0).clamp(740.0, 1000.0);
-    let window = WindowBuilder::new().with_title(&spec.title).with_inner_size(tao::dpi::LogicalSize::new(660.0, height)).build(&event_loop).unwrap_or_else(|e| out(false, "error", &format!("no window: {e}")));
+    // tall enough for a store's whole sign-in form (Steam's runs long): most of the screen's height, 740 to 1000 points, and still resizable; never taller than the screen
+    // (a Steam Deck's 800 px in Game Mode cut the bottom of Steam's QR code off)
+    let screen_h = event_loop.primary_monitor().map(|m| m.size().to_logical::<f64>(m.scale_factor()).height);
+    let height = screen_h.map(|h| (h * 0.85).clamp(740.0_f64.min(h * 0.95), 1000.0)).unwrap_or(900.0);
+    // gamescope (Steam Deck Game Mode) shows one window filling the screen anyway: start maximized so the page is laid out for the whole screen
+    let gamescope = std::env::var_os("GAMESCOPE_WAYLAND_DISPLAY").is_some() || std::env::var("XDG_SESSION_DESKTOP").map_or(false, |d| d == "gamescope");
+    // there the window is the whole screen: asking to be maximized did nothing under gamescope, and at 660 wide Steam's page stacks its QR code under the form, below the
+    // bottom of an 800 px screen (at full width it sits beside the form)
+    let size = match (gamescope, event_loop.primary_monitor()) { (true, Some(m)) => m.size().to_logical::<f64>(m.scale_factor()), _ => tao::dpi::LogicalSize::new(660.0, height) };
+    let window = WindowBuilder::new().with_title(&spec.title).with_inner_size(size).with_maximized(gamescope).build(&event_loop).unwrap_or_else(|e| out(false, "error", &format!("no window: {e}")));
 
     // every page reports its address and text once loaded (a JSON page's text is what an Epic or PlayStation sign-in ends on)
     let report = r#"
@@ -158,16 +166,33 @@ fn main() {
             function probe() { if (location.host !== 'account.battle.net') return; try { fetch('/api/', { credentials: 'include' }).then(function (r) { return r.text(); }).then(function (t) { window.ipc.postMessage(JSON.stringify({ u: location.href, probe: t })); }).catch(function () {}); } catch (e) {} }
             window.addEventListener('load', function () { send(); setTimeout(send, 1200); probe(); setTimeout(probe, 1500); setTimeout(probe, 4000); });
         })();"#;
+    // Game Mode (gamescope) draws no title bar, so the window could not be closed without signing in: a Cancel button floats over every page there, and the
+    // controller's B does the same (the page reads it through the browser's gamepad API)
+    let cancel = if gamescope { r#"
+        (function () {
+            function quit() { try { window.ipc.postMessage(JSON.stringify({ cancel: true })); } catch (e) {} }
+            function add() {
+                if (!document.body || document.getElementById('__zest_cancel')) return;
+                var b = document.createElement('button'); b.id = '__zest_cancel'; b.textContent = '✕ CANCEL';
+                b.setAttribute('style', 'position:fixed;top:10px;right:10px;z-index:2147483647;padding:10px 16px;font:bold 15px sans-serif;letter-spacing:1px;color:#fff;background:#a32a2a;border:0;border-radius:6px;cursor:pointer');
+                b.addEventListener('click', quit); document.body.appendChild(b);
+            }
+            document.addEventListener('DOMContentLoaded', add); window.addEventListener('load', add); setInterval(add, 1000);
+            var held = false;
+            setInterval(function () { try { var ps = navigator.getGamepads ? navigator.getGamepads() : []; var b = false; for (var i = 0; i < ps.length; i++) { if (ps[i] && ps[i].buttons[1] && ps[i].buttons[1].pressed) b = true; }
+                if (b && !held) quit(); held = b; } catch (e) {} }, 100);
+        })();"# } else { "" };
     let (p1, p2, done_nav) = (proxy.clone(), proxy.clone(), spec.done.clone());
     let mut builder = WebViewBuilder::new()
         .with_url(&spec.url)
         .with_incognito(true)
-        .with_initialization_script(&format!("{}{report}", match &spec.done { Done::Body { click: Some(t), url_contains, .. } => format!("window.__zc = {}; window.__zu = {};\n", serde_json::json!(t), serde_json::json!(url_contains)), Done::Cookies { click: Some(t), click_on: Some(u), .. } => format!("window.__zc = {}; window.__zu = {};\n", serde_json::json!(t), serde_json::json!(u)), _ => String::new() }))
+        .with_initialization_script(&format!("{}{report}{cancel}", match &spec.done { Done::Body { click: Some(t), url_contains, .. } => format!("window.__zc = {}; window.__zu = {};\n", serde_json::json!(t), serde_json::json!(url_contains)), Done::Cookies { click: Some(t), click_on: Some(u), .. } => format!("window.__zc = {}; window.__zu = {};\n", serde_json::json!(t), serde_json::json!(u)), _ => String::new() }))
         .with_navigation_handler(move |url| { if let Done::Url { .. } = &done_nav { if page_done(&done_nav, &url, "").is_some() { let _ = p1.send_event(Ev::Url(url.clone())); } } true })
         .with_ipc_handler(move |req| {
             let body = req.body();
             if let Ok(v) = serde_json::from_str::<serde_json::Value>(body) {
                 if let Some(d) = v["dbg"].as_str() { trace(&format!("  page note: {d}")); return; }
+                if v["cancel"].as_bool() == Some(true) { let _ = p2.send_event(Ev::Cancel); return; }
                 if let Some(t) = v["probe"].as_str() { let _ = p2.send_event(Ev::Probe { url: v["u"].as_str().unwrap_or("").to_string(), text: t.to_string() }); return; }
                 let _ = p2.send_event(Ev::Page { url: v["u"].as_str().unwrap_or("").to_string(), text: v["t"].as_str().unwrap_or("").to_string() }); }
         });
@@ -249,7 +274,7 @@ fn main() {
             }
             // a sign-in that finishes without a page load (a script setting a cookie) is caught by looking at the jar every so often
             Event::NewEvents(StartCause::ResumeTimeReached { .. }) => { if let Some(v) = check_cookies(&current_url, authed) { out(true, "value", &v); } }
-            Event::WindowEvent { event: WindowEvent::CloseRequested, .. } => out(false, "error", "closed"),
+            Event::WindowEvent { event: WindowEvent::CloseRequested, .. } | Event::UserEvent(Ev::Cancel) => out(false, "error", "closed"),
             _ => {}
         }
     });

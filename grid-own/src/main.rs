@@ -1202,7 +1202,7 @@ impl pd_filter::pop_sync::Groups for PopGroups<'_> {
 }
 
 /// An open dialog. Only the Blacklist manager has real content so far; the rest say so.
-enum Modal { SendLog(Box<sendlog_dialog::SendLogDialog>), Tutorial(Box<tutorial_dialog::TutorialDialog>), Update(Box<update_dialog::UpdateDialog>), Hltb(Box<hltb_dialog::HltbDialog>), Data(Box<data_dialog::DataDialog>), Playnite(Box<playnite_dialog::PlayniteDialog>), HomeEdit(Box<home_edit_ui::HomeEditor>), AddGame(Box<add_game_dialog::AddGameDialog>), Junk(Box<junk_dialog::JunkDialog>), Emulators(Box<emulators_dialog::EmulatorsDialog>), Community, Settings(Box<settings_dialog::SettingsDialog>), Plugins(Box<plugins_dialog::PluginsDialog>), Placeholder(&'static str), WhatsNew { sections: Vec<pd_filter::whats_new::Section> }, Blacklist { entries: Vec<home::BlEntry>, query: String }, Duplicates { items: Vec<(pd_filter::dupes::Suggestion, bool)> } }
+enum Modal { SendLog(Box<sendlog_dialog::SendLogDialog>), Tutorial(Box<tutorial_dialog::TutorialDialog>), Update(Box<update_dialog::UpdateDialog>), Hltb(Box<hltb_dialog::HltbDialog>), Data(Box<data_dialog::DataDialog>), Playnite(Box<playnite_dialog::PlayniteDialog>), HomeEdit(Box<home_edit_ui::HomeEditor>), AddGame(Box<add_game_dialog::AddGameDialog>), Junk(Box<junk_dialog::JunkDialog>), Emulators(Box<emulators_dialog::EmulatorsDialog>), Community, Settings(Box<settings_dialog::SettingsDialog>), Plugins(Box<plugins_dialog::PluginsDialog>), Placeholder(&'static str), WhatsNew { sections: Vec<pd_filter::whats_new::Section> }, KeyringChoice, Blacklist { entries: Vec<home::BlEntry>, query: String }, Duplicates { items: Vec<(pd_filter::dupes::Suggestion, bool)> } }
 
 /// What the Companion listener calls: the SteamGifts import and the Steam date import share its two route prefixes.
 struct CompanionHandlers { sg: Option<Arc<dyn pd_filter::companion::SteamGiftsHandler>>, steam: Option<Arc<pd_filter::steam_dates::SteamDates>> }
@@ -2672,6 +2672,8 @@ impl Own {
                 key => { if let Some((_, label)) = MENU.iter().find(|m| m.0 == key) { self.modal = Some(Modal::Placeholder(label)); } }
             }
         }
+        // a sign-in was just made with no keyring and no answer yet: ask where sign-ins go (Settings > Account changes it later)
+        if self.modal.is_none() && pd_filter::secrets::choice_pending() { self.modal = Some(Modal::KeyringChoice); }
         // the first start of a new version: the changelog sections newer than the last one shown, once. A first-ever start shows the running version's notes
         // when the library was copied from PlayDate (what changed), else the tutorial (it opens with the welcome)
         if !std::mem::replace(&mut self.whats_new_checked, true) && self.modal.is_none() {
@@ -3000,6 +3002,30 @@ impl Own {
                     }
                 }
             }
+            Modal::KeyringChoice => {
+                let accent = ui_kit::accent();
+                let mut pick: Option<pd_filter::secrets::Fallback> = None;
+                let out = ui_kit::modal(&ctx, "keyring_choice", "Keep your sign-ins?", 30.0, |ui, r| {
+                    ui.label(egui::RichText::new("Zest keeps sign-ins in your system's keyring, but none is available here (for example, Steam Deck Game Mode).").size(0.9 * r).color(ui_kit::TEXT()));
+                    ui.add_space(0.4 * r);
+                    ui.label(egui::RichText::new("Save in a file: you stay signed in. The file is not encrypted, so anyone who can read your files can use these sign-ins.").size(0.85 * r).color(ui_kit::TEXT()));
+                    ui.add_space(0.2 * r);
+                    ui.label(egui::RichText::new("Forget when Zest closes: you sign in again next time.").size(0.85 * r).color(ui_kit::TEXT()));
+                    ui.add_space(0.4 * r);
+                    ui.horizontal_wrapped(|ui| {
+                        if ui_kit::button(ui, "SAVE IN A FILE", ui_kit::Kind::Primary, accent, r).clicked() { pick = Some(pd_filter::secrets::Fallback::File); }
+                        if ui_kit::button(ui, "FORGET WHEN ZEST CLOSES", ui_kit::Kind::Plain, accent, r).clicked() { pick = Some(pd_filter::secrets::Fallback::Session); }
+                    });
+                    ui.add_space(0.3 * r);
+                    ui.label(ui_kit::muted("You can change this in Settings > Account.", 0.8 * r));
+                });
+                if let Some(m) = pick {
+                    hs.data.save_pref("keyring_fallback", serde_json::json!(m.key()));
+                    pd_filter::secrets::set_fallback(m);
+                    pd_filter::account::migrate_secrets(&hs.data.root_dir());
+                    None
+                } else if out.closed { pd_filter::secrets::dismiss_pending(); None } else { Some(Modal::KeyringChoice) }
+            }
             Modal::WhatsNew { sections } => {
                 let out = ui_kit::modal(&ctx, "whats_new", "What's new in Zest", 36.0, |ui, r| {
                     egui::ScrollArea::vertical().max_height(f32::INFINITY).auto_shrink([false, true]).show(ui, |ui| {
@@ -3065,7 +3091,8 @@ impl Own {
                         let (ids, blacklist) = match out { junk_dialog::JunkOut::Delete(i) => (i, false), junk_dialog::JunkOut::Blacklist(i) => (i, true), _ => unreachable!() };
                         let (mut gone, mut first_err) = (Vec::new(), None::<String>);
                         for id in ids { match hs.data.delete_game(id, blacklist) { Ok(()) => gone.push(id), Err(e) => { first_err.get_or_insert(e); } } }
-                        if !gone.is_empty() { hs.dirty = true; }
+                        // as a delete from a shelf: Home asks its shelves again (the shuffled ones only fill the gaps), or the deleted games just left holes
+                        if !gone.is_empty() { hs.dirty = true; hs.data.library_changed(); }
                         let msg = match first_err { None => format!("{} {} game{}.", if blacklist { "Blacklisted" } else { "Deleted" }, gone.len(), if gone.len() == 1 { "" } else { "s" }), Some(e) => format!("{} done, then an error: {e}", gone.len()) };
                         d.done(&gone, msg);
                         Some(Modal::Junk(d))
@@ -3187,6 +3214,7 @@ impl Own {
         if status.as_ref().map_or(false, |s| s.1) { ui.ctx().request_repaint_after(Duration::from_millis(400)); }
         let (want_fs, want_exit) = (&mut self.want_fullscreen, &mut false);
         let mut exit = false;
+        let (mut fs_rect, mut exit_rect) = (egui::Rect::NOTHING, egui::Rect::NOTHING);
         let mut row = ui.new_child(egui::UiBuilder::new().max_rect(rect.shrink2(egui::vec2(pad, 0.0))).layout(egui::Layout::left_to_right(egui::Align::Center)));
         row.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
             let danger = col(t.color_danger);
@@ -3201,6 +3229,7 @@ impl Own {
             ui.painter().galley(r.center() - galley.size() / 2.0, galley, tint);
             if resp.hovered() { ui.ctx().set_cursor_icon(egui::CursorIcon::PointingHand); }
             if resp.clicked() { exit = true; }
+            exit_rect = r;
             ui.add_space(8.0);
             // fullscreen: a small square with the corner-brackets glyph
             let (r, resp) = ui.allocate_exact_size(egui::vec2((2.25 * rem).max(2.0 * 0.625 * rem + rem), btn_h), egui::Sense::click());
@@ -3222,6 +3251,7 @@ impl Own {
             }
             if resp.hovered() { ui.ctx().set_cursor_icon(egui::CursorIcon::PointingHand); }
             if resp.clicked() { *want_fs = true; }
+            fs_rect = r;
             ui.add_space(14.0);
             if let Some((text, job, tip)) = &status {
                 let room = (ui.available_width() - (tabs_end - rect.left() - pad) - 24.0).max(0.0);
@@ -3238,6 +3268,9 @@ impl Own {
         if status_clicked { self.status_clicked = true; }
         let _ = want_exit;
         if exit { self.want_exit = true; }
+        // the pad reaches the fullscreen and EXIT buttons too: nav indices 4 and 5, after the menu button and the three tabs
+        self.pad_nav_rects.truncate(4); self.pad_nav_rects.push(fs_rect); self.pad_nav_rects.push(exit_rect);
+        for (k, rc) in [(4usize, fs_rect), (5, exit_rect)] { if self.pad_nav == Some(k) && rc.is_positive() { self.pad_ring_draw(ui.ctx(), rc, ui.ctx().content_rect(), false, 4.0); } }
     }
 
     /// Labels (the shuffle link is clickable), titles of covers that have no image, and the chart widgets: the Home page's text and vector art.
@@ -3903,13 +3936,13 @@ impl Own {
                     if pressed {
                         match n {
                             Nav::Left => self.pad_nav = Some(i.saturating_sub(1)),
-                            Nav::Right => self.pad_nav = Some((i + 1).min(3)),
+                            Nav::Right => self.pad_nav = Some((i + 1).min(self.pad_nav_rects.len().saturating_sub(1).max(3))),
                             Nav::Down => {
                                 self.pad_nav = None;
                                 if self.page == Page::Library && !self.pad_bar_items.is_empty() { self.pad_bar = Some(self.pad_bar_items.len() / 2); }
                             }
                             Nav::Confirm => {
-                                if i == 0 { self.menu_open = true; self.pad_menu = true; } else { self.want_page = Some(PAGES[i - 1]); self.pad_cur = None; }
+                                match i { 0 => { self.menu_open = true; self.pad_menu = true; } 4 => self.want_fullscreen = true, 5 => self.want_exit = true, _ => { self.want_page = Some(PAGES[i - 1]); self.pad_cur = None; } }
                                 self.pad_nav = None;
                             }
                             _ => {}
@@ -5033,6 +5066,8 @@ impl ApplicationHandler for Own {
             attrs = attrs.with_name(id.clone(), id);
         }
         let window = Rc::new(el.create_window(attrs).expect("window"));
+        // Steam Deck Game Mode (gamescope) shows one app filling the screen: a window of any other shape was shrunk to fit with bars beside it, so it opens full screen there
+        if std::env::var_os("GAMESCOPE_WAYLAND_DISPLAY").is_some() || std::env::var("XDG_SESSION_DESKTOP").map_or(false, |d| d == "gamescope") { window.set_fullscreen(Some(winit::window::Fullscreen::Borderless(None))); }
         // the covers are laid out in physical pixels and egui draws in points, so a screen scale above 1 (a Retina Mac, Windows at 125% or 150%) put every label at the wrong place: egui is told to treat one point as one physical pixel
         self.ctx.set_zoom_factor(1.0 / window.scale_factor() as f32);
         let context = softbuffer::Context::new(el.owned_display_handle()).expect("softbuffer context");
@@ -5285,7 +5320,9 @@ fn start_gamepad(app: &Own, proxy: winit::event_loop::EventLoopProxy<()>) {
 }
 
 /// First run with no library: one window that starts as the setup questions and becomes the main window when they are answered (no second window opens).
-struct Shell { setup: Option<setup_window::App>, own: Option<Own>, ctx: egui::Context, root: PathBuf, args: Vec<String>, proxy: winit::event_loop::EventLoopProxy<()> }
+struct Shell { setup: Option<setup_window::App>, own: Option<Own>, ctx: egui::Context, root: PathBuf, args: Vec<String>, proxy: winit::event_loop::EventLoopProxy<()>,
+    /// The gamepad thread, started with the setup window so a controller works there too; the main window takes these over instead of starting a second one.
+    pad: (gamepad::Queue, gamepad::Scroll) }
 impl Shell {
     fn hand_over(&mut self) {
         let Some(mut s) = self.setup.take() else { return };
@@ -5298,7 +5335,13 @@ impl Shell {
             else if let (Some(w), Some(h)) = (get("w").filter(|v| *v >= 400.0), get("h").filter(|v| *v >= 300.0)) { let _ = window.request_inner_size(winit::dpi::LogicalSize::new(w, h)); }
         }
         own.window = Some(window.clone()); own.surface = Some(surface); own.egui_winit = Some(st);
-        start_gamepad(&own, self.proxy.clone());
+        // as Own::resumed does: egui works in physical pixels, like the cards it draws over (without this a display scale other than 1, a Steam Deck in Game Mode, drew the
+        // focus ring and other overlays at the wrong size and place until the next start)
+        self.ctx.set_zoom_factor(1.0 / window.scale_factor() as f32);
+        // a PlayDate import or a restored backup may have brought sign-ins in config.json: with no keyring, ask where they go
+        if pd_filter::account::has_plaintext_sign_ins(&self.root) { pd_filter::secrets::request_choice(); }
+        own.pad_queue = self.pad.0.clone(); own.pad_scroll = self.pad.1.clone();
+        if let Some(st) = std::fs::read_to_string(own.root.join("state.json")).ok().and_then(|t| serde_json::from_str::<serde_json::Value>(&t).ok()) { gamepad::apply_state(&st); gamepad::set_sdl_mappings(&st); gamepad::reload(); }   // an imported or restored library may bring its own controller mappings
         window.request_redraw();
         self.own = Some(own);
     }
@@ -5311,7 +5354,7 @@ impl ApplicationHandler for Shell {
         s.window_event(el, id, ev);
         if s.finished { self.hand_over(); }
     }
-    fn user_event(&mut self, el: &ActiveEventLoop, e: ()) { if let Some(o) = self.own.as_mut() { o.user_event(el, e) } }
+    fn user_event(&mut self, el: &ActiveEventLoop, e: ()) { if let Some(o) = self.own.as_mut() { o.user_event(el, e) } else if let Some(s) = self.setup.as_ref() { s.wake() } }
     fn about_to_wait(&mut self, el: &ActiveEventLoop) { if let Some(o) = self.own.as_mut() { o.about_to_wait(el) } else if let Some(s) = self.setup.as_mut() { s.about_to_wait(el) } }
 }
 
@@ -5354,10 +5397,15 @@ fn main() {
     // secrets (API keys, sign-in tokens, cookies) live in the system keyring where there is one (pd_filter::secrets): a secret still in config.json is moved there now. Headless runs
     // (screenshots, self-tests) and ZEST_NO_KEYRING=1 leave config.json as it is, so test data never reaches the real keyring.
     if std::env::var_os("ZEST_NO_KEYRING").is_none() && !helper_run {
-        match pd_filter::secrets::platform_vault() {
-            Some(v) => { pd_filter::secrets::install(v); pd_filter::account::migrate_secrets(&root); }
-            None => pd_filter::net::log("secrets: no keyring on this machine; keys and sign-ins stay in config.json"),
-        }
+        // without a working keyring, sign-ins go to a file or stay in memory as the user chose (asked at the first sign-in; Settings > Account); typed API keys stay in config.json
+        let mode = std::fs::read_to_string(root.join("state.json")).ok().and_then(|t| serde_json::from_str::<serde_json::Value>(&t).ok())
+            .and_then(|st| st.get("keyring_fallback").and_then(|v| v.as_str()).map(pd_filter::secrets::Fallback::from_key)).unwrap_or(pd_filter::secrets::Fallback::Ask);
+        let v = std::sync::Arc::new(pd_filter::secrets::WithFallback::new(pd_filter::secrets::platform_vault(), root.join("zest_secrets.json"), mode));
+        pd_filter::net::log(&if v.keyring_works() { "secrets: using the system keyring".to_string() } else { format!("secrets: no working keyring; sign-ins: {}", mode.key()) });
+        pd_filter::secrets::install_with_fallback(v);
+        pd_filter::account::migrate_secrets(&root);
+        // sign-ins already in config.json (a PlayDate import, an earlier run) with no keyring: ask about them as about a new sign-in
+        if pd_filter::account::has_plaintext_sign_ins(&root) { pd_filter::secrets::request_choice(); }
     }
     // one Zest per data folder; headless shots, self-tests and the cover-preview helpers (Zest starts itself with --update-packs / --build-tier, see grid-core) run beside the real one
     let _instance = if args.iter().any(|a| a == "--screenshot" || a.starts_with("--selftest") || a == "--update-packs" || a == "--build-tier" || a == "--build-pack") { None } else {
@@ -5420,7 +5468,10 @@ fn main() {
         let ctx = egui::Context::default();
         let proxy = event_loop.create_proxy();
         wake_on_repaint(&ctx, proxy.clone());
-        let mut shell = Shell { setup: Some(setup_window::App::new(root.clone(), ctx.clone())), own: None, ctx, root: root.clone(), args: args.clone(), proxy };
+        let pad: (gamepad::Queue, gamepad::Scroll) = Default::default();
+        { let p = proxy.clone(); gamepad::spawn(pad.0.clone(), pad.1.clone(), move || { let _ = p.send_event(()); }); }
+        let mut setup = setup_window::App::new(root.clone(), ctx.clone()); setup.pad = Some(pad.0.clone()); setup.pad_scroll = Some(pad.1.clone());
+        let mut shell = Shell { setup: Some(setup), own: None, ctx, root: root.clone(), args: args.clone(), proxy, pad };
         event_loop.run_app(&mut shell).expect("run");
         return;
     }

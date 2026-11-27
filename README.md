@@ -45,6 +45,8 @@ curl -fsSL https://raw.githubusercontent.com/RobbyRatpoison/zest-library-manager
 
 The same install script puts `Zest.app` in `~/Applications` (Intel and Apple Silicon). Run it again to update.
 
+Use the script rather than downloading the archive in your browser: macOS blocks apps downloaded that way unless they are notarized by Apple, and Zest is not.
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/RobbyRatpoison/zest-library-manager/main/install.sh | sh
 ```
@@ -53,7 +55,7 @@ curl -fsSL https://raw.githubusercontent.com/RobbyRatpoison/zest-library-manager
 
 ## Moving from PlayDate
 
-Zest is a new app, installed next to PlayDate rather than over it.
+Zest and PlayDate are separate apps, so you can keep both while you move over.
 
 1. Install Zest as above. You do not need to uninstall PlayDate first.
 2. On first start, Zest looks for your PlayDate library and offers to **import a copy** of it: your games, settings, theme, shelves, saved filters and cover art. If it can't find it, use **Browse** to point it at PlayDate's folder.
@@ -61,7 +63,7 @@ Zest is a new app, installed next to PlayDate rather than over it.
 
 Things to redo by hand: taskbar pins, Steam shortcuts and menu entries that pointed to PlayDate. Store sign-ins may ask you to sign in again.
 
-PlayDate no longer gets updates. Problems moving over can be reported on either repository.
+PlayDate no longer gets major updates. Problems moving over can be reported on either repository.
 
 ---
 

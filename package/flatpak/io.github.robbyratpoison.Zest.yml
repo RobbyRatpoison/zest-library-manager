@@ -14,6 +14,9 @@ sdk-extensions:
 command: zest
 finish-args:
   - --filesystem=home
+  # PlayDate's Flatpak data, for the first-start import: home access does not include other apps' ~/.var/app folders (found on a Steam Deck)
+  - --filesystem=~/.var/app/io.github.robbyratpoison.PlayDate
+  - --filesystem=~/.var/app/io.github.robbyratpoison.PlayDate.Qt
   - --filesystem=/mnt
   - --filesystem=/media
   - --filesystem=/run/media
@@ -23,8 +26,12 @@ finish-args:
   - --socket=fallback-x11
   # gamepads (and the Steam Deck's controller) are read from /dev/input
   - --device=all
+  # the udev database: the gamepad library finds controllers through it, and without it no pad is seen at all (found on a Steam Deck; PlayDate's Qt Flatpak needed it too)
+  - --filesystem=/run/udev:ro
   # Wine, Proton, umu-run, winetricks and the games run on the host through flatpak-spawn --host (pd-filter/src/sandbox.rs)
   - --talk-name=org.freedesktop.Flatpak
+  # the system keyring (GNOME Keyring, KDE Wallet) through secret-tool, where sign-ins are kept between runs (pd-filter/src/secrets.rs)
+  - --talk-name=org.freedesktop.secrets
 modules:
   - name: zest
     buildsystem: simple
