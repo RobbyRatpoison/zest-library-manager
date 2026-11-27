@@ -174,18 +174,22 @@ pub fn install_present(install_path: &str, exe_rel: Option<&str>) -> bool {
     manifest_path(install_path).is_file()
 }
 
+/// The EA test prefix (`tests/data/ea_prefix`). Its `dosdevices/c:` and `e:` links are made here, not kept in git: a name with a colon cannot be checked out on Windows.
+/// Every test that uses the fixture must get it through this.
+#[cfg(all(test, unix))]
+pub(crate) fn fixture_prefix() -> PathBuf {
+    let p = Path::new(concat!(env!("CARGO_MANIFEST_DIR"), "/tests/data/ea_prefix")).to_path_buf();
+    for d in ["c", "e"] { let l = p.join("dosdevices").join(format!("{d}:")); if std::fs::symlink_metadata(&l).is_err() { let _ = std::fs::create_dir_all(p.join("dosdevices")); let _ = std::os::unix::fs::symlink(format!("../drive_{d}"), &l); } }
+    p
+}
+
 #[cfg(all(test, unix))]   // Wine prefixes are a Linux thing, and the fixture's drive links are Unix symlinks
 mod tests {
     use super::*;
     use serde_json::Value;
     fn here() -> PathBuf { Path::new(concat!(env!("CARGO_MANIFEST_DIR"), "/tests")).to_path_buf() }
     fn golden() -> Value { serde_json::from_str(&std::fs::read_to_string(here().join("ea_manifest_golden.json")).unwrap()).unwrap() }
-    /// The fixture prefix. Its `dosdevices/c:` and `e:` links are made here, not kept in git: a name with a colon cannot be checked out on Windows.
-    fn root() -> PathBuf {
-        let p = here().join("data/ea_prefix");
-        for d in ["c", "e"] { let l = p.join("dosdevices").join(format!("{d}:")); if std::fs::symlink_metadata(&l).is_err() { let _ = std::fs::create_dir_all(p.join("dosdevices")); let _ = std::os::unix::fs::symlink(format!("../drive_{d}"), &l); } }
-        std::fs::canonicalize(p).unwrap()
-    }
+    fn root() -> PathBuf { std::fs::canonicalize(fixture_prefix()).unwrap() }
     fn put(s: &str) -> String { s.replace("<ROOT>", &root().to_string_lossy()) }
     fn want(v: &Value) -> Option<String> { v.as_str().map(put) }
 

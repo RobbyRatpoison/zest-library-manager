@@ -428,9 +428,10 @@ mod tests {
         crate::account::plugin_secret_set(&d, "ea_app", "access_token", Some("old")).unwrap(); crate::account::plugin_number_set(&d, "ea_app", "expires_at", now() - 10).unwrap();
         assert!(!s.auth_status().unwrap().connected);
     }
+    #[cfg(unix)]   // the fixture prefix's drive links are Unix symlinks
     #[test] fn the_install_scan_finds_installs_and_forgets_gutted_ones() {
         let d = tmpdir("scan"); let db = d.join("games.db");
-        let fixture = Path::new(concat!(env!("CARGO_MANIFEST_DIR"), "/tests/data/ea_prefix")).to_path_buf();
+        let fixture = crate::sources::ea_manifest::fixture_prefix();
         let root = std::fs::canonicalize(&fixture).unwrap();
         let bej = root.join("drive_c/Program Files (x86)/Origin Games/Bejeweled 3");
         let hospital = root.join("drive_c/Program Files/EA Games/Theme Hospital");
