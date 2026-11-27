@@ -19,3 +19,6 @@ games*.db-*
 /pd-filter/tests/golden.json
 
 __pycache__/
+
+# made by the EA manifest tests (a name with a colon cannot be checked out on Windows)
+/pd-filter/tests/data/ea_prefix/dosdevices/
