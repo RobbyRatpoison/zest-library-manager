@@ -25,7 +25,7 @@ jobs:
         with: { workspaces: . }
       - run: sudo apt-get update && sudo apt-get install -y libwayland-dev libxkbcommon-dev libudev-dev
       # the fast profile (no LTO): the tests check behavior, which LTO does not change, and it compiles in a fraction of the time
-      - run: cargo test --profile fast -p pd-filter -p grid-core -p grid-own
+      - run: cargo test --profile fast --no-fail-fast -p pd-filter -p grid-core -p grid-own
 
   # the same tests on Windows and macOS exercise the per-OS code (path detection, emulator and Steam locations); informative only, nothing waits for them
   tests-other:
@@ -40,7 +40,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
         with: { workspaces: . }
-      - run: cargo test --profile fast -p pd-filter -p grid-core -p grid-own
+      - run: cargo test --profile fast --no-fail-fast -p pd-filter -p grid-core -p grid-own
 
   linux:
     name: Linux tarball

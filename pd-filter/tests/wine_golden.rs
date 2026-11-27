@@ -20,8 +20,8 @@ use std::path::PathBuf;
         mk(home.join(".var/app/com.valvesoftware.Steam/.local/share/Steam/compatibilitytools.d"), names("flatpak"), &[]);
         let mine = find_proton_versions(&home, SYSTEM_COMPAT_DIRS);
         let want: Vec<(String, String)> = c["found"].as_array().unwrap().iter().map(|f| (f["name"].as_str().unwrap().to_string(), f["rel"].as_str().unwrap().to_string())).collect();
-        // the same builds at the same places (the Python also lists the machine's own /usr/share ones; so does this)
-        let set = |v: Vec<(String, String)>| v.into_iter().collect::<BTreeSet<_>>();
+        // the same builds at the same places, inside the fake home only: the machine's own /usr/share builds differ between the machine the golden was made on and this one
+        let set = |v: Vec<(String, String)>| v.into_iter().filter(|(_, r)| !r.contains("usr/")).collect::<BTreeSet<_>>();
         let got: Vec<(String, String)> = mine.iter().map(|p| (p.name.clone(), p.path.strip_prefix(&home).map(|r| r.to_string_lossy().to_string()).unwrap_or_else(|_| format!("..{}", p.path.display())))).collect();
         // a build outside the home folder shows as `../../usr/share/...` in the Python's relative path and as the absolute path here: compare from `usr/`
         let norm = |v: Vec<(String, String)>| set(v.into_iter().map(|(n, r)| (n, r.find("usr/").map_or(r.clone(), |i| r[i..].to_string()))).collect());
