@@ -123,7 +123,8 @@ mod tests {
         let mut got = false;
         for _ in 0..100 { std::thread::sleep(Duration::from_millis(50)); while let Ok(id) = w.rx.try_recv() { w.pending.insert(id, Instant::now() - QUIET); got = true; } if got { break; } }
         assert!(got, "the install touched a watched folder");
-        assert_eq!(w.poll(), vec!["x"]);
+        // macOS (FSEvents) may also report the creation of the folder "y" watches, which only costs a harmless extra scan of y
+        let due = w.poll(); assert!(due.contains(&"x".to_string()) && due.iter().all(|i| i == "x" || i == "y"), "{due:?}");
         assert!(!w.has_pending());
         let _ = std::fs::remove_dir_all(&d);
     }
