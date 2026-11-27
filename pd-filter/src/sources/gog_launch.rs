@@ -146,6 +146,8 @@ mod tests {
         let d = tmp("other"); put(&d, "goggame-2.info", &info(r#"[{"type":"FileTask","path":"B.exe"}]"#)); put(&d, "B.exe", "");
         assert_eq!(find_executable(&d, "1", &none), GogExe::File("B.exe".into()));
     }
+    // Linux and macOS executables (scripts, .x86_64 files): Windows only runs .exe files
+    #[cfg(not(windows))]
     #[test] fn without_a_usable_task_a_known_script_then_the_executable_files_are_used_scripts_first() {
         let d = tmp("fallback");
         put(&d, "readme.txt", ""); put(&d, ".hidden", ""); put(&d, "Zed.x86", ""); put(&d, "Zed.x86_64", ""); put(&d, "tool.sh.bak", "");

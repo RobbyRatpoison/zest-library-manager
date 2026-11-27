@@ -130,7 +130,10 @@ mod tests {
         let edge = command_for(&e, "", "Microsoft Edge").expect("an uninstall command for Microsoft Edge");
         let (prog, args) = split_command(&edge);
         assert!(prog.to_lowercase().ends_with(".exe") && !args.is_empty(), "{edge}");
-        assert!(command_for(&e, r"C:\Program Files (x86)\Microsoft\Edge\Application", "different name").is_some());
+        // and by folder: any program that records where it is installed (not every machine lists one for Edge)
+        if let Some(loc) = e.iter().filter_map(|x| x.get("InstallLocation").filter(|l| !l.trim().is_empty() && x.get("UninstallString").map_or(false, |u| !u.trim().is_empty()))).next() {
+            assert!(command_for(&e, loc, "a name that matches nothing").is_some(), "{loc}");
+        }
     }
     #[test] fn a_program_is_found_by_its_display_name() {
         let e = parse_reg_query(SAMPLE);

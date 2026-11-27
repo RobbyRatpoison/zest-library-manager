@@ -1,0 +1,2 @@
+# Test fixtures are compared byte for byte (Wine registry files, encrypted caches, archives): never convert their line endings on checkout.
+pd-filter/tests/data/** -text

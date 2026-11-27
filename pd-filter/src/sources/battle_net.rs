@@ -411,6 +411,8 @@ mod tests {
         let fen = got.iter().find(|r| r.platform_id == "Fen").expect("owned game added with no prefix");
         assert_eq!((fen.installed, fen.date_added), (Some(false), Some(1_690_000_000)));
     }
+    // install state comes from the fixture Wine prefix here; on Windows from the real Battle.net install
+    #[cfg(not(windows))]
     #[test] fn a_connected_account_adds_owned_games_and_their_purchase_dates_to_the_sync() {
         let d = tmpdir("acct"); let s = BattleNetSource::new(d.clone(), d.join("games_1.db"), std::sync::Arc::new(Acct));
         let fixture = Path::new(concat!(env!("CARGO_MANIFEST_DIR"), "/tests/data/bnet_prefix"));

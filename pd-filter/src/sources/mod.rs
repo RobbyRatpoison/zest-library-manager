@@ -392,7 +392,8 @@ mod tests {
     }
     #[test] fn defaults_refuse_politely() {
         let g = GameRef::default();
-        assert!(Fake.uninstall(&g).unwrap_err().contains("Fake Store"));
+        // on Windows the default uninstall runs the game's own uninstaller (found in the registry), so its refusal names that instead
+        if !cfg!(windows) { assert!(Fake.uninstall(&g).unwrap_err().contains("Fake Store")); }
         assert!(Fake.store_url(&g).is_none());
     }
 

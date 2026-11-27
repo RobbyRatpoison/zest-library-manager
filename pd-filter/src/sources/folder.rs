@@ -277,12 +277,21 @@ fn copy_tree(from: &Path, to: &Path) -> std::io::Result<()> {
 
 /// A game folder that holds something/// A game folder that holds something (a file or folder whose name does not start with a dot). An empty folder, such as the one an older Zest made
 /// for "drop the downloaded files in here", is not an install.
+/// A folder path as a key for "is this the same folder?": on Windows either slash and any letter case name the same folder (a stored path can be
+/// `games/Game` while the folder listing says `games\Game`); elsewhere only a trailing slash is dropped.
+pub fn path_key(p: &str) -> String {
+    if cfg!(windows) { p.replace('/', "\\").trim_end_matches('\\').to_lowercase() } else { p.trim_end_matches('/').to_string() }
+}
 pub fn has_content(dir: &Path) -> bool { std::fs::read_dir(dir).map_or(false, |rd| rd.flatten().any(|e| !e.file_name().to_string_lossy().starts_with('.'))) }
 pub fn mb(n: u64) -> String { format!("{:.1}", n as f64 / 1e6) }
 
 #[cfg(test)]
 mod pick_tests {
     use super::*;
+    #[test] fn the_same_folder_gives_the_same_key() {
+        assert_eq!(path_key("/a/games/Game/"), path_key("/a/games/Game"));
+        if cfg!(windows) { assert_eq!(path_key(r"C:\Games/My Game"), path_key(r"c:\games\my game\")); } else { assert_ne!(path_key("/a/Game"), path_key("/a/game")); }
+    }
     fn elf(p: &Path) { if let Some(d) = p.parent() { std::fs::create_dir_all(d).unwrap(); } std::fs::write(p, [0x7fu8, b'E', b'L', b'F', 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]).unwrap(); }
     #[cfg(target_os = "linux")]
     #[test] fn a_tie_is_asked_about_a_choice_wins_and_all_candidates_are_listed() {

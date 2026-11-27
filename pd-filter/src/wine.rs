@@ -331,6 +331,8 @@ mod tests {
         let (_, _, _, env) = get(&spawn_action(&Runtime::Wine { wine: "/usr/bin/wine".into() }, &home, &exe, &[], None, &prefix, false).unwrap());
         assert!(!env.iter().any(|(k, _)| k == "DISPLAY"));
     }
+    // Wine prefixes and their processes: not on Windows
+    #[cfg(not(windows))]
     #[test] fn prefixes_are_folders_with_drive_c_and_processes_match_the_prefix_or_its_pfx() {
         let root = tmp("pfxs"); for d in ["a/drive_c", "b/other", "c/drive_c"] { std::fs::create_dir_all(root.join(d)).unwrap(); }
         assert_eq!(list_prefixes(&[root.clone(), root.join("missing")]), vec![root.join("a"), root.join("c")]);

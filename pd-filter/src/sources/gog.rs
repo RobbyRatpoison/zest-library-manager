@@ -623,6 +623,8 @@ mod behaviour {
         assert_eq!(s.install(&cx(&d, site), &GameRef { name: "Game One".into(), ..g }, &mut |_, _, _| {}, &c).unwrap_err(), "Cancelled");
         assert!(!games.join("Game One").exists());
     }
+    // Windows builds run through Wine here: on Windows they start directly
+    #[cfg(not(windows))]
     #[test] fn installed_scan_follows_the_folder_and_launch_covers_windows_builds_and_dosbox() {
         let (s, _, d) = setup("launchcases", fake(), Some(FAR));
         let (win, dos) = (d.join("w"), d.join("d"));

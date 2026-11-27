@@ -121,6 +121,8 @@ pub fn filter<'a>(apps: &'a [App], q: &str) -> Vec<&'a App> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    // .desktop files exist on Linux only
+    #[cfg(not(windows))]
     #[test] fn a_desktop_file_gives_a_name_and_a_command_without_field_codes() {
         let a = parse_desktop("[Desktop Entry]\nType=Application\nName=Discord\nExec=/bin/sh %U\nName[de]=Zwietracht\n[Desktop Action x]\nName=Other\nExec=/nope\n").unwrap();
         assert_eq!((a.name.as_str(), a.program.as_str(), a.args.as_str()), ("Discord", which("/bin/sh").unwrap().to_str().unwrap(), ""));

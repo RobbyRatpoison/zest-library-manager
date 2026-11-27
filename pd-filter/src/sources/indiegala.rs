@@ -280,7 +280,7 @@ impl LibrarySource for IndiegalaSource {
         let (mut out, mut linked) = (vec![], std::collections::HashSet::new());
         for (_, _, pid, path) in &games {
             if path.is_empty() { continue; }
-            if super::folder::has_content(std::path::Path::new(path)) { out.push(InstalledRow { platform_id: pid.clone(), installed: true, install_path: None }); linked.insert(path.clone()); }
+            if super::folder::has_content(std::path::Path::new(path)) { out.push(InstalledRow { platform_id: pid.clone(), installed: true, install_path: None }); linked.insert(super::folder::path_key(path)); }
             else { out.push(InstalledRow { platform_id: pid.clone(), installed: false, install_path: Some(String::new()) }); }
         }
         let mut unlinked: Vec<(i64, String)> = games.iter().filter(|g| g.3.is_empty()).map(|g| (g.0, g.1.clone())).collect();
@@ -289,10 +289,10 @@ impl LibrarySource for IndiegalaSource {
             dirs.sort();   // the order is the folder names', not the file system's, so a tie is always settled the same way
             for (name, path) in dirs {
                 let ps = path.to_string_lossy().to_string();
-                if linked.contains(&ps) || name.starts_with('.') { continue; }
+                if linked.contains(&super::folder::path_key(&ps)) || name.starts_with('.') { continue; }
                 if let Some(id) = find_best_match(&name, &unlinked) {
                     if let Some(g) = games.iter().find(|g| g.0 == id) { out.push(InstalledRow { platform_id: g.2.clone(), installed: true, install_path: Some(ps.clone()) }); }
-                    unlinked.retain(|(a, _)| *a != id); linked.insert(ps);
+                    unlinked.retain(|(a, _)| *a != id); linked.insert(super::folder::path_key(&ps));
                 }
             }
         }
@@ -460,7 +460,7 @@ mod behaviour {
         assert!(s.launch(&GameRef { install_path: Some("/gone".into()), ..gr.clone() }).unwrap_err().contains("not found"));
         // not installed: a folder named for the game is made and opened with the download page
         let l = s.launch(&GameRef { installed: false, install_path: None, name: "Brand: New/Game!".into(), appname: "https://www.indiegala.com/library/showcase/x".into(), ..gr.clone() }).unwrap();
-        let made = d.join("games/Brand NewGame"); assert!(made.is_dir());
+        let made = d.join("games").join("Brand NewGame"); assert!(made.is_dir());
         match l.action { Action::Many(v) => assert_eq!(v[..2], [Action::OpenUrl(made.to_string_lossy().into()), Action::OpenUrl("https://www.indiegala.com/library/showcase/x".into())]), a => panic!("{a:?}") }
         // uninstall removes files only inside the games folder
         assert_eq!(s.uninstall(&GameRef { install_path: Some(gdir.to_string_lossy().into()), ..gr.clone() }).unwrap(), Action::RemoveInstall { dir: gdir.to_string_lossy().into(), delete: true });
@@ -480,7 +480,7 @@ mod behaviour {
         let rows = s.installed_scan().unwrap();
         let by = |id: &str| rows.iter().find(|r| r.platform_id == id).cloned();
         assert_eq!(by("p1").unwrap(), InstalledRow { platform_id: "p1".into(), installed: true, install_path: None });
-        assert_eq!(by("p2").unwrap(), InstalledRow { platform_id: "p2".into(), installed: true, install_path: Some(d.join("games/game two!").to_string_lossy().into()) });
+        assert_eq!(by("p2").unwrap(), InstalledRow { platform_id: "p2".into(), installed: true, install_path: Some(d.join("games").join("game two!").to_string_lossy().into()) });
         assert_eq!(by("p3").unwrap(), InstalledRow { platform_id: "p3".into(), installed: false, install_path: Some(String::new()) });
         assert!(by("p4").is_none());
         assert!(by("p5").is_none(), "an empty folder is not linked to a game");

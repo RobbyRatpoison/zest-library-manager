@@ -59,7 +59,8 @@ mod tests {
         let a = acquire(&d).expect("first");
         let e = acquire(&d).unwrap_err();
         assert!(e.contains("already running"), "{e}");
-        assert_eq!(std::fs::read_to_string(d.join("zest.lock")).unwrap(), std::process::id().to_string());
+        // Windows does not let anyone read a locked file (the second copy's message then has no process number)
+        if !cfg!(windows) { assert_eq!(std::fs::read_to_string(d.join("zest.lock")).unwrap(), std::process::id().to_string()); }
         drop(a);
         let again = acquire(&d).expect("released with the first");
         // another folder is independent

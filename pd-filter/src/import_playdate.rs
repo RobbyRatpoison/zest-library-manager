@@ -227,6 +227,8 @@ mod tests {
         assert_eq!([ago(now, now), ago(now - 86400, now), ago(now - 5 * 86400, now), ago(now - 90 * 86400, now), ago(now - 800 * 86400, now)], ["today", "yesterday", "5 days ago", "3 months ago", "2 years ago"]);
         let d = tmp("used"); playdate(&d); assert!(last_used(&d).map_or(false, |t| (now..now * 3).contains(&t)));
     }
+    // PlayDate on Linux and macOS: launcher scripts and .desktop lines name its folder (Windows finds it through the Start menu shortcut)
+    #[cfg(not(windows))]
     #[test] fn launcher_lines_give_the_install_folder() {
         assert_eq!(install_dirs_in("Exec=/home/a/My Apps/PlayDate/launch.sh"), vec![PathBuf::from("/home/a/My Apps/PlayDate")]);
         assert_eq!(install_dirs_in("exec \"/Users/r/PlayDate/playdate-launch.sh\" \"$@\""), vec![PathBuf::from("/Users/r/PlayDate")]);

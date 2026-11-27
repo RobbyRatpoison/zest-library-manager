@@ -623,6 +623,8 @@ mod launch_tests {
         assert_eq!(path_url("https://h/p?x=1#f", "/files/ab"), "https://h/p/files/ab?x=1#f");
         assert_eq!(folder_name("Fun: Game!", "id"), "Fun Game"); assert_eq!(folder_name("!!!", "id"), "id");
     }
+    // launching through a Wine prefix: on Windows the game starts directly
+    #[cfg(not(windows))]
     #[test] fn launch_runs_the_descriptor_in_a_prefix_and_the_scan_and_uninstall_follow_the_folder() {
         let d = tmpdir("flow"); let s = src(&d);
         let inst = d.join("Games/Amazon Games/Game"); std::fs::create_dir_all(inst.join("bin/data")).unwrap();

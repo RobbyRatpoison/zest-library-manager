@@ -787,7 +787,7 @@ mod install_tests {
         let (s, site, d) = setup("install", 200);
         let mut texts: Vec<String> = vec![];
         let r = s.install(&cx(&d, site.clone()), &gref(), &mut |t, _, _| texts.push(t.to_string()), &Cancel::new()).unwrap();
-        let dir = d.join("games/My Game");
+        let dir = d.join("games").join("My Game");
         assert_eq!(r, Installed { install_path: dir.to_string_lossy().into(), executable: None, note: None });
         assert!(dir.join("game/run").is_file() && !dir.join("game_win.zip").exists());
         assert!(texts.first().unwrap().contains("asking Humble") && texts.iter().any(|t| t.starts_with("Unpacking")), "{texts:?}");
@@ -821,6 +821,8 @@ mod install_tests {
         assert!(!dir.join("game.tar.gz").exists() && dir.join("game/readme.txt").is_file());
         assert_eq!(l.action, Action::OpenUrl(dir.to_string_lossy().into()));
     }
+    // a Linux self-extracting installer (MojoSetup) and its launcher script
+    #[cfg(not(windows))]
     #[test] fn a_self_extracting_installer_is_unpacked_into_the_game_folder_and_its_launcher_script_is_the_way_to_start_it() {
         let (s, _, d) = setup("mojo", 200);
         let dir = d.join("games/Mojo Game"); std::fs::create_dir_all(&dir).unwrap();
