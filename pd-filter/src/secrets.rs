@@ -12,6 +12,9 @@ pub trait Vault: Send + Sync {
     fn get(&self, name: &str) -> Option<String>;
     fn put(&self, name: &str, value: &str) -> bool;
     fn forget(&self, name: &str);
+    /// Would a value put here be kept as the user wants? False only while the user has not said where sign-ins go without a keyring: then a sign-in still in `config.json` is
+    /// left there rather than moved somewhere closing Zest would lose it.
+    fn keeps(&self, _name: &str) -> bool { true }
 }
 
 static VAULT: RwLock<Option<Arc<dyn Vault>>> = RwLock::new(None);
@@ -40,6 +43,7 @@ impl Vault for Cached {
         ok
     }
     fn forget(&self, name: &str) { self.inner.forget(name); if let Ok(mut m) = self.seen.lock() { m.insert(name.to_string(), None); } }
+    fn keeps(&self, name: &str) -> bool { self.inner.keeps(name) }
 }
 
 /// The platform's store, when its tool is there; None = no vault on this machine.
@@ -116,6 +120,116 @@ impl Vault for WindowsVault {
     fn forget(&self, name: &str) { if let Some(f) = Self::file(name) { let _ = std::fs::remove_file(f); } }
 }
 
+// ───────────────────────── no working keyring: a file, or memory only, as the user chose ─────────────────────────
+
+/// Where sign-ins go when the keyring does not work (a Steam Deck in Game Mode, a desktop without one). Asked once, at the first sign-in (`choice_pending`), and changeable in
+/// Settings > Account. Typed API keys (`account/<id>`, `sgdb`) are not sign-ins: without a keyring they stay in `config.json` as before, whatever the choice.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum Fallback { Ask, File, Session }
+impl Fallback {
+    pub fn key(self) -> &'static str { match self { Fallback::Ask => "ask", Fallback::File => "file", Fallback::Session => "session" } }
+    pub fn from_key(k: &str) -> Fallback { match k { "file" => Fallback::File, "session" => Fallback::Session, _ => Fallback::Ask } }
+}
+
+/// Is this vault entry a sign-in (a store's tokens and cookies, the Steam sign-in) rather than a key the user typed?
+pub fn is_sign_in(name: &str) -> bool { name.starts_with("plugin/") || name.starts_with("steam-refresh/") }
+
+/// The sign-ins kept in a plain file in the data folder, readable by this user only (`zest_secrets.json`): one JSON object of name -> value.
+pub struct FileVault { path: std::path::PathBuf, lock: Mutex<()> }
+impl FileVault {
+    pub fn new(path: std::path::PathBuf) -> Self { FileVault { path, lock: Mutex::new(()) } }
+    fn load(&self) -> Map<String, Value> { std::fs::read_to_string(&self.path).ok().and_then(|t| serde_json::from_str::<Value>(&t).ok()).and_then(|v| v.as_object().cloned()).unwrap_or_default() }
+    fn save(&self, m: &Map<String, Value>) -> bool {
+        if m.is_empty() { let _ = std::fs::remove_file(&self.path); return true; }
+        let tmp = self.path.with_extension("json.tmp");
+        let ok = (|| -> std::io::Result<()> {
+            use std::io::Write;
+            let mut o = std::fs::OpenOptions::new(); o.write(true).create(true).truncate(true);
+            #[cfg(unix)] { use std::os::unix::fs::OpenOptionsExt; o.mode(0o600); }
+            let mut f = o.open(&tmp)?; f.write_all(Value::Object(m.clone()).to_string().as_bytes())?; f.sync_all()?;
+            std::fs::rename(&tmp, &self.path)
+        })().is_ok();
+        if !ok { let _ = std::fs::remove_file(&tmp); }
+        ok
+    }
+    pub fn names(&self) -> Vec<String> { let _g = self.lock.lock(); self.load().keys().cloned().collect() }
+}
+impl Vault for FileVault {
+    fn get(&self, name: &str) -> Option<String> { let _g = self.lock.lock(); self.load().get(name).and_then(|v| v.as_str()).map(String::from) }
+    fn put(&self, name: &str, value: &str) -> bool { let _g = self.lock.lock(); let mut m = self.load(); m.insert(name.into(), Value::String(value.into())); self.save(&m) }
+    fn forget(&self, name: &str) { let _g = self.lock.lock(); let mut m = self.load(); if m.remove(name).is_some() { self.save(&m); } }
+}
+
+/// Kept in memory only: gone when Zest closes.
+#[derive(Default)] pub struct MemVault { map: Mutex<HashMap<String, String>> }
+impl Vault for MemVault {
+    fn get(&self, n: &str) -> Option<String> { self.map.lock().ok()?.get(n).cloned() }
+    fn put(&self, n: &str, v: &str) -> bool { if let Ok(mut m) = self.map.lock() { m.insert(n.into(), v.into()); } true }
+    fn forget(&self, n: &str) { if let Ok(mut m) = self.map.lock() { m.remove(n); } }
+}
+
+/// The vault Zest installs: the keyring when it works, else the file or memory for sign-ins as chosen. Typed keys without a keyring are refused (`put` false), so `account.rs`
+/// keeps them in `config.json` as before.
+pub struct WithFallback { keyring: Option<Arc<dyn Vault>>, keyring_works: bool, file: FileVault, mem: MemVault, mode: RwLock<Fallback> }
+static PENDING: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+static ACTIVE: RwLock<Option<Arc<WithFallback>>> = RwLock::new(None);
+impl WithFallback {
+    /// `keyring` is the platform's store (None = none here); whether it really works is tried once with a throwaway entry. Sign-ins left in the file from a run without a keyring
+    /// move into the keyring when it works now (a Steam Deck switched to Desktop Mode).
+    pub fn new(keyring: Option<Arc<dyn Vault>>, file: std::path::PathBuf, mode: Fallback) -> Self {
+        let keyring_works = keyring.as_ref().map_or(false, |k| { let ok = k.put("zest-probe", "1"); k.forget("zest-probe"); ok });
+        let me = WithFallback { keyring, keyring_works, file: FileVault::new(file), mem: MemVault::default(), mode: RwLock::new(mode) };
+        if let (true, Some(k)) = (me.keyring_works, &me.keyring) {
+            for n in me.file.names() { if let Some(v) = me.file.get(&n) { if k.put(&n, &v) { me.file.forget(&n); } } }
+        }
+        me
+    }
+    pub fn keyring_works(&self) -> bool { self.keyring_works }
+    pub fn mode(&self) -> Fallback { self.mode.read().map(|m| *m).unwrap_or(Fallback::Ask) }
+    /// The user's answer: sign-ins held in memory while asking move to the file when they chose it.
+    pub fn set_mode(&self, m: Fallback) {
+        if let Ok(mut g) = self.mode.write() { *g = m; }
+        PENDING.store(false, std::sync::atomic::Ordering::SeqCst);
+        match m {
+            Fallback::File => { let held: Vec<(String, String)> = self.mem.map.lock().map(|x| x.iter().map(|(a, b)| (a.clone(), b.clone())).collect()).unwrap_or_default();
+                for (n, v) in held { if self.file.put(&n, &v) { self.mem.forget(&n); } } }
+            // chose not to keep them: what an earlier choice saved in the file is now kept in memory only
+            Fallback::Session => { for n in self.file.names() { if let Some(v) = self.file.get(&n) { self.mem.put(&n, &v); } self.file.forget(&n); } }
+            Fallback::Ask => {}
+        }
+    }
+    fn holder(&self) -> &dyn Vault { if self.mode() == Fallback::File { &self.file } else { &self.mem } }
+}
+impl Vault for WithFallback {
+    fn get(&self, name: &str) -> Option<String> {
+        if self.keyring_works { if let Some(v) = self.keyring.as_ref().and_then(|k| k.get(name)) { return Some(v); } }
+        self.mem.get(name).or_else(|| self.file.get(name))
+    }
+    fn put(&self, name: &str, value: &str) -> bool {
+        if self.keyring_works { if let Some(k) = &self.keyring { if k.put(name, value) { self.file.forget(name); self.mem.forget(name); return true; } } }
+        if !is_sign_in(name) { return false; }
+        if self.mode() == Fallback::Ask { PENDING.store(true, std::sync::atomic::Ordering::SeqCst); }
+        self.holder().put(name, value)
+    }
+    fn forget(&self, name: &str) { if let Some(k) = &self.keyring { if self.keyring_works { k.forget(name); } } self.file.forget(name); self.mem.forget(name); }
+    /// While the user has not answered, a sign-in already in `config.json` stays there (it is not moved into memory, where closing Zest would lose it).
+    /// Typed keys without a keyring are not offered at all (they stay in `config.json`, quietly).
+    fn keeps(&self, name: &str) -> bool { self.keyring_works || (is_sign_in(name) && self.mode() != Fallback::Ask) }
+}
+
+/// Installs `v` as the vault and remembers it for `choice_pending` / `set_fallback`.
+pub fn install_with_fallback(v: Arc<WithFallback>) { if let Ok(mut g) = ACTIVE.write() { *g = Some(v.clone()); } install(v); }
+fn active() -> Option<Arc<WithFallback>> { ACTIVE.read().ok().and_then(|g| g.clone()) }
+/// A sign-in has just been held in memory with no keyring and no answer yet: the app asks where to keep sign-ins.
+pub fn choice_pending() -> bool { PENDING.load(std::sync::atomic::Ordering::SeqCst) && active().map_or(false, |a| !a.keyring_works() && a.mode() == Fallback::Ask) }
+/// Is the keyring missing (so the choice matters here)?
+pub fn no_keyring() -> bool { active().map_or(true, |a| !a.keyring_works()) }
+/// Sign-ins already on disk (imported from PlayDate, or from a run before the question existed) with no keyring and no answer: ask about them too.
+pub fn request_choice() { if active().map_or(false, |a| !a.keyring_works() && a.mode() == Fallback::Ask) { PENDING.store(true, std::sync::atomic::Ordering::SeqCst); } }
+/// The question was closed without an answer: not asked again this run (the sign-in stays in memory meanwhile).
+pub fn dismiss_pending() { PENDING.store(false, std::sync::atomic::Ordering::SeqCst); }
+pub fn set_fallback(m: Fallback) { if let Some(a) = active() { a.set_mode(m); } }
+
 // ───────────────────────── blobs: the owner's secrets as one JSON object ─────────────────────────
 
 pub fn blob_get(v: &dyn Vault, name: &str) -> Map<String, Value> { v.get(name).and_then(|t| serde_json::from_str::<Value>(&t).ok()).and_then(|j| j.as_object().cloned()).unwrap_or_default() }
@@ -155,6 +269,28 @@ mod tests {
         let m = Mem::default(); let mut b = Map::new(); b.insert("k".into(), Value::String("v".into()));
         assert!(blob_put(&m, "plugin/x", &b)); assert_eq!(blob_get(&m, "plugin/x").get("k").and_then(|v| v.as_str()), Some("v"));
         assert!(blob_put(&m, "plugin/x", &Map::new())); assert!(m.get("plugin/x").is_none());
+    }
+    fn tmpfile(tag: &str) -> std::path::PathBuf { let d = std::env::temp_dir().join(format!("zest_secrets_{tag}_{}", std::process::id())); let _ = std::fs::remove_dir_all(&d); std::fs::create_dir_all(&d).unwrap(); d.join("zest_secrets.json") }
+    #[test] fn without_a_keyring_sign_ins_wait_in_memory_until_the_user_chooses() {
+        let f = tmpfile("ask"); let v = WithFallback::new(None, f.clone(), Fallback::Ask);
+        assert!(!v.keeps("plugin/gog"), "a sign-in in config.json is left there while asking");
+        assert!(!v.keeps("account/1"), "typed keys are not offered without a keyring: they stay in config.json");
+        assert!(v.put("plugin/gog", "tok")); assert_eq!(v.get("plugin/gog").as_deref(), Some("tok")); assert!(!f.exists(), "nothing written to disk before the answer");
+        assert!(!v.put("account/1", "{}"), "a typed key is refused, so it stays in config.json");
+        v.set_mode(Fallback::File);
+        assert!(f.exists()); assert_eq!(FileVault::new(f.clone()).get("plugin/gog").as_deref(), Some("tok"), "the held sign-in moved to the file");
+        #[cfg(unix)] { use std::os::unix::fs::PermissionsExt; assert_eq!(std::fs::metadata(&f).unwrap().permissions().mode() & 0o777, 0o600); }
+        v.set_mode(Fallback::Session);
+        assert!(!f.exists(), "choosing not to keep sign-ins empties the file"); assert_eq!(v.get("plugin/gog").as_deref(), Some("tok"), "but this run still has it");
+    }
+    #[test] fn a_working_keyring_wins_and_takes_over_what_the_file_held() {
+        let f = tmpfile("kr"); FileVault::new(f.clone()).put("plugin/gog", "old");
+        let k = Arc::new(Mem::default());
+        let v = WithFallback::new(Some(k.clone()), f.clone(), Fallback::File);
+        assert!(v.keyring_works()); assert_eq!(k.get("plugin/gog").as_deref(), Some("old"), "moved into the keyring"); assert!(!f.exists());
+        assert!(v.put("account/1", "{}"), "typed keys go to a working keyring");
+        let broken = Arc::new(Mem::default()); broken.broken.store(true, std::sync::atomic::Ordering::SeqCst);
+        let v2 = WithFallback::new(Some(broken), tmpfile("broken"), Fallback::Ask); assert!(!v2.keyring_works(), "a keyring that does not take a value counts as none");
     }
     #[test] fn the_windows_file_name_is_hex_of_the_name() { #[cfg(target_os = "windows")] { assert!(WindowsVault::file("plugin/x").is_some()); } assert_eq!(format!("{}", "plugin/x".bytes().map(|b| format!("{b:02x}")).collect::<String>()), "706c7567696e2f78"); }
 }

@@ -25,7 +25,8 @@ fn arc(root: &Path, p: &Path) -> String { p.strip_prefix(root).unwrap_or(p).comp
 
 /// Writes a backup of the data folder to `dest` (written beside it and renamed, so a half-written file never has the final name). `progress(done, total)` counts entries.
 /// Returns how many entries went in.
-pub fn create(root: &Path, dest: &Path, include_art: bool, progress: &mut dyn FnMut(usize, usize), cancel: &Cancel) -> Result<usize, String> {
+/// `sign_ins`: store sign-ins go into the backup's `config.json` (unencrypted); without it they are left out. Typed API keys are always included.
+pub fn create(root: &Path, dest: &Path, include_art: bool, sign_ins: bool, progress: &mut dyn FnMut(usize, usize), cancel: &Cancel) -> Result<usize, String> {
     let tmp = dest.with_extension("zip.partial");
     let result = (|| -> Result<usize, String> {
         let f = std::io::BufWriter::new(std::fs::File::create(&tmp).map_err(|e| format!("Could not write {}: {e}", tmp.display()))?);
@@ -42,7 +43,13 @@ pub fn create(root: &Path, dest: &Path, include_art: bool, progress: &mut dyn Fn
         let total = plain.len() + dbs.len() + art.len();
         let mut done = 0usize;
         let check = |cancel: &Cancel| if cancel.is_set() { Err("Cancelled".to_string()) } else { Ok(()) };
-        for (name, p, deflate) in &plain { check(cancel)?; z.add_file(name, p, *deflate).map_err(|e| format!("{name}: {e}"))?; done += 1; progress(done, total); }
+        for (name, p, deflate) in &plain {
+            check(cancel)?;
+            // config.json is written as a backup should hold it: keys from the keyring put back, sign-ins only when asked for
+            let cfg = (name == "config.json").then(|| crate::account::config_for_backup(root, sign_ins)).flatten().and_then(|v| serde_json::to_vec_pretty(&v).ok());
+            match cfg { Some(b) => z.add_bytes(name, &b, *deflate), None => z.add_file(name, p, *deflate) }.map_err(|e| format!("{name}: {e}"))?;
+            done += 1; progress(done, total);
+        }
         for db in &dbs {
             check(cancel)?;
             let name = db.file_name().unwrap_or_default().to_string_lossy().to_string();
@@ -234,11 +241,11 @@ mod tests {
         std::fs::create_dir_all(a.join("static/img/library/vertical")).unwrap(); std::fs::write(a.join("static/img/library/vertical/1.jpg"), [0xffu8, 0xd8, 1, 2, 3]).unwrap();
         std::fs::create_dir_all(a.join("static/img/badges")).unwrap(); std::fs::write(a.join("static/img/badges/b.png"), [1u8, 2]).unwrap();
         let z = a.join("backup.zip");
-        let n = create(&a, &z, true, &mut |_, _| {}, &Cancel::new()).unwrap();
+        let n = create(&a, &z, true, false, &mut |_, _| {}, &Cancel::new()).unwrap();
         assert_eq!(n, 6, "config, state, db, wins, badge and one cover; the junk file stays out");
         assert!(!a.join("backup.zip.partial").exists() && !z.with_extension("zip.partial").exists());
         // without art the covers are left out
-        let z2 = a.join("small.zip"); assert_eq!(create(&a, &z2, false, &mut |_, _| {}, &Cancel::new()).unwrap(), 5);
+        let z2 = a.join("small.zip"); assert_eq!(create(&a, &z2, false, false, &mut |_, _| {}, &Cancel::new()).unwrap(), 5);
         // restore into another folder that already has a different library open
         let b = tmp("b"); library(&b, "games_1.db");
         let live = Connection::open(b.join("games_1.db")).unwrap(); live.execute("DELETE FROM games", []).unwrap();

@@ -153,6 +153,7 @@ begin
   end;
   DeleteFile(Dir + '\owned_checked.json');
   DeleteFile(Dir + '\zest_sync_status.json');
+  DeleteFile(Dir + '\zest_secrets.json');
   DelTree(Dir + '\.rollback', True, True, True);
   DelTree(Dir + '\zest-login.exe.WebView2', True, True, True);
   DeleteFile(Dir + '\config.json');

@@ -49,7 +49,7 @@ fn secret_get_with(vault: Option<&dyn Vault>, dir: &Path, loc: &Loc) -> Option<S
     let mut blob = secrets::blob_get(v, &loc.blob);
     if let Some(x) = blob.get(&loc.field).and_then(|x| x.as_str()) { return Some(x.to_string()); }
     let p = plain?;
-    if p.is_empty() { return Some(p); }
+    if p.is_empty() || !v.keeps(&loc.blob) { return Some(p); }
     blob.insert(loc.field.clone(), json!(p));
     if secrets::blob_put(v, &loc.blob, &blob) { let _ = remove_plaintext(dir, &loc.path); } else { crate::net::log("secrets: the keyring did not take a value; it stays in config.json for now"); }
     Some(p)
@@ -75,7 +75,7 @@ fn section_with(v: Option<&dyn Vault>, dir: &Path, plugin: &str) -> Map<String, 
     let name = format!("plugin/{plugin}");
     let mut blob = secrets::blob_get(v, &name);
     let left: Vec<String> = m.iter().filter(|(k, x)| x.is_string() && secrets::is_secret_key(k) && !blob.contains_key(*k)).map(|(k, _)| k.clone()).collect();
-    if !left.is_empty() {
+    if !left.is_empty() && v.keeps(&name) {
         for k in &left { blob.insert(k.clone(), m[k].clone()); }
         if secrets::blob_put(v, &name, &blob) { for k in &left { let _ = remove_plaintext(dir, &[plugin.to_string(), k.clone()]); } }
     }
@@ -115,6 +115,30 @@ fn migrate_secrets_with(v: &dyn Vault, dir: &Path) {
     if let Some(o) = cfg.as_object() { for (plugin, sec) in o { if matches!(plugin.as_str(), "accounts" | "launchers") { continue; }
         if let Some(m) = sec.as_object() { for (k, x) in m { if x.is_string() && secrets::is_secret_key(k) { touch(loc_plugin(plugin, k)); } } } } }
     if moved > 0 { crate::net::log(&format!("secrets: {moved} secret(s) moved from config.json into the keyring")); }
+}
+
+/// `config.json` as a backup should hold it, in PlayDate's own layout (so either program restores it): typed API keys always written back in from the vault; store sign-ins
+/// written back in when `sign_ins`, else every secret-looking value taken out of the stores' sections. The Steam sign-in is never included (it is quick to redo).
+pub fn config_for_backup(dir: &Path, sign_ins: bool) -> Option<Value> {
+    let mut cfg = read(dir)?;
+    let v = vault_ref();
+    if let Some(sg) = secret_get_with(v.as_deref(), dir, &loc_sgdb()).filter(|k| !k.is_empty()) { if let Some(o) = cfg.as_object_mut() { o.insert("sgdb_key".into(), json!(sg)); } }
+    let ids: Vec<String> = cfg.get("accounts").and_then(|a| a.as_object()).map(|a| a.keys().cloned().collect()).unwrap_or_default();
+    for id in ids {
+        if let Some(k) = secret_get_with(v.as_deref(), dir, &loc_api_key(&id)).filter(|k| !k.is_empty()) { if let Some(e) = cfg.get_mut("accounts").and_then(|a| a.get_mut(&id)).and_then(|e| e.as_object_mut()) { e.insert("api_key".into(), json!(k)); } }
+    }
+    let plugins: Vec<String> = cfg.as_object().map(|o| o.iter().filter(|(k, x)| !matches!(k.as_str(), "accounts" | "launchers") && x.is_object()).map(|(k, _)| k.clone()).collect()).unwrap_or_default();
+    for p in plugins {
+        let sec = if sign_ins { section_with(v.as_deref(), dir, &p) } else { section_plain(dir, &p).into_iter().filter(|(k, x)| !(x.is_string() && secrets::is_secret_key(k))).collect() };
+        if let Some(o) = cfg.as_object_mut() { o.insert(p, Value::Object(sec)); }
+    }
+    Some(cfg)
+}
+
+/// Does `config.json` hold a store sign-in in plain text (a secret-looking value in a store's section)?
+pub fn has_plaintext_sign_ins(dir: &Path) -> bool {
+    read(dir).and_then(|c| c.as_object().cloned()).map_or(false, |o| o.iter().any(|(k, sec)| !matches!(k.as_str(), "accounts" | "launchers")
+        && sec.as_object().map_or(false, |m| m.iter().any(|(f, x)| secrets::is_secret_key(f) && x.as_str().map_or(false, |v| !v.is_empty())))))
 }
 
 /// `get_active_account`
@@ -259,6 +283,16 @@ pub fn write_json(path: &Path, v: &Value) -> std::io::Result<()> {
 
 #[cfg(test)]
 mod tests {
+    #[test] fn a_backup_config_has_keys_always_and_sign_ins_only_when_asked() {
+        let d = std::env::temp_dir().join(format!("zest_cfgbackup_{}", std::process::id())); let _ = std::fs::remove_dir_all(&d); std::fs::create_dir_all(&d).unwrap();
+        std::fs::write(d.join("config.json"), r#"{"active_account":"1","accounts":{"1":{"api_key":"K"}},"sgdb_key":"S","gog":{"username":"me","access_token":"T"},"launchers":{"x":{"prefix":"/p"}}}"#).unwrap();
+        let off = config_for_backup(&d, false).unwrap();
+        assert_eq!(off["accounts"]["1"]["api_key"], "K"); assert_eq!(off["sgdb_key"], "S");
+        assert_eq!(off["gog"]["username"], "me"); assert!(off["gog"].get("access_token").is_none(), "sign-ins left out by default");
+        assert_eq!(off["launchers"]["x"]["prefix"], "/p", "launcher settings are not secrets and are untouched");
+        let on = config_for_backup(&d, true).unwrap(); assert_eq!(on["gog"]["access_token"], "T");
+        let _ = std::fs::remove_dir_all(&d);
+    }
     use super::*;
     fn tmp(n: &str) -> std::path::PathBuf { let d = std::env::temp_dir().join(format!("zest_acct_{n}_{}", std::process::id())); let _ = std::fs::remove_dir_all(&d); std::fs::create_dir_all(&d).unwrap(); d }
     #[test] fn read_write_keeps_the_rest() {

@@ -24,24 +24,27 @@ impl SecretTool {
 }
 impl SecretStore for SecretTool {
     fn get(&self, steam_id: &str) -> Option<String> {
-        if !cfg!(target_os = "linux") { return Self::vault_name(steam_id).and_then(|n| crate::secrets::current()?.get(&n)); }
-        if !Self::have() { return None; }
-        let out = std::process::Command::new("secret-tool").args(["lookup", "service", "zest", "kind", "steam-refresh", "steamid", steam_id]).stdin(std::process::Stdio::null()).stderr(std::process::Stdio::null()).output().ok()?;
-        let t = String::from_utf8_lossy(&out.stdout).trim().to_string();
-        (out.status.success() && !t.is_empty()).then_some(t)
+        let vault = || Self::vault_name(steam_id).and_then(|n| crate::secrets::current()?.get(&n));
+        if !cfg!(target_os = "linux") { return vault(); }
+        let direct = Self::have().then(|| std::process::Command::new("secret-tool").args(["lookup", "service", "zest", "kind", "steam-refresh", "steamid", steam_id]).stdin(std::process::Stdio::null()).stderr(std::process::Stdio::null()).output().ok()).flatten()
+            .and_then(|out| { let t = String::from_utf8_lossy(&out.stdout).trim().to_string(); (out.status.success() && !t.is_empty()).then_some(t) });
+        // no keyring: the vault's fallback (a file or memory, as the user chose) may hold it
+        direct.or_else(vault)
     }
     fn put(&self, steam_id: &str, token: &str) -> bool {
         use std::io::Write;
         if !cfg!(target_os = "linux") { return match (Self::vault_name(steam_id), crate::secrets::current()) { (Some(n), Some(v)) => v.put(&n, token), _ => false }; }
-        if !Self::have() { return false; }
+        let fallback = || match (Self::vault_name(steam_id), crate::secrets::current()) { (Some(n), Some(v)) => v.put(&n, token), _ => false };
+        if !Self::have() { return fallback(); }
         let Ok(mut child) = std::process::Command::new("secret-tool").args(["store", "--label", "Zest: Steam sign-in", "service", "zest", "kind", "steam-refresh", "steamid", steam_id])
             .stdin(std::process::Stdio::piped()).stdout(std::process::Stdio::null()).stderr(std::process::Stdio::null()).spawn() else { return false };
         if let Some(mut si) = child.stdin.take() { let _ = si.write_all(token.as_bytes()); }
-        child.wait().map(|s| s.success()).unwrap_or(false)
+        if child.wait().map(|s| s.success()).unwrap_or(false) { return true; }
+        fallback()
     }
     fn forget(&self, steam_id: &str) {
-        if !cfg!(target_os = "linux") { if let (Some(n), Some(v)) = (Self::vault_name(steam_id), crate::secrets::current()) { v.forget(&n); } return; }
-        if !Self::have() { return; }
+        if let (Some(n), Some(v)) = (Self::vault_name(steam_id), crate::secrets::current()) { v.forget(&n); }
+        if !cfg!(target_os = "linux") || !Self::have() { return; }
         let _ = std::process::Command::new("secret-tool").args(["clear", "service", "zest", "kind", "steam-refresh", "steamid", steam_id]).stdin(std::process::Stdio::null()).stdout(std::process::Stdio::null()).stderr(std::process::Stdio::null()).status();
     }
 }
@@ -93,7 +96,7 @@ pub fn renew(http: &dyn Http, refresh_token: &str) -> Result<Renewed, String> {
 /// Saves the refresh token (keyring) for this account.
 pub fn remember(store: &dyn SecretStore, steam_id: &str, refresh_cookie: &str) {
     let ok = store.put(steam_id, refresh_cookie);
-    crate::net::log(&format!("steam session: the refresh token was {}", if ok { "saved in the keyring" } else { "not saved (no keyring here); the sign-in lasts until Zest closes" }));
+    crate::net::log(&format!("steam session: the refresh token was {}", if !ok { "not saved; the sign-in lasts until Zest closes" } else if crate::secrets::no_keyring() { "kept without a keyring (a file or memory, as chosen in Settings > Account)" } else { "saved in the keyring" }));
 }
 
 /// Brings the session back after a restart (or a day's expiry): the saved refresh token is traded for new cookies, which become this run's sessions (`steamsignin`). True when a Help session exists after.

@@ -17,7 +17,8 @@ pub enum DataOut { None, Close, /// A filter was imported: save it under this na
     OpenPlaynite }
 
 pub struct DataDialog {
-    include_art: bool, busy: bool, status: String,
+    include_art: bool, /// Backup: put the store sign-ins in it (off by default; they are written unencrypted).
+    include_sign_ins: bool, busy: bool, status: String,
     /// Which CSV columns to export (`backup::CSV_HEADERS` order) and whether the list is open.
     csv_cols: [bool; 17], csv_open: bool, dbi: crate::dbimport_ui::DbImportUi,
     root: PathBuf, db: PathBuf, filter_query: (String, Vec<Sql>),
@@ -36,7 +37,7 @@ fn stamp() -> String {
 impl DataDialog {
     pub fn new(ctx: &egui::Context, root: PathBuf, db: PathBuf, filter_query: (String, Vec<Sql>), saved: &serde_json::Map<String, serde_json::Value>) -> Self {
         let (tx, rx) = mpsc::channel();
-        DataDialog { dbi: crate::dbimport_ui::DbImportUi::new(), csv_cols: [true; 17], csv_open: false, include_art: true, busy: false, status: String::new(), root, db, filter_query, tx, rx, ctx: ctx.clone(), cancel: Cancel::new(), filters: saved.iter().map(|(n, e)| (n.clone(), e.get("tree").cloned().unwrap_or_else(|| e.clone()))).collect(), f_pick: String::new(), f_pending: None, f_new: String::new(), f_msg: String::new(), confirm_restore: None, progress: Arc::new(Mutex::new(String::new())) }
+        DataDialog { dbi: crate::dbimport_ui::DbImportUi::new(), csv_cols: [true; 17], csv_open: false, include_art: true, include_sign_ins: false, busy: false, status: String::new(), root, db, filter_query, tx, rx, ctx: ctx.clone(), cancel: Cancel::new(), filters: saved.iter().map(|(n, e)| (n.clone(), e.get("tree").cloned().unwrap_or_else(|| e.clone()))).collect(), f_pick: String::new(), f_pending: None, f_new: String::new(), f_msg: String::new(), confirm_restore: None, progress: Arc::new(Mutex::new(String::new())) }
     }
     fn run(&mut self, kind: Kind2, work: impl FnOnce(&Cancel, &dyn Fn(String)) -> Result<String, String> + Send + 'static) {
         self.busy = true; self.cancel = Cancel::new(); self.status = String::new();
@@ -78,13 +79,14 @@ impl DataDialog {
             ui.label(ui_kit::muted("Saves your library, settings and (optionally) every cover into one zip. PlayDate can restore it too.", 0.82 * r));
             ui.add_space(0.3 * r);
             ui.checkbox(&mut self.include_art, egui::RichText::new("Include cover art (much bigger, restores without re-downloading)").size(0.85 * r).color(ui_kit::TEXT()));
+            ui.checkbox(&mut self.include_sign_ins, egui::RichText::new("Include store sign-ins (saved unencrypted in the backup; API keys are always included)").size(0.85 * r).color(ui_kit::TEXT()));
             ui.add_space(0.3 * r);
             ui.horizontal(|ui| {
                 if ui_kit::button(ui, "BACK UP...", Kind::Primary, accent, r).clicked() && !self.busy {
-                    let (root, art) = (self.root.clone(), self.include_art);
+                    let (root, art, sign_ins) = (self.root.clone(), self.include_art, self.include_sign_ins);
                     self.run(Kind2::Backup, move |cancel, report| {
                         let Some(path) = rfd::FileDialog::new().set_title("Save backup").set_file_name(format!("zest_backup_{}.zip", stamp())).add_filter("Zip", &["zip"]).save_file() else { return Ok(String::new()) };
-                        let n = pd_filter::backup::create(&root, &path, art, &mut |d, t| report(format!("Backing up: {d} of {t}")), cancel)?;
+                        let n = pd_filter::backup::create(&root, &path, art, sign_ins, &mut |d, t| report(format!("Backing up: {d} of {t}")), cancel)?;
                         Ok(format!("Backed up {n} files to {}", path.display()))
                     });
                 }
