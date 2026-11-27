@@ -236,6 +236,8 @@ pub fn session_action(exe: &Path, prefix: &Path, args: &[String]) -> Result<Acti
         Ok(Runtime::Umu { proton, .. }) | Ok(Runtime::ProtonScript { proton }) => proton.path.parent().and_then(|d| ["files/bin", "dist/bin"].iter().map(|b| d.join(b).join("wine")).find(|w| w.is_file())),
         _ => None,
     };
+    // tests set the runtime themselves, so they do not depend on a Wine being installed on the machine running them
+    #[cfg(test)] let proton_wine = proton_wine.or_else(|| match TEST_RUNTIME.with(|t| t.borrow().clone()) { Some(Ok(Runtime::Wine { wine })) => Some(wine), _ => None });
     let wine = proton_wine.or_else(|| find_wine(&path, WINE_DIRS)).ok_or("Wine is not installed, so Zest cannot hand the launch to the running Battle.net.")?;
     // a bare program name (`start`) has no folder of its own: the prefix is used (an empty folder made the start fail with "No such file or directory")
     let cwd = if exe.is_absolute() { None } else { Some(prefix) };
