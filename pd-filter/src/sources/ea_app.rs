@@ -460,7 +460,8 @@ mod tests {
         assert!(get(&rows, "O-unk").is_none(), "a game nothing matches is left alone");
         assert!(s.caps().launch && s.caps().uninstall && s.caps().installed_scan && !s.caps().install);
     }
-    #[cfg(not(windows))]
+    // Linux only: the EA App has no macOS version (launch says so there)
+    #[cfg(target_os = "linux")]
     #[test] fn launch_and_uninstall_open_the_app_in_its_prefix_unless_it_is_already_open() {
         let d = tmpdir("launch"); let pfx = d.join("pfx");
         let s = EaSource::new(Arc::new(Fake), d.clone(), d.join("g.db"));

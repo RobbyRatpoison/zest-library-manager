@@ -429,7 +429,8 @@ mod tests {
         assert!(s.auth_status().unwrap().connected, "the local setup is untouched");
     }
 
-    #[cfg(not(windows))]
+    // Linux only: on a Mac the native Battle.net app is opened through its link instead
+    #[cfg(target_os = "linux")]
     #[test] fn launch_and_the_scan_follow_the_prefix() {
         let d = tmpdir("launch"); let db = d.join("games_1.db");
         let s = BattleNetSource::new(d.clone(), db.clone(), std::sync::Arc::new(crate::net::UreqHttp::new()));

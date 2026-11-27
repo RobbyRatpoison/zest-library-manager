@@ -426,7 +426,8 @@ mod tests {
         assert_eq!(raw_entries(&data).len(), 2);
         assert!(raw_entries(&[]).is_empty() && raw_entries(&[0x0A, 0xFF]).is_empty());
     }
-    #[cfg(not(windows))]
+    // Linux only: on a Mac a game's link goes straight to Ubisoft Connect (no prefix to start it in)
+    #[cfg(target_os = "linux")]
     #[test] fn the_prefix_is_kept_and_sync_scan_art_and_links_work_on_it() {
         let d = tmpdir("flow"); let pfx = d.join("pfx");
         let cache = pfx.join("drive_c/users/steamuser").join(CONFIG_SUBPATH); std::fs::create_dir_all(cache.parent().unwrap()).unwrap();

@@ -539,7 +539,6 @@ mod launch_tests {
         std::fs::write(d.join("fuel.json"), r#"{"Main": {"Command": ""}}"#).unwrap(); assert_eq!(read_fuel(&d), None);
         std::fs::write(d.join("fuel.json"), "nope").unwrap(); assert_eq!(read_fuel(&d), None);
     }
-    #[cfg(not(windows))]
     // ---- install: a fake Amazon distribution service serving signed manifests (made by tests/gen_sds_golden.py with a throwaway key) and files by hash
     fn unhex(s: &str) -> Vec<u8> { (0..s.len() / 2).map(|i| u8::from_str_radix(&s[2 * i..2 * i + 2], 16).unwrap()).collect() }
     struct Shop { g: Value, corrupt: Option<String>, no_url: bool, asked: Mutex<Vec<String>> }

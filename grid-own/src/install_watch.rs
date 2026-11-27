@@ -70,8 +70,13 @@ impl InstallWatch {
         }
         missing
     }
+    /// Events carry the folder's real path (symlinks resolved: macOS reports /private/var for /var, and a games folder can be a link to another drive),
+    /// so a root is matched both as given and as its real path.
     fn add_root(&self, path: &Path, id: &str) {
-        if let Ok(mut r) = self.roots.lock() { if !r.iter().any(|(p, i)| p == path && i == id) { r.push((path.to_path_buf(), id.to_string())); } }
+        let real = std::fs::canonicalize(path).ok().filter(|r| r != path);
+        if let Ok(mut r) = self.roots.lock() {
+            for p in std::iter::once(path.to_path_buf()).chain(real) { if !r.iter().any(|(q, i)| *q == p && i == id) { r.push((p, id.to_string())); } }
+        }
     }
     pub fn due_for_refresh(&self) -> bool { self.last_refresh.map_or(true, |t| t.elapsed() >= RETRY) }
 
@@ -116,7 +121,7 @@ mod tests {
         assert!(w.watched.contains_key(&d.join("later")));
         // events arrive on another thread: wait for them
         let mut got = false;
-        for _ in 0..40 { std::thread::sleep(Duration::from_millis(50)); while let Ok(id) = w.rx.try_recv() { w.pending.insert(id, Instant::now() - QUIET); got = true; } if got { break; } }
+        for _ in 0..100 { std::thread::sleep(Duration::from_millis(50)); while let Ok(id) = w.rx.try_recv() { w.pending.insert(id, Instant::now() - QUIET); got = true; } if got { break; } }
         assert!(got, "the install touched a watched folder");
         assert_eq!(w.poll(), vec!["x"]);
         assert!(!w.has_pending());

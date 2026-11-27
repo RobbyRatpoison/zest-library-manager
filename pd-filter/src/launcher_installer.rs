@@ -595,9 +595,9 @@ mod tests {
         // a refused download
         let f = mk(false, true);
         assert!(install("rockstar", &cfg("https://x/missing"), &prefix, &env(&rt, &f, &d, &Site), &Cancel::new(), &mut |_, _| {}).unwrap_err().contains("Download failed"));
-        // no winetricks on the machine
+        // no winetricks on the machine (Linux only: macOS has none and installs the Visual C++ runtime itself)
         let mut en = env(&rt, &f, &d, &Site); en.winetricks = None;
-        assert!(install("rockstar", &cfg("https://x/i"), &prefix, &en, &Cancel::new(), &mut |_, _| {}).unwrap_err().contains("winetricks is required"));
+        if cfg!(target_os = "linux") { assert!(install("rockstar", &cfg("https://x/i"), &prefix, &en, &Cancel::new(), &mut |_, _| {}).unwrap_err().contains("winetricks is required")); }
         // cancelled
         let c = Cancel::new(); c.cancel();
         assert_eq!(install("rockstar", &cfg("https://x/i"), &prefix, &env(&rt, &f, &d, &Site), &c, &mut |_, _| {}).unwrap_err(), "Cancelled");

@@ -73,14 +73,16 @@ pub fn read_reg_value(reg: &Registry, key: &str) -> Option<String> {
     reg.get(&n.replacen("software\\", "software\\wow6432node\\", 1)).map(String::from)
 }
 
-/// `_case_insensitive_join`: Wine's disk is case-sensitive but manifests use Windows casing.
+/// `_case_insensitive_join`: Wine's disk is case-sensitive but manifests use Windows casing. Each part takes the name as it is on disk: an exact match first,
+/// else one that differs only in case. (Checking `exists()` first is not enough: on a case-insensitive disk, as on a Mac, any casing "exists" and the path
+/// would keep the manifest's spelling.)
 pub fn case_insensitive_join(base: &Path, rel: &str) -> PathBuf {
     let mut cur = base.to_path_buf();
     for part in rel.split('/').filter(|p| !p.is_empty()) {
-        let cand = cur.join(part);
-        if cand.exists() { cur = cand; continue; }
-        let found = std::fs::read_dir(&cur).ok().and_then(|rd| rd.flatten().map(|e| e.file_name().to_string_lossy().to_string()).find(|n| n.to_lowercase() == part.to_lowercase()));
-        cur = cur.join(found.as_deref().unwrap_or(part));
+        let names: Vec<String> = std::fs::read_dir(&cur).map(|rd| rd.flatten().map(|e| e.file_name().to_string_lossy().to_string()).collect()).unwrap_or_default();
+        let lower = part.to_lowercase();
+        let found = names.iter().find(|n| *n == part).or_else(|| names.iter().find(|n| n.to_lowercase() == lower));
+        cur = cur.join(found.map(String::as_str).unwrap_or(part));
     }
     cur
 }

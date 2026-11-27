@@ -551,8 +551,10 @@ mod tests {
     #[test] fn launch_fills_the_placeholders_and_explains_what_is_missing() {
         let r = tmp("launch"); let rom = r.join("g.sfc"); std::fs::write(&rom, b"x").unwrap(); let rs = rom.to_string_lossy().to_string();
         assert!(launch(&r, "snes", &rs).unwrap_err().contains("No emulator"));
-        add_custom_emulator(&r, "Mine", "snes", "/bin/true", &["--r".into(), "{rom}".into(), "{rom_dir}".into(), "{rom_name}".into()]).unwrap();
-        match launch(&r, "snes", &rs).unwrap() { Action::Spawn { program, args, .. } => { assert_eq!(program, "/bin/true"); assert_eq!(args[1], rs); assert_eq!(args[2], r.to_string_lossy()); assert_eq!(args[3], "g"); } _ => panic!() }
+        // a program file made here, so the test does not depend on /bin/true (macOS has it in /usr/bin, Windows not at all)
+        let emu = r.join("emu"); std::fs::write(&emu, b"x").unwrap(); let es = emu.to_string_lossy().to_string();
+        add_custom_emulator(&r, "Mine", "snes", &es, &["--r".into(), "{rom}".into(), "{rom_dir}".into(), "{rom_name}".into()]).unwrap();
+        match launch(&r, "snes", &rs).unwrap() { Action::Spawn { program, args, .. } => { assert_eq!(program, es); assert_eq!(args[1], rs); assert_eq!(args[2], r.to_string_lossy()); assert_eq!(args[3], "g"); } _ => panic!() }
         assert!(launch(&r, "snes", "/nope.sfc").unwrap_err().contains("ROM"));
         update_emulator(&r, "custom_1", &Update { args: Some(vec!["-L".into(), "{core}".into(), "{rom}".into()]), ..Default::default() }).unwrap();
         assert!(launch(&r, "snes", &rs).unwrap_err().contains("core")); let _ = std::fs::remove_dir_all(&r);
