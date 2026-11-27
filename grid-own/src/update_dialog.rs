@@ -10,16 +10,19 @@ enum Msg { Checked(Result<Option<Update>, String>), Downloaded(Result<String, St
 pub struct UpdateDialog {
     root: std::path::PathBuf, beta: bool, auto: bool, status: String, found: Option<Update>, busy: bool, progress: Arc<Mutex<(u64, u64)>>, cancel: Cancel,
     tx: mpsc::Sender<Msg>, rx: mpsc::Receiver<Msg>, ctx: egui::Context, asked: bool,
+    /// A Flatpak update is installed: RESTART NOW starts the new version (Flatpak does not swap the running program, so nothing restarts by itself).
+    installed: bool,
 }
 pub enum UpdateOut { None, Close, /// The user changed a setting (`beta_updates`, `check_updates`): value to store.
     Pref(&'static str, bool), /// A file or folder to open.
     Open(String), /// The update was swapped in: quit so the supervisor can start the new program.
-    Restart }
+    Restart, /// A Flatpak update is installed: start the new version, then quit.
+    RestartFlatpak }
 
 impl UpdateDialog {
     pub fn new(ctx: &egui::Context, root: std::path::PathBuf, beta: bool, auto: bool) -> Self {
         let (tx, rx) = mpsc::channel();
-        let mut d = UpdateDialog { root, beta, auto, status: String::new(), found: None, busy: false, progress: Arc::new(Mutex::new((0, 0))), cancel: Cancel::new(), tx, rx, ctx: ctx.clone(), asked: false };
+        let mut d = UpdateDialog { root, beta, auto, status: String::new(), found: None, busy: false, progress: Arc::new(Mutex::new((0, 0))), cancel: Cancel::new(), tx, rx, ctx: ctx.clone(), asked: false, installed: false };
         d.check(); d
     }
     fn check(&mut self) {
@@ -67,7 +70,7 @@ impl UpdateDialog {
             match m {
                 Msg::Checked(r) => { self.busy = false; match r { Ok(Some(u)) => { self.status = String::new(); self.found = Some(u); } Ok(None) => self.status = format!("You're up to date (Zest {}).", updater::VERSION), Err(e) => self.status = e } }
                 Msg::Downloaded(r) => { self.busy = false; match r {
-                    Ok(s) if s.starts_with("INSTALLED:") => self.status = "Installed. Restart Zest to use the new version.".into(),
+                    Ok(s) if s.starts_with("INSTALLED:") => { self.status = "Installed. Restart Zest to use the new version.".into(); self.installed = true; }
                     Ok(s) if s.starts_with("SETUP:") => { self.status = "Installing the update. Zest closes now and starts again when it is done.".into(); out = UpdateOut::Restart; }
                     Ok(s) if s.starts_with("SWAPPED:") => { self.status = "Updated. Zest restarts now; if the new version does not start, the old one comes back.".into(); out = UpdateOut::Restart; }
                     Ok(s) if s.starts_with("SWAPFAIL:") => { let (why, p) = s.trim_start_matches("SWAPFAIL:").split_once('\n').unwrap_or((&s, "")); self.status = format!("{why} The download is at {p}."); if let Some(d) = std::path::Path::new(p).parent() { out = UpdateOut::Open(d.to_string_lossy().to_string()); } }
@@ -76,7 +79,7 @@ impl UpdateDialog {
             }
         }
         let (d, t) = self.progress.lock().map(|p| *p).unwrap_or((0, 0));
-        let mut download = false; let mut recheck = false; let mut page: Option<String> = None;
+        let mut download = false; let mut recheck = false; let mut page: Option<String> = None; let mut restart = false;
         let (mut beta, mut auto) = (self.beta, self.auto);
         let found = self.found.clone();
         let res = ui_kit::modal(ctx, "update", "Check for Updates", 40.0, |ui, r| {
@@ -93,15 +96,21 @@ impl UpdateDialog {
                     if self.busy && ui_kit::button(ui, "CANCEL", Kind::Plain, accent, r).clicked() { self.cancel.cancel(); }
                 });
                 if self.busy && t > 0 { ui.add(egui::ProgressBar::new(d as f32 / t as f32).desired_width(20.0 * r)); }
-                ui.label(ui_kit::muted("Zest swaps itself and keeps the old version for two failed starts. Your data is not rolled back: keep a backup.", 0.75 * r));
+                ui.label(ui_kit::muted(match Install::current() {
+                    Install::Flatpak => "The new version is installed for your user; Zest then offers to restart. Your data stays as it is: keep a backup.",
+                    Install::WindowsSetup => "The installer runs quietly and starts Zest again when it is done. Your data stays as it is: keep a backup.",
+                    _ => "Zest swaps itself and keeps the old version for two failed starts. Your data is not rolled back: keep a backup.",
+                }, 0.75 * r));
             } else if ui_kit::button(ui, "CHECK AGAIN", Kind::Plain, accent, r).clicked() && !self.busy { recheck = true; }
             if !self.status.is_empty() { ui.add_space(0.3 * r); ui.label(ui_kit::muted(self.status.clone(), 0.85 * r)); }
+            if self.installed && ui_kit::button(ui, "RESTART NOW", Kind::Primary, accent, r).clicked() { restart = true; }
             ui.add_space(0.5 * r);
             ui.checkbox(&mut beta, egui::RichText::new("Include beta versions").size(0.85 * r).color(ui_kit::TEXT()));
             ui.checkbox(&mut auto, egui::RichText::new("Look for updates once a day when Zest starts").size(0.85 * r).color(ui_kit::TEXT()));
         });
         if beta != self.beta { self.beta = beta; out = UpdateOut::Pref("beta_updates", beta); if !self.busy { self.check(); } }
         if auto != self.auto { self.auto = auto; out = UpdateOut::Pref("check_updates", auto); }
+        if restart { return UpdateOut::RestartFlatpak; }
         if download { if let Some(u) = found { self.download(&u); } }
         if recheck { self.check(); }
         if let Some(p) = page { out = UpdateOut::Open(p); }

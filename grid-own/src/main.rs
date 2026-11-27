@@ -2894,6 +2894,7 @@ impl Own {
                     update_dialog::UpdateOut::Pref(k, v) => { hs.data.save_pref(k, serde_json::json!(v)); Some(Modal::Update(d)) }
                     update_dialog::UpdateOut::Open(u) => { open_url(&u); Some(Modal::Update(d)) }
                     update_dialog::UpdateOut::Restart => { self.want_exit = true; None }
+                    update_dialog::UpdateOut::RestartFlatpak => { relaunch_flatpak(); self.want_exit = true; None }
                 }
             }
             Modal::Hltb(mut d) => {
@@ -5126,6 +5127,18 @@ impl ApplicationHandler for Own {
 /// Shows the window that was created hidden. Windows would fade it in (an empty window for a moment) and maximizing it afterwards redrew nothing at the new size, so the open animation
 /// is switched off for this one show and, when the window is to start maximized, that is done first. True = the picture just drawn has the old size, so it is not presented: the
 /// next frame (asked for here) is drawn at the right size.
+/// After a Flatpak update: starts the new version once this one has quit. It runs on the host, detached (`setsid` in a shell that returns at once, or the `flatpak-spawn`
+/// client keeps this old sandbox alive), after a pause so this copy has let go of its lock. Started from Steam (Game Mode, a Steam shortcut) it goes through Steam
+/// (`steam://rungameid/<SteamGameId>`), so Steam and gamescope show it as the same game; otherwise `flatpak run`.
+fn relaunch_flatpak() {
+    let id = std::env::var("FLATPAK_ID").unwrap_or_else(|_| "io.github.robbyratpoison.Zest".into());
+    let game = std::env::var("SteamGameId").ok().filter(|g| !g.is_empty() && g != "0" && g.bytes().all(|b| b.is_ascii_digit()));
+    let start = match &game { Some(g) => format!("steam steam://rungameid/{g}"), None => format!("flatpak run {id}") };
+    let script = format!("setsid sh -c 'sleep 3; {start}' >/dev/null 2>&1 </dev/null &");
+    pd_filter::net::log(&format!("update: restarting with: {start}"));
+    let _ = std::process::Command::new("flatpak-spawn").args(["--host", "sh", "-c", &script]).stdin(std::process::Stdio::null()).stdout(std::process::Stdio::null()).stderr(std::process::Stdio::null()).spawn();
+}
+
 fn reveal_window(window: &Window) -> bool {
     #[cfg(windows)] { dark_background(window); dwm_transitions(window, false); dwm_cloak(window, true); UNCLOAK.store(true, std::sync::atomic::Ordering::Relaxed); }
     let max = WANT_MAX.load(std::sync::atomic::Ordering::Relaxed);
