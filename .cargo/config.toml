@@ -1,0 +1,4 @@
+# Windows: link the C runtime into the programs. Without it Zest.exe and zest-login.exe need VCRUNTIME140.dll (the Visual C++ Redistributable),
+# which a fresh Windows does not have: the program would not start at all ("VCRUNTIME140.dll was not found", seen on a clean Windows 11, 2026-11-27).
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]
