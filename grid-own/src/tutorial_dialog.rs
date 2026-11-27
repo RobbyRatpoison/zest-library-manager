@@ -1,6 +1,6 @@
 //! Menu -> Tutorial: a list of sections with a search box, and a step view with Back and Next (the words are in `tutorial_text.rs`). Links in a step open a dialog or jump to
-//! another step. The search shows only sections that hold every typed word and opens one at its first matching step.
-use crate::tutorial_text::{Section, Step, OPEN_KEYS, SECTIONS};
+//! another step. A search lists the steps that answer it, best first; it knows plurals, skips small words ("how do i") and maps common other words to the tutorial's own (`SYNONYMS`).
+use crate::tutorial_text::{Step, OPEN_KEYS, SECTIONS};
 use crate::ui_kit::{self, Kind};
 use egui::{RichText, Ui};
 
@@ -32,19 +32,101 @@ pub fn pieces(line: &str) -> Vec<Piece> {
     flush(&mut buf, &mut out); out
 }
 
+/// Words people may type for what the tutorial calls something else: (what they might type, the tutorial's own words). One way only, so a common
+/// tutorial word ("cover", "play") never drags in every step. A typed word finds its group when it equals an entry (after `stem`) or starts one
+/// (4+ letters); an entry with a space is matched as a phrase of the query.
+const SYNONYMS: &[(&[&str], &[&str])] = &[
+    (&["picture", "image", "poster", "boxart", "box art", "thumbnail", "artwork", "capsule", "banner", "grid art"], &["cover", "art"]),
+    (&["controller", "joypad", "joystick", "xbox controller", "dualsense"], &["gamepad", "controller"]),
+    (&["remove", "erase", "trash", "get rid"], &["delete", "remove"]),
+    (&["hide", "ignore", "exclude", "block", "unwanted"], &["blacklist", "hidden", "junk"]),
+    (&["collection", "label", "category", "folder", "favorite", "favourite", "playlist"], &["group", "tag"]),
+    (&["finished", "done", "beat", "complete", "progress", "100%"], &["completion", "beaten", "completed"]),
+    (&["rating", "stars", "score", "critic"], &["review", "metacritic"]),
+    (&["time played", "hours", "hours played"], &["playtime", "hours played"]),
+    (&["recommend", "suggest", "decide", "random", "what to play", "what should i play", "backlog"], &["pick 6"]),
+    (&["login", "log in", "logon", "password", "credential", "authenticate", "connect"], &["sign in", "signing in", "sign-in", "sign-ins"]),
+    (&["save", "copy", "export"], &["backup", "export"]),
+    (&["migrate", "transfer", "move", "switch from", "old library"], &["playdate", "import"]),
+    (&["upgrade", "new version", "latest"], &["update"]),
+    (&["bug", "crash", "problem", "error", "broken", "report", "support", "contact"], &["send log", "help", "discord"]),
+    (&["dark mode", "light mode", "dark", "color", "colour", "wallpaper", "look", "style", "skin"], &["appearance", "theme", "background"]),
+    (&["bigger text", "larger text", "smaller text", "bigger", "larger", "smaller", "zoom", "font", "text size", "tiny"], &["ui scale", "cover size"]),
+    (&["shop", "storefront", "account sync"], &["store", "plugin"]),
+    (&["rom", "retroarch", "console", "retro", "nes", "snes", "switch", "ps2"], &["emulator"]),
+    (&["twice", "same game", "copies", "double"], &["duplicate"]),
+    (&["run", "start game", "open game", "play game"], &["launch"]),
+    (&["download"], &["install"]),
+    (&["front page", "start page", "dashboard", "main page"], &["home", "shelf"]),
+    (&["order", "arrange"], &["sort"]),
+    (&["remap", "bind", "keybind", "hotkey", "mapping"], &["shortcut", "gamepad controls"]),
+    (&["deck", "handheld", "game mode"], &["steam deck"]),
+    (&["how long", "length", "duration"], &["howlongtobeat"]),
+    (&["bought", "purchased", "acquired", "activation", "when i got"], &["purchase dates", "date added"]),
+    (&["border", "frame", "highlight"], &["outline"]),
+    (&["metadata", "genre", "info", "information", "missing"], &["fill missing data", "details"]),
+    (&["key", "api key"], &["web api key", "steamgriddb key"]),
+];
+/// Words a search skips ("how do i hide a game" looks for hide; "game" is in nearly every step).
+const STOP: &[&str] = &["a", "an", "the", "to", "in", "on", "of", "for", "and", "or", "how", "do", "does", "i", "my", "me", "is", "it", "can", "what", "where", "with", "from", "by", "be", "this", "that", "you", "your", "get", "want", "zest", "change", "set", "make", "use", "using", "game", "games"];
+
 /// The text a search looks through for a step.
 fn plain(s: &Step) -> String { let mut t = String::new(); for p in pieces(&format!("{} {}", s.title, s.body.replace('\n', " "))) { match p { Piece::Text(x) | Piece::Bold(x) | Piece::Open(_, x) | Piece::Go(_, x) => { t.push_str(&x); } } } t.to_lowercase() }
-/// Does the section hold every word, and at which step does the first of them appear?
-pub fn search(sec: &Section, query: &str) -> Option<(usize, usize)> {
-    let words: Vec<String> = query.to_lowercase().split_whitespace().map(String::from).collect();
-    if words.is_empty() { return Some((0, 0)); }
-    let texts: Vec<String> = sec.steps.iter().map(plain).collect();
-    let all = format!("{} {}", sec.title.to_lowercase(), texts.join(" "));
-    if !words.iter().all(|w| all.contains(w)) { return None; }
-    // the step holding the most of the words (the earliest on a tie), so "saved filters" lands on the Saved filters step and not on any step that says "filters"
-    let score = |t: &String| words.iter().filter(|w| t.contains(w.as_str())).count();
-    let first = texts.iter().enumerate().fold((0usize, 0usize), |best, (i, t)| if score(t) > best.1 { (i, score(t)) } else { best }).0;
-    Some((first, texts.iter().filter(|t| words.iter().any(|w| t.contains(w))).count()))
+/// A plural ending taken off ("filters" -> "filter", "categories" -> "category", "matches" -> "match"), so the stem finds both forms.
+fn stem(w: &str) -> String {
+    if w.len() > 4 { if let Some(s) = w.strip_suffix("ies") { return format!("{s}y"); }
+        if let Some(s) = w.strip_suffix("es").filter(|s| s.ends_with("sh") || s.ends_with("ch") || s.ends_with('x')) { return s.to_string(); } }
+    if w.len() > 3 && w.ends_with('s') && !w.ends_with("ss") { return w[..w.len() - 1].to_string(); }
+    w.to_string()
+}
+/// Does `term` occur in `text` at the start of a word ("art" finds "artwork", not "start")? A stem also finds its "-ies" plural ("category" in "categories").
+fn has_term(text: &str, term: &str) -> bool {
+    let at_start = |t: &str| text.match_indices(t).any(|(i, _)| !text[..i].chars().next_back().is_some_and(|c| c.is_alphanumeric()));
+    at_start(term) || term.strip_suffix('y').is_some_and(|b| b.len() > 2 && at_start(&format!("{b}ies")))
+}
+/// One thing the user asked for: the word as typed (stemmed) and the tutorial words it may also be found as.
+struct Term { own: String, syn: Vec<&'static str> }
+fn term_for(word: &str) -> Term {
+    let own = stem(word);
+    let syn = SYNONYMS.iter().filter(|(typed, _)| typed.iter().any(|e| !e.contains(' ') && (stem(e) == own || (own.len() >= 4 && e.starts_with(own.as_str()))))).flat_map(|(_, to)| to.iter().copied()).collect();
+    Term { own, syn }
+}
+/// The query as terms: phrases that are synonym entries ("steam deck", "log in") first, then the remaining words, small words dropped unless nothing else is left.
+fn query_terms(query: &str) -> Vec<Term> {
+    let q = query.to_lowercase().replace(['?', ',', '.', '!'], " ");
+    let mut rest = format!(" {} ", q.split_whitespace().collect::<Vec<_>>().join(" "));
+    let mut terms = vec![];
+    for (typed, to) in SYNONYMS { for e in typed.iter().filter(|e| e.contains(' ')) { let pat = format!(" {e} "); if rest.contains(&pat) { rest = rest.replacen(&pat, " ", 1); terms.push(Term { own: e.to_string(), syn: to.to_vec() }); } } }
+    let words: Vec<&str> = rest.split_whitespace().collect();
+    let kept: Vec<&str> = words.iter().copied().filter(|w| !STOP.contains(w)).collect();
+    terms.extend((if kept.is_empty() && terms.is_empty() { words } else { kept }).into_iter().map(term_for));
+    terms
+}
+/// How well one text answers a term: 3 for the word itself, 2 for a synonym, 0 for neither.
+fn weight(text: &str, t: &Term) -> u32 { if has_term(text, &t.own) { 3 } else if t.syn.iter().any(|s| has_term(text, s)) { 2 } else { 0 } }
+
+/// Every step that answers the query, best first: steps holding the most of the asked-for words, then the word itself over a synonym (a hit in the
+/// step's title counting double), then the earliest. When no step holds every word, the steps holding the most of them are shown.
+pub fn results(query: &str) -> Vec<(usize, usize)> {
+    let terms = query_terms(query);
+    if terms.is_empty() { return vec![]; }
+    let mut hits: Vec<(usize, usize, usize, u32)> = vec![];
+    for (si, sec) in SECTIONS.iter().enumerate() { for (ti, st) in sec.steps.iter().enumerate() {
+        // the step's own title counts as much again as its text; its section's title adds a little (so Pick 6's steps lead for "what should i play")
+        let (body, title, sec_title) = (format!("{} {}", sec.title.to_lowercase(), plain(st)), st.title.to_lowercase(), sec.title.to_lowercase());
+        let ws: Vec<u32> = terms.iter().map(|t| weight(&body, t) + weight(&title, t) + (weight(&sec_title, t) > 0) as u32).collect();
+        let n = ws.iter().filter(|w| **w > 0).count();
+        if n > 0 { hits.push((si, ti, n, ws.iter().sum())); }
+    } }
+    let best = hits.iter().map(|h| h.2).max().unwrap_or(0);
+    hits.retain(|h| h.2 == best);
+    hits.sort_by(|a, b| b.3.cmp(&a.3).then((a.0, a.1).cmp(&(b.0, b.1))));
+    hits.into_iter().map(|h| (h.0, h.1)).collect()
+}
+/// Did the results hold every asked-for word? (Else the list says it is showing the closest matches.)
+pub fn complete(query: &str) -> bool {
+    let terms = query_terms(query);
+    results(query).first().is_some_and(|&(si, ti)| { let (sec, st) = (&SECTIONS[si], &SECTIONS[si].steps[ti]); let body = format!("{} {}", sec.title.to_lowercase(), plain(st)); terms.iter().all(|t| weight(&body, t) > 0) })
 }
 
 fn find_step(section: &str, step: Option<&str>) -> Option<(usize, usize)> {
@@ -81,19 +163,28 @@ impl TutorialDialog {
                     ui_kit::style_fields(ui);
                     ui.add(egui::TextEdit::singleline(&mut self.query).hint_text("Search the tutorial").desired_width(f32::INFINITY));
                     ui.add_space(0.3 * r);
-                    let mut shown = 0;
                     egui::ScrollArea::vertical().max_height(f32::INFINITY).auto_shrink([false, true]).show(ui, |ui| {
-                        for (i, sec) in SECTIONS.iter().enumerate() {
-                            let Some((first, n)) = search(sec, &self.query) else { continue };
-                            shown += 1;
-                            ui.horizontal(|ui| {
-                                let rs = ui.add(egui::Label::new(RichText::new(sec.title).size(1.0 * r).strong().color(crate::ui_kit::heading())).sense(egui::Sense::click())); ui_kit::focus_mark(ui, &rs, rs.rect); if rs.clicked() { pick = Some((i, first)); }
-                                let note = if self.query.trim().is_empty() { format!("{} steps", sec.steps.len()) } else { format!("{n} match{}", if n == 1 { "" } else { "es" }) };
-                                ui.label(ui_kit::muted(note, 0.8 * r));
-                            });
-                            ui.add_space(0.15 * r);
+                        if self.query.trim().is_empty() {
+                            for (i, sec) in SECTIONS.iter().enumerate() {
+                                ui.horizontal(|ui| {
+                                    let rs = ui.add(egui::Label::new(RichText::new(sec.title).size(1.0 * r).strong().color(crate::ui_kit::heading())).sense(egui::Sense::click())); ui_kit::focus_mark(ui, &rs, rs.rect); if rs.clicked() { pick = Some((i, 0)); }
+                                    ui.label(ui_kit::muted(format!("{} steps", sec.steps.len()), 0.8 * r));
+                                });
+                                ui.add_space(0.15 * r);
+                            }
+                        } else {
+                            // a search lists the steps that answer it, best first, each with its section
+                            let found = results(&self.query);
+                            if found.is_empty() { ui.label(ui_kit::muted("Nothing in the tutorial matches that. Try another word.", 0.9 * r)); }
+                            else if !complete(&self.query) { ui.label(ui_kit::muted("No step has all of those words; these come closest.", 0.8 * r)); ui.add_space(0.2 * r); }
+                            for (si, ti) in found.into_iter().take(12) {
+                                ui.horizontal(|ui| {
+                                    let rs = ui.add(egui::Label::new(RichText::new(SECTIONS[si].steps[ti].title).size(1.0 * r).strong().color(crate::ui_kit::heading())).sense(egui::Sense::click())); ui_kit::focus_mark(ui, &rs, rs.rect); if rs.clicked() { pick = Some((si, ti)); }
+                                    ui.label(ui_kit::muted(SECTIONS[si].title, 0.8 * r));
+                                });
+                                ui.add_space(0.15 * r);
+                            }
                         }
-                        if shown == 0 { ui.label(ui_kit::muted("Nothing in the tutorial has all those words.", 0.9 * r)); }
                     });
                 }
                 Some((si, ti)) => {
@@ -140,14 +231,30 @@ mod tests {
         assert_eq!(pieces("a **b** [[open:data|**Data**]] and [[go:home:Shuffle|there]]."), vec![Piece::Text("a ".into()), Piece::Bold("b".into()), Piece::Text(" ".into()), Piece::Open("data".into(), "Data".into()), Piece::Text(" and ".into()), Piece::Go("home:Shuffle".into(), "there".into()), Piece::Text(".".into())]);
         assert_eq!(pieces("no markup, 2 * 3 ** unbalanced"), vec![Piece::Text("no markup, 2 * 3 ** unbalanced".into())]);
     }
-    #[test] fn search_needs_every_word_and_opens_at_the_first_step_that_has_one() {
-        let lib = SECTIONS.iter().find(|s| s.id == "library").unwrap();
-        assert_eq!(search(lib, ""), Some((0, 0)));
-        let (first, n) = search(lib, "saved filters").unwrap(); assert_eq!(lib.steps[first].title, "Saved filters"); assert!(n >= 1);
-        assert!(search(lib, "zzzznotthere").is_none());
-        assert!(search(lib, "saved zzzznotthere").is_none(), "every word must be somewhere in the section");
-        // every section can be reached by some search of its own title's first word
-        for s in SECTIONS { assert!(search(s, s.title.split_whitespace().next().unwrap()).is_some(), "{}", s.id); }
+    /// The first result of a query as (section id, step title).
+    fn top(q: &str) -> Option<(&'static str, &'static str)> { results(q).first().map(|&(si, ti)| (SECTIONS[si].id, SECTIONS[si].steps[ti].title)) }
+    fn in_top(q: &str, n: usize, section: &str, step: &str) -> bool { results(q).iter().take(n).any(|&(si, ti)| SECTIONS[si].id == section && SECTIONS[si].steps[ti].title == step) }
+    #[test] fn search_finds_words_plurals_and_synonyms_and_ranks_the_best_step_first() {
+        assert!(results("").is_empty() && results("zzzznotthere").is_empty());
+        assert_eq!(top("saved filters"), Some(("library", "Saved filters")));
+        assert_eq!(top("crop").map(|x| x.1), Some("The art tabs"));
+        assert!(in_top("filters", 3, "library", "Building a filter") && in_top("filter", 3, "library", "Building a filter"));
+        assert!(in_top("picture", 3, "art", "Where covers come from"), "{:?}", top("picture"));
+        assert!(in_top("joystick", 3, "gamepad", "Moving around") || in_top("joystick", 3, "getting-started", "A controller"), "{:?}", top("joystick"));
+        assert!(in_top("how do i hide a game", 3, "cleanup", "The blacklist"), "{:?}", results("how do i hide a game").iter().take(3).collect::<Vec<_>>());
+        assert!(in_top("log in", 3, "stores", "Signing in"), "{:?}", top("log in"));
+        assert_eq!(top("steam deck"), Some(("gamepad", "Steam Deck"))); assert_eq!(top("dark mode").map(|x| x.1), Some("Appearance")); assert!(in_top("keyring", 2, "stores", "Where sign-ins are kept")); assert!(in_top("tampermonkey", 3, "stores", "Signing in"));
+        assert!(in_top("bought", 3, "metadata", "Purchase dates"));
+        assert!(in_top("crash", 3, "settings", "Getting help"));
+        assert!(in_top("rom", 3, "emulators", "ROM folders and scanning"));
+        assert!(in_top("favorite", 5, "library", "Select games and Bulk Ops") || top("favorite").is_some());
+        // a word matches at the start of a word: "art" must not match "start" or "party"
+        assert!(!has_term("start the party", "art") && has_term("artwork here", "art") && has_term("cover art", "art") && has_term("categories", "category"));
+        assert_eq!(stem("categories"), "category"); assert_eq!(stem("matches"), "match"); assert_eq!(stem("class"), "class"); assert_eq!(stem("filters"), "filter");
         assert_eq!(find_step("home", Some("Shuffle")), Some((1, 1))); assert_eq!(find_step("nope", None), None);
+    }
+    /// Every step can be found by its own title.
+    #[test] fn every_step_is_found_by_its_title() {
+        for (si, s) in SECTIONS.iter().enumerate() { for (ti, st) in s.steps.iter().enumerate() { assert!(results(st.title).iter().take(5).any(|&x| x == (si, ti)), "{} / {}: {:?}", s.id, st.title, results(st.title).iter().take(5).map(|&(a, b)| SECTIONS[a].steps[b].title).collect::<Vec<_>>()); } }
     }
 }

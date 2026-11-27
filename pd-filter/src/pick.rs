@@ -36,6 +36,8 @@ fn tags_of(g: &Value) -> Vec<String> {
     field(g, "tags").as_str().unwrap_or("").split(',').map(|t| t.trim().to_string()).filter(|t| !t.is_empty()).collect()
 }
 fn state_f(state: &Value, k: &str, default: f64) -> f64 { state.get(k).and_then(num).unwrap_or(default) }
+/// The lowest review score Smart mode picks from (percent).
+pub fn smart_min_review(state: &Value) -> f64 { state_f(state, "pick6_smart_min_review", 70.0).clamp(0.0, 100.0) }
 
 fn civil_from_days(z: i64) -> i64 {
     let z = z + 719468;
@@ -263,7 +265,8 @@ pub fn random_sample(n: usize, k: usize, rng: &mut dyn FnMut() -> f64) -> Vec<us
 pub fn pick_games(games: &[Value], profile: &Profile, state: &Value, p: &PickParams, now: f64, now_year: i64, rng: &mut dyn FnMut() -> f64) -> PickResult {
     const NUM_PICKS: usize = 6;
     let mut p_eff = PickParams { mode: p.mode.clone(), b_review: p.b_review, ..*p };
-    if p.mode == "smart" && p.b_review.is_none() { p_eff.b_review = Some(70.0); }
+    // Smart mode only draws games reviewed at least this well (Settings > Tuning, `pick6_smart_min_review`; 70 as in PlayDate)
+    if p.mode == "smart" && p.b_review.is_none() { p_eff.b_review = Some(smart_min_review(state)); }
     let p = &p_eff;
     let appid = |g: &Value| field(g, "appid").as_i64().unwrap_or(0);
     if games.is_empty() { return PickResult { picks: vec![], pool_size: 0, bounded_pool_size: 0, bounds_relaxed: false }; }

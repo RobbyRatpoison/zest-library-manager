@@ -249,7 +249,7 @@ pub fn show(ui: &mut Ui, ps: &mut PickState, data: &mut HomeData, t: &Theme, hov
         ui.horizontal(|ui| {
             ui.add_space(6.875 * rem + ui.spacing().item_spacing.x);
             ui.label(RichText::new(desc).size(0.8 * rem).italics().color(MUTED()));
-            if ps.mode == Mode::Smart { ui.label(RichText::new("Auto-filter: review \u{2265} 70%").size(0.78 * rem).italics().color(MUTED())); }
+            if ps.mode == Mode::Smart { ui.label(RichText::new(format!("Auto-filter: review \u{2265} {:.0}%", pd_filter::pick::smart_min_review(&data.state_json()))).size(0.78 * rem).italics().color(MUTED())); }
         });
 
         if ps.mode == Mode::Weighted {

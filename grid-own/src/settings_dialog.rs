@@ -47,6 +47,7 @@ const SECTIONS: &[Section] = &[
         Knob { key: "review_half_trust_count", label: "Reviews to trust a score", min: 2.0, max: 1000.0, step: 1.0, def: 10.0, unit: " reviews", log: true, hint: "How many reviews before a score counts halfway between neutral and its raw value. Higher makes small samples count for less, for longer." },
     ] },
     Section { id: "pick6", title: "Pick 6 Scoring", desc: "How Pick 6 turns a game's data into scores. The signal weights themselves stay on the Pick 6 page (Weighted mode).", knobs: &[
+        Knob { key: "pick6_smart_min_review", label: "Smart mode review minimum", min: 0.0, max: 100.0, step: 1.0, def: 70.0, unit: "%", log: false, hint: "Smart mode only picks games with at least this review score." },
         Knob { key: "pick6_smart_tag_weight", label: "Smart mode blend", min: 0.0, max: 100.0, step: 1.0, def: 65.0, unit: "/", log: false, hint: "Tag similarity vs. review score (the second number), when not using Weighted." },
         Knob { key: "pick6_staleness_cap_days", label: "Staleness cap", min: 30.0, max: 2000.0, step: 10.0, def: 730.0, unit: " days", log: false, hint: "Days since last played that count as \"maximally stale.\"" },
         Knob { key: "pick6_staleness_curve", label: "Staleness curve", min: 0.2, max: 4.0, step: 0.05, def: 1.0, unit: "", log: false, hint: CURVE },
